@@ -1,0 +1,11 @@
+{
+  "name": "astro-chat-backend",
+  "version": "1.0.0",
+  "description": "Backend for Astro Chat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lu-Vuong <lu-vuongle@hotmail.com>",
+  "license": "MIT"
+}
