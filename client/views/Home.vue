@@ -6,10 +6,10 @@
       </div>
       <div class="section__content">
         <p class="section__lead">Realtime chat application created using Vue JS, Socket IO and Node JS. Create A Room, Join a Room, Chat with people from all over! Connect with new friends and have fun!</p>
-        <a href="/" class="btn btn--white">Learn More</a>
-        <a href="/register" class="btn btn--blue">Register Now</a>
+        <router-link to="/" class="btn btn--anim btn--white">Learn More</router-link>
+        <router-link to="/register" class="btn btn--anim btn--blue">Register Now</router-link>
         <div class="section__graphic">
-          <img src="@/assets/Desk.svg" alt="">
+          <img src="@/assets/img/Desk.svg" alt="">
         </div>
       </div>
     </section>
@@ -38,57 +38,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.section {
-	&__heading {
-		font-size: 2.5rem;
-		text-align: center;
-	}
-
-	&__title {
-		font-weight: bold;
-		width: auto;
-		display: inline-block;
-	}
-
-	&__lead {
-		text-align: center;
-		width: 50%;
-		margin: 1em auto 3em auto;
-		font-size: 0.9em;
-		line-height: 1.5em;
-		color: rgba(255, 255, 255, 0.8);
-	}
-
-	&:first-child {
-		height: calc(100vh - 66px);
-	}
-
-	&__landing {
-		margin: 4em 0 10em 0;
-	}
-
-	&__content {
-		text-align: center;
-	}
-
-	&__graphic {
-		width: 100%;
-		margin: 4em 0;
-
-		& > img {
-			width: 50%;
-		}
-	}
-
-	&__footer {
-		padding: 2em;
-		width: 90%;
-		margin: 0 auto;
-		background: transparent;
-		text-align: center;
-		border-top: 1px solid #fff;
-	}
-}
-</style>
 

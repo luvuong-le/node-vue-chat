@@ -1,0 +1,166 @@
+@import '../abstract/keyframes.scss';
+@import '../abstract/util.scss';
+@import '../vendors/animate.scss';
+
+*,
+*::before,
+*::after {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	background: #18191c;
+	font-family: 'Work Sans', sans-serif;
+}
+
+header {
+	background: #18191c;
+	padding: 1rem;
+	border-bottom: 1px solid #fff;
+	width: 100%;
+	position: relative;
+	z-index: 10;
+}
+
+img {
+	width: 100%;
+}
+
+nav a {
+	text-decoration: none;
+	color: #fff;
+	margin: 0 0.5rem;
+}
+
+li .nav__link.router-link-exact-active {
+	font-weight: bold;
+	color: #fff;
+	opacity: 1;
+}
+
+.btn {
+	text-decoration: none;
+	color: #fff;
+	text-align: center;
+	font-size: 0.9em;
+	margin: 0 1em;
+	padding: 12px 50px;
+	display: inline-block;
+	cursor: pointer;
+	transition: transform 1s ease, opacity 0.5s ease;
+
+	&:hover {
+		opacity: 0.5;
+	}
+
+	&--rounded {
+		border-radius: 20px;
+		border: 2px solid #fff;
+		padding: 5px 17px 7px;
+	}
+
+	&--anim {
+		animation: hover 1s linear infinite;
+	}
+
+	&--white {
+		color: #000;
+		background: #fff;
+		border-radius: 5px;
+	}
+
+	&--blue {
+		color: #fff;
+		background: #3c9adf;
+		border-radius: 5px;
+		animation-delay: 0.8s;
+	}
+}
+
+.icon {
+	font-size: 1.5em;
+	margin: 0 0.4em;
+}
+
+.page {
+	height: 100%;
+	background: transparent;
+	color: #fff;
+	background: url(./assets/img/BackgroundPath.svg) no-repeat;
+	background-size: 100%;
+	background-position: bottom center;
+	position: relative;
+	z-index: 100;
+}
+
+.section {
+	height: 100vh;
+	width: 100%;
+	position: relative;
+	padding: 1rem;
+}
+
+.section {
+	&__heading {
+		font-size: 2.5rem;
+		text-align: center;
+	}
+
+	&__title {
+		font-weight: bold;
+		width: auto;
+		display: inline-block;
+	}
+
+	&__lead {
+		text-align: center;
+		width: 50%;
+		margin: 1em auto 3em auto;
+		font-size: 0.9em;
+		line-height: 1.5em;
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	&:first-child {
+		height: calc(100vh - 66px);
+	}
+
+	&__landing {
+		margin: 4em 0 10em 0;
+	}
+
+	&__content {
+		text-align: center;
+	}
+
+	&__graphic {
+		width: 100%;
+		margin: 4em 0;
+
+		& > img {
+			width: 50%;
+		}
+	}
+
+	&__footer {
+		padding: 2em;
+		width: 90%;
+		margin: 0 auto;
+		background: transparent;
+		text-align: center;
+		border-top: 1px solid #fff;
+	}
+}
+
+.particle {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
+}
