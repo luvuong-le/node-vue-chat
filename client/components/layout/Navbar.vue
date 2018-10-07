@@ -5,6 +5,9 @@
           <ion-icon name="rocket" class="navbar__icon navbar__icon--logo"></ion-icon>
           <router-link to="/" class="navbar__textbrand">Astro Chat</router-link>
       </div>
+      <span @click="navToggleState = !navToggleState"  class="navbar__toggle">
+        <ion-icon name="menu" class="navbar__icon navbar__toggle--icon"></ion-icon>
+      </span>
       <ul class="navbar__nav">
         <li class="nav__item">
           <router-link to="/" class="nav__link">Home</router-link>
@@ -29,14 +32,53 @@
           <router-link to="/register" class="nav__link nav__link--rounded">Sign Up</router-link>
         </li>
       </ul>
-    </nav>   
+    </nav>  
+    <nav class="snav" v-bind:class = "{'snav--shown': navToggleState}">
+      <Particle name="particlejs-nav" />
+      <ul class="snav__nav">
+        <li @click="this.closeSideNav" class="snav__item">
+          <router-link to="/" class="nav__link">Home</router-link>
+        </li>
+        <li @click="this.closeSideNav" class="snav__item">
+          <router-link to="#" class="nav__link">About</router-link>
+        </li>
+        <li @click="this.closeSideNav" class="snav__item">
+          <router-link to="#" class="nav__link">Support</router-link>
+        </li>
+        <li @click="this.closeSideNav" class="snav__item">
+          <router-link to="/login" class="nav__link nav__link--rounded">Login</router-link>
+        </li>
+        <li @click="this.closeSideNav" class="snav__item">
+          <router-link to="/register" class="nav__link nav__link--rounded">Sign Up</router-link>
+        </li>
+      </ul>
+      <!-- <div class="snav__footer">
+        <h1>dsadsa</h1>
+      </div>         -->
+    </nav> 
   </header>
 </template>
 
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+import Particle from '@/components/layout/Particle.vue';
+
 export default {
 	name: 'Navbar',
+	components: {
+		Particle: Particle,
+	},
+	data: function() {
+		return {
+			navToggleState: false,
+		};
+	},
+	methods: {
+		closeSideNav() {
+			this.navToggleState = false;
+		},
+	},
 };
 </script>
 

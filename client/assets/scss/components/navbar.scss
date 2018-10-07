@@ -2,8 +2,12 @@
 	display: flex;
 	align-items: center;
 	width: 85%;
-	padding: 0.3em 0;
+	padding: 1em 0;
 	margin: 0 auto;
+
+	@include respond(tablet-landscape) {
+		width: 90%;
+	}
 
 	&__link {
 		color: rgba(255, 255, 255, 0.7);
@@ -60,10 +64,75 @@
 		margin: 0 1em;
 		align-items: center;
 
+		@include respond(phone) {
+			display: none;
+		}
+
 		&--right {
 			flex-grow: 1;
 			text-align: right;
 			justify-content: flex-end;
 		}
 	}
+
+	&__toggle {
+		position: relative;
+		z-index: 10;
+		display: none;
+		flex-grow: 1;
+		text-align: right;
+		justify-content: flex-end;
+		cursor: pointer;
+
+		@include respond(phone) {
+			display: initial;
+		}
+
+		&--icon {
+			font-size: 2em;
+		}
+	}
+}
+
+.snav {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 99;
+	padding: 1em;
+	border-top: 1px solid #fff;
+	background: url(../../assets/img/BackgroundPath.svg) no-repeat, rgba(24, 25, 28, 1);
+	background-size: 100%;
+	background-position: bottom center;
+	transform: translateX(100%);
+	transition: transform 0.5s ease;
+
+	&--shown {
+		transform: translateX(0);
+	}
+
+	&__nav {
+		position: relative;
+		z-index: 50;
+		display: flex;
+		flex-flow: column;
+		margin: 0 1em;
+		align-items: flex-start;
+	}
+
+	&__item {
+		list-style: none;
+		width: 100%;
+		padding: 1em;
+
+		& > a {
+			color: #fff;
+			font-weight: bold;
+		}
+	}
+
+	// &__footer {
+	// 	position: absolute;
+	// 	bottom: 20%;
+	// }
 }

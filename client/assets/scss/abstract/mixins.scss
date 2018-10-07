@@ -1,0 +1,43 @@
+// Media Query Breakpoints
+
+/*
+
+    0 - 768px: Smartphones
+    768 - 1024px: Tablet Landscape
+    1224 - 1824px : Desktops and Laptops
+    1824+ Larger Screens 
+
+*/
+
+@mixin respond($breakpoint) {
+	@if $breakpoint == phone {
+		@media only screen and (min-width: 20em) and (max-width: 48em) {
+			@content;
+		}
+	}
+
+	@if $breakpoint == tablet-portrait {
+		@media only screen and (min-width: 48em) and (max-width: 64em) and (orientation: portrait) {
+			@content;
+		}
+	}
+
+	@if $breakpoint == tablet-landscape {
+		@media only screen and (min-width: 48em) and (max-width: 64em) {
+			@content;
+		}
+	}
+
+	@if $breakpoint == desktop {
+		@media only screen and (min-width: 64em) and (max-width: 114em) {
+			@content;
+		}
+	}
+}
+
+@mixin center() {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

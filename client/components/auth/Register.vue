@@ -26,7 +26,10 @@
                 <input type="password" name="password" class="form__control" placeholder="Enter Password" required>
                 <label for="password" class="form__label">Password</label>
             </div>
-            <p>Already have an account? Login <router-link to="/register" class="form__link btn btn--rounded">here!</router-link></p>
+            <div class="form__info-group">
+              <p>Already have an account?</p>
+              <router-link to="/register" class="form__link btn btn--rounded">Login</router-link>
+            </div>
             <button type="submit" class="form__submit">Register</button>
         </form>
       </div>

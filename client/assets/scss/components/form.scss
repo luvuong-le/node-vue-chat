@@ -8,6 +8,10 @@
 	box-shadow: 1px 1px 1px 1px #000;
 	transform: translateY(30px);
 
+	@include respond(phone) {
+		width: 80%;
+	}
+
 	&__input-group {
 		position: relative;
 		width: auto;
@@ -83,6 +87,10 @@
 		text-decoration: none;
 		color: #fff;
 		font-weight: bold;
+
+		@include respond(phone) {
+			margin: 1em 0 0 0;
+		}
 	}
 
 	&__icon {

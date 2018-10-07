@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar v-if="['Home', 'Login', 'Register'].includes($route.name)" />
-		<Particle />
+		<Particle name="particle-js"/>
 		<transition name="router-anim" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
 			<router-view/>
 		</transition>

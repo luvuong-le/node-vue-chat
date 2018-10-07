@@ -1,5 +1,5 @@
 <template>
-    <div id="particles-js" class="particle"></div>
+    <div v-bind:id="this.name" class="particle"></div>
 </template>
 
 
@@ -9,9 +9,15 @@ import particleConfig from '@/assets/config/particlesjs-config.json';
 
 export default {
 	name: 'Particle',
+	props: ['name'],
+	data: function() {
+		return {
+			id: this.name,
+		};
+	},
 	methods: {
 		initParticleJS() {
-			particlesJS('particles-js', particleConfig);
+			particlesJS(this.id, particleConfig);
 		},
 	},
 	mounted() {

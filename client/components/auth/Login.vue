@@ -21,7 +21,10 @@
                 <input type="password" name="password" class="form__control" placeholder="Enter Password" required>
                 <label for="password" class="form__label">Password</label>
             </div>
-            <p>Don't have an account? Register <router-link to="/register" class="form__link btn btn--rounded">Here!</router-link></p>
+            <div class="form__info-group">
+              <span>Don't have an account?</span>
+              <router-link to="/register" class="form__link btn btn--rounded">Register</router-link>
+            </div>
             <button type="submit" class="form__submit">Login</button>
         </form>
       </div>
@@ -33,7 +36,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+	name: 'Login',
+	mounted() {
+		console.log('Mounted');
+	},
+};
 </script>
 
 

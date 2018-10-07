@@ -8,5 +8,12 @@ module.exports = {
     entry: {
       app: "./client/main.js"
     }
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `@import "@/assets/scss/abstract/mixins.scss";`
+      }
+    }
   }
 };
