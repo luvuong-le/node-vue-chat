@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+    - 'iojs'
+    - '10'
+    - '8'
+
+services:
+    - mongodb
+
+env:
+  - JWT_SECRET=testsecret
+  - PORT=5000
+
+install:
+    - npm install
+    - cd server && npm install
+
+script:
+- npm run test
+
+cache:
+    directories:
+        - 'node_modules'

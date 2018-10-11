@@ -1,0 +1,69 @@
+const express = require("express");
+const router = express.Router();
+
+const { User } = require("../models/User");
+
+/** Authentication */
+const {
+  checkRegistrationFields,
+  checkLoginFields
+} = require("../middleware/authenticate");
+
+/** JWT */
+const jwt = require("jsonwebtoken");
+
+/**
+ * @description  POST /register
+ * @param  {} [checkRegistrationFields]
+ * @param  {} request
+ * @param  {} response
+ * @access public
+ */
+router.post("/register", [checkRegistrationFields], (req, res) => {
+  User.findOne({ email: req.body.email }).then(user => {
+    if (user) {
+      res.send({ errors: "Email is already taken" }).end();
+    } else {
+      const newUser = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+      });
+
+      newUser
+        .save()
+        .then(user => {
+          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+            expiresIn: 84000
+          });
+
+          res.status(200).send({ auth: true, token, user });
+        })
+        .catch(err => {
+          res.send({
+            err,
+            error: "Something went wrong, Please check the fields again"
+          });
+        });
+    }
+  });
+});
+
+/**
+ * @description POST /login
+ * @param  {} checkLoginFields
+ * @param  {} request
+ * @param  {} response
+ * @access public
+ */
+router.post("/login", checkLoginFields, async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+    expiresIn: 3600
+  });
+
+  res.status(200).send({ auth: true, token, user });
+});
+
+module.exports = router;

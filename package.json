@@ -6,9 +6,12 @@
 		"dev": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint",
+		"server:test:watch": "cd server && npm run test:watch",
+		"server:test": "cd server && npm run test",
 		"test:unit": "vue-cli-service test:unit",
 		"server": "pm2 start ecosystem.config.js && pm2 logs",
 		"server:kill": "pm2 kill",
+		"test": "npm run test:unit && npm run server:test",
 		"start": "npm run server && npm run dev",
 		"deploy": "npm run build && npm run server"
 	},

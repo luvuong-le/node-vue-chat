@@ -1,28 +1,11 @@
-const isAuthenticated = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    res.send({
-      error: "Not Authenticated"
-    });
-  }
-};
-
-const isLoggedIn = (req, res, next) => {
-  if (req.user) {
-    res.send({
-      error: "Already Logged In"
-    });
-  } else {
-    next();
-  }
-};
+const { User } = require("../models/User");
 
 const createErrorObject = errors => {
   const errorObject = {};
   errors.forEach(error => {
     errorObject[error.param] = error.msg;
   });
+
   return errorObject;
 };
 
@@ -50,4 +33,22 @@ const checkRegistrationFields = (req, res, next) => {
   }
 };
 
-module.exports = { isLoggedIn, isAuthenticated, checkRegistrationFields };
+const checkLoginFields = async (req, res, next) => {
+  let errors = [];
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    errors.push({ param: "email", msg: "No User Found with that email" });
+  }
+  if (!(await user.isValidPassword(req.body.password))) {
+    errors.push({ param: "password", msg: "Password doesn't match" });
+  }
+  if (errors.length !== 0) {
+    res.send({
+      errors: createErrorObject(errors)
+    });
+  } else {
+    next();
+  }
+};
+
+module.exports = { checkLoginFields, checkRegistrationFields };
