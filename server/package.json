@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "Backend for Astro Chat",
 	"main": "index.js",
+	"private": true,
 	"scripts": {
 		"test:watch": "jest --notify --watchAll",
 		"test": "jest --silent --coverage --notify"
