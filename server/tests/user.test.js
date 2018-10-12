@@ -17,9 +17,8 @@ beforeAll(async () => {
   token = `bearer ${response.body.token}`;
 });
 
-afterEach(done => {
-  server.close();
-  done();
+afterAll(async () => {
+  await server.close();
 });
 
 describe("GET /users", () => {

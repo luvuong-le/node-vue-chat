@@ -51,4 +51,8 @@ const checkLoginFields = async (req, res, next) => {
   }
 };
 
-module.exports = { checkLoginFields, checkRegistrationFields };
+module.exports = {
+  checkLoginFields,
+  checkRegistrationFields,
+  createErrorObject
+};

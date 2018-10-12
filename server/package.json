@@ -5,8 +5,8 @@
 	"main": "index.js",
 	"private": true,
 	"scripts": {
-		"test:watch": "jest --notify --watchAll",
-		"test": "jest --silent --coverage --notify"
+		"test:watch": "jest --silent --notify --runInBand --watchAll",
+		"test": "jest --silent --runInBand --coverage --notify --forceExit"
 	},
 	"author": "Lu-Vuong <lu-vuongle@hotmail.com>",
 	"license": "MIT",
