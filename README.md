@@ -66,5 +66,3 @@ npm run test
 ### Deployment
 
 Not yet implemented
-
-:sta
