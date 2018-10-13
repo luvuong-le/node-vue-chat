@@ -7,14 +7,17 @@ services:
     - mongodb
 
 env:
-  - DATABASE_URL=mongodb://localhost:27017/testdb JWT_SECRET=testsecret PORT=5000
+    - DATABASE_URL=mongodb://localhost:27017/testdb JWT_SECRET=testsecret PORT=5000
 
 install:
     - npm install
     - cd server && npm install
 
+before_script:
+    - cd ..
+
 script:
-- npm run test
+    - npm run test
 
 cache:
     directories:
