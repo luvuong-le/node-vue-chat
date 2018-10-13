@@ -12,7 +12,7 @@ const createUsers = async () => {
 
   console.log("[PROCESS:SEED] Seeding User Data");
 
-  await User.collection.drop();
+  await User.deleteMany({}).exec();
 
   for (let user of userSeedData) {
     await new User(user).save();

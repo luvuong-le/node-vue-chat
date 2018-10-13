@@ -13,9 +13,6 @@
         </div>
       </div>
     </section>
-    <section class="section__footer">
-      <h3>Copyright &copy; 2018 Lu-Vuong Le</h3>
-    </section>
   </div>
 </template>
 

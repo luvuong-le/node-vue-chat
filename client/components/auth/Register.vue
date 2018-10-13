@@ -28,14 +28,11 @@
             </div>
             <div class="form__info-group">
               <span>Already have an account?</span>
-              <router-link to="/register" class="form__link btn btn--rounded">Login</router-link>
+              <router-link to="/login" class="form__link btn btn--rounded">Login</router-link>
             </div>
             <button type="submit" class="form__submit">Register</button>
         </form>
       </div>
-    </section>
-    <section class="section__footer">
-      <h1>Copyright &copy; 2018 Lu-Vuong Le</h1>
     </section>
   </div>
 </template>

@@ -18,27 +18,30 @@
             </div>
             <div class="form__input-group">
                 <ion-icon name="lock" class="form__icon"></ion-icon>
-                <input type="password" name="password" class="form__control" placeholder="Enter Password" required v-model.trim="password">
+                <input type="password" name="password" class="form__control" placeholder="Enter Password" pattern="/{5,15}/" title="Password must be between 5 and 15 characters" required v-model.trim="password">
                 <label for="password" class="form__label">Password</label>
             </div>
             <div class="form__info-group">
               <span>Don't have an account?</span>
               <router-link to="/register" class="form__link btn btn--rounded">Register</router-link>
             </div>
-            <div v-show="errors.length !== 0" class="form__error">
-              <span v-for="(error, index) in errors" v-bind:key='index'>{{ error }}</span>
-            </div>
+						<transition name="fade" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+						  <div v-show="errors.length !== 0" class="form__error">
+								<transition name="fade" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+									<span v-for="(error, index) in errors" v-bind:key='index'>{{ error }}</span>
+								</transition>
+            	</div>
+						</transition>
             <button type="submit" class="form__submit">Login</button>
         </form>
       </div>
-    </section>
-    <section class="section__footer">
-      <h1>Copyright &copy; 2018 Lu-Vuong Le</h1>
     </section>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
 	name: 'Login',
 	data: function() {
@@ -52,28 +55,24 @@ export default {
 		handleSubmit(e) {
 			this.errors = [];
 			if (this.email && this.password) {
-				fetch('http://localhost:5000/api/auth/login', {
-					method: 'POST',
-					mode: 'cors',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ email: this.email, password: this.password }),
-				})
-					.then(res => res.json())
+				axios
+					.post('http://localhost:5000/api/auth/login', { email: this.email, password: this.password })
 					.then(res => {
-						if (res.errors) {
-							for (const error of res.errors) {
+						if (res.data.errors) {
+							for (const error of res.data.errors) {
 								const [param] = Object.keys(error);
 								const [value] = Object.values(error);
 								this.errors.push(value);
 							}
 						} else {
-							console.log(res);
+							localStorage.setItem('authToken', res.data.token);
 						}
-					})
-					.catch(err => console.log(err));
+					});
 			}
+
+			setTimeout(() => {
+				this.errors = [];
+			}, 1500);
 		},
 	},
 	mounted() {
