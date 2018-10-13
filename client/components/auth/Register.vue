@@ -7,23 +7,23 @@
       <div class="section__content">
         <p class="section__lead">We hope you will enjoy our application!</p>
 
-        <form class="form">
+        <form @submit.prevent="handleSubmit" class="form">
             <span class="form__lead">
                 <ion-icon name="person-add" class="icon"></ion-icon> We always welcome new astros!
             </span><br>
             <div class="form__input-group">
                 <ion-icon name="pricetags" class="form__icon"></ion-icon>
-                <input type="text" name="username" class="form__control" placeholder="Enter Username" required>
+                <input type="text" name="username" class="form__control" placeholder="Enter Username" required v-model.trim='username'>
                 <label for="username" class="form__label">Username</label>
             </div>
             <div class="form__input-group">
                 <ion-icon name="person" class="form__icon"></ion-icon>
-                <input type="email" name="email" class="form__control" placeholder="Enter Email" required>
+                <input type="email" name="email" class="form__control" placeholder="Enter Email" required v-model.trim="email">
                 <label for="email" class="form__label">Email</label>
             </div>
             <div class="form__input-group">
                 <ion-icon name="lock" class="form__icon"></ion-icon>
-                <input type="password" name="password" class="form__control" placeholder="Enter Password" required>
+                <input type="password" name="password" class="form__control" placeholder="Enter Password" pattern="/{5,15}/" title="Password must be between 5 and 15 characters" required v-model.trim="password">
                 <label for="password" class="form__label">Password</label>
             </div>
             <div class="form__info-group">
@@ -38,8 +38,23 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
 	name: 'Register',
+	data: function() {
+		return {
+			username: '',
+			email: '',
+			password: '',
+			errors: [],
+		};
+	},
+	methods: {
+		handleSubmit(e) {
+			this.errors = [];
+		},
+	},
 };
 </script>
 

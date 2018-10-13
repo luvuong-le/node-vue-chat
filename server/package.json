@@ -7,7 +7,8 @@
 	"scripts": {
 		"seed": "node ./tests/seed/seed.js",
 		"test:watch": "jest --coverage --config ./jest.config.js --notify --watchAll",
-		"test": "jest --coverage --config ./jest.config.js --notify"
+		"test:local": "jest --coverage --config ./jest.config.js --notify",
+		"test:ci": "jest --coverage --config ./jest.config.js --forceExit"
 	},
 	"author": "Lu-Vuong <lu-vuongle@hotmail.com>",
 	"license": "MIT",
