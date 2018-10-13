@@ -1,17 +1,7 @@
+require("dotenv").config();
+const { mongoose } = require("../../db/mongoose");
 const { User } = require("../../models/User");
-
-const users = [
-  {
-    email: "test1@hotmail.com",
-    username: "testing1",
-    password: "testing123"
-  },
-  {
-    email: "test2@hotmail.com",
-    username: "testing2",
-    password: "testing1234"
-  }
-];
+const { userSeedData } = require("./userSeedData");
 
 const createUsers = async () => {
   //   User.remove({}).then(() => {
@@ -20,9 +10,17 @@ const createUsers = async () => {
   //     return Promise.all([userOne, userTwo]).then(() => done());
   //   });
 
-  await User.deleteMany({});
-  await new User(users[0]).save();
-  await new User(users[1]).save();
+  console.log("[PROCESS:SEED] Seeding User Data");
+
+  await User.collection.drop();
+
+  for (let user of userSeedData) {
+    await new User(user).save();
+  }
+
+  console.log("[PROCESS:FIN] Completed Seeding User Data");
+
+  await mongoose.connection.close();
 };
 
-module.exports = { users, createUsers };
+createUsers();

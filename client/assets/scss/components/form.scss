@@ -113,4 +113,15 @@
 		line-height: 1.5em;
 		color: rgba(255, 255, 255, 0.8);
 	}
+
+	&__error {
+		display: inline-block;
+		width: 90%;
+		background: rgba(79%, 19%, 17%, 0.9);
+		border-radius: 3px;
+		margin: 1em 1em 0 1em;
+		padding: 12px;
+		color: #fff;
+		font-weight: bold;
+	}
 }

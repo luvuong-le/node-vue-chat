@@ -1,9 +1,12 @@
 const { User } = require("../models/User");
 
 const createErrorObject = errors => {
-  const errorObject = {};
+  const errorObject = [];
   errors.forEach(error => {
-    errorObject[error.param] = error.msg;
+    let err = {
+      [error.param]: error.msg
+    };
+    errorObject.push(err);
   });
 
   return errorObject;
@@ -38,10 +41,12 @@ const checkLoginFields = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     errors.push({ param: "email", msg: "No User Found with that email" });
+  } else {
+    if (!(await user.isValidPassword(req.body.password))) {
+      errors.push({ param: "password", msg: "Password doesn't match" });
+    }
   }
-  if (!(await user.isValidPassword(req.body.password))) {
-    errors.push({ param: "password", msg: "Password doesn't match" });
-  }
+
   if (errors.length !== 0) {
     res.send({
       errors: createErrorObject(errors)

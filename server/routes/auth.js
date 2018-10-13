@@ -59,6 +59,12 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
 router.post("/login", checkLoginFields, async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
 
+  if (!user) {
+    return res.status(404).send({
+      error: "No User Found"
+    });
+  }
+
   const token = jwt.sign({ user }, process.env.JWT_SECRET, {
     expiresIn: 3600
   });

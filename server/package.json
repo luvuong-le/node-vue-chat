@@ -5,14 +5,16 @@
 	"main": "index.js",
 	"private": true,
 	"scripts": {
-		"test:watch": "jest --silent --notify --runInBand --watchAll",
-		"test": "jest --silent --runInBand --coverage --notify --forceExit"
+		"seed": "node ./tests/seed/seed.js",
+		"test:watch": "jest --coverage --config ./jest.config.js --notify --watchAll",
+		"test": "jest --coverage --config ./jest.config.js --notify"
 	},
 	"author": "Lu-Vuong <lu-vuongle@hotmail.com>",
 	"license": "MIT",
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
 		"body-parser": "^1.18.3",
+		"cors": "^2.8.4",
 		"dotenv": "^6.0.0",
 		"express": "^4.16.3",
 		"express-session": "^1.15.6",

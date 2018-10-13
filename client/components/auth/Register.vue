@@ -27,7 +27,7 @@
                 <label for="password" class="form__label">Password</label>
             </div>
             <div class="form__info-group">
-              <p>Already have an account?</p>
+              <span>Already have an account?</span>
               <router-link to="/register" class="form__link btn btn--rounded">Login</router-link>
             </div>
             <button type="submit" class="form__submit">Register</button>

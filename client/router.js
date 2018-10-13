@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Login from "@/components/auth/Login.vue";
 import Register from "@/components/auth/Register.vue";
+import UserProfile from "@/components/user/UserProfile.vue";
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path: "/register",
       name: "Register",
       component: Register
+    },
+    {
+      path: "/user/profile",
+      name: "UserProfile",
+      component: UserProfile
     }
     // {
     //   path: "/about",
