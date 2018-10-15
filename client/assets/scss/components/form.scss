@@ -123,5 +123,9 @@
 		padding: 12px;
 		color: #fff;
 		font-weight: bold;
+
+		& span {
+			display: block;
+		}
 	}
 }

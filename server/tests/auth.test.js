@@ -12,6 +12,7 @@ describe("POST /auth", () => {
     });
 
     expect(response.status).toEqual(200);
+    expect(response.body.session_id).not.toBeNull();
     expect(response.body.token).not.toBeNull();
     expect(response.body.auth).not.toBeNull();
   });
@@ -34,6 +35,7 @@ describe("POST /auth", () => {
 
     expect(response.status).toEqual(200);
     expect(response.body.token).not.toBeNull();
+    expect(response.body.user.session_id).not.toBeNull();
     expect(response.body.auth).not.toBeNull();
   });
 

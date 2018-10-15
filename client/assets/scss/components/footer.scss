@@ -1,0 +1,43 @@
+.footer {
+	color: #fff;
+	width: 100%;
+	padding: 1em;
+	margin: 0 auto;
+	background: transparent;
+	text-align: center;
+	border-top: 1px solid #fff;
+	font-weight: bold;
+
+	&__content {
+		display: flex;
+		width: 85%;
+		margin: 0 auto;
+	}
+
+	&__left {
+		width: 30%;
+		text-align: left;
+		align-self: center;
+	}
+
+	&__right {
+		flex-grow: 1;
+		text-align: right;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	&__icon {
+		font-size: 2.5em;
+		color: #fff;
+		margin: 0 1rem;
+
+		&--logo {
+			transform: rotate(45deg);
+			font-size: 1.8em;
+			color: #fff;
+			animation: zoomIn 0.5s linear;
+		}
+	}
+}

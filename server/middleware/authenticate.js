@@ -12,7 +12,7 @@ const createErrorObject = errors => {
   return errorObject;
 };
 
-const checkRegistrationFields = (req, res, next) => {
+const checkRegistrationFields = async (req, res, next) => {
   req.check("email").isEmail();
   req
     .check("username")

@@ -23,13 +23,20 @@
             </div>
             <div class="form__input-group">
                 <ion-icon name="lock" class="form__icon"></ion-icon>
-                <input type="password" name="password" class="form__control" placeholder="Enter Password" pattern="/{5,15}/" title="Password must be between 5 and 15 characters" required v-model.trim="password">
+                <input type="password" name="password" class="form__control" placeholder="Enter Password" pattern=".{5,15}" title="Password must be between 5 and 15 characters" required v-model.trim="password">
                 <label for="password" class="form__label">Password</label>
             </div>
             <div class="form__info-group">
               <span>Already have an account?</span>
               <router-link to="/login" class="form__link btn btn--rounded">Login</router-link>
             </div>
+            <transition name="fade" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+						  <div v-show="errors.length !== 0" class="form__error">
+								<transition-group name="fade" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+									<span v-for="(error, index) in errors" v-bind:key='index'>{{ error }}</span>
+								</transition-group>
+            	</div>
+						</transition>
             <button type="submit" class="form__submit">Register</button>
         </form>
       </div>
@@ -51,8 +58,34 @@ export default {
 		};
 	},
 	methods: {
-		handleSubmit(e) {
+		handleSubmit() {
 			this.errors = [];
+
+			if (this.username && this.email && this.password) {
+				axios
+					.post('http://localhost:5000/api/auth/register', {
+						username: this.username,
+						email: this.email,
+						password: this.password,
+					})
+					.then(res => {
+						if (res.data.errors) {
+							for (const error of res.data.errors) {
+								const [param] = Object.keys(error);
+								const [value] = Object.values(error);
+								this.errors.push(value);
+							}
+						} else {
+							localStorage.setItem('authToken', res.data.token);
+							localStorage.setItem('session_id', res.data.user.session_id);
+							this.$router.push({ name: 'UserProfile', params: { username: res.data.user.username } });
+						}
+					});
+			}
+
+			setTimeout(() => {
+				this.errors = [];
+			}, 1500);
 		},
 	},
 };

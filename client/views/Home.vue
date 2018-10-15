@@ -22,6 +22,7 @@ import Typed from 'typed.js';
 
 export default {
 	name: 'Home',
+	props: [],
 	components: {},
 	mounted() {
 		let options = {
@@ -30,7 +31,7 @@ export default {
 			loop: true,
 		};
 
-		let typed = new Typed('.section__title', options);
+		new Typed('.section__title', options);
 	},
 };
 </script>

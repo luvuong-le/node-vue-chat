@@ -11,7 +11,8 @@ Real Time Chat Application created with VueJS, Express, Socket IO and MongoDB/Mo
 
 ### Current Features
 
--   REST Api with JWT Authentication
+-   REST API (JWT Authentication)
+-   Complete Login Functionality with JWT
 
 ### Tech Stack
 
@@ -66,3 +67,7 @@ npm run test
 ### Deployment
 
 Not yet implemented
+
+### Additional
+
+-   View the project management cycle here [Astro Chat Project Kanban (Trello)](https://trello.com/b/V04pQQV3/astro-chat)

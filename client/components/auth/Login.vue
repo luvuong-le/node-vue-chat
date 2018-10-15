@@ -5,8 +5,14 @@
         <span class="section__title">Sign In</span>
       </div>
       <div class="section__content">
+				<transition name="fade" enter-active-class="animated fadeIn" leave-active-class="animated zoomOutRight" mode="out-in">
+					<div v-show="this.message" class="mb-6 form__error">
+						<transition name="fade" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+							<span>{{ this.message }}</span>
+						</transition>
+					</div>
+				</transition>
         <p class="section__lead">Welcome Back!</p>
-
         <form @submit.prevent="handleSubmit" class="form">
             <span class="form__lead">
               <ion-icon name="rocket" class="icon"></ion-icon> We are excited to see you again!
@@ -18,7 +24,7 @@
             </div>
             <div class="form__input-group">
                 <ion-icon name="lock" class="form__icon"></ion-icon>
-                <input type="password" name="password" class="form__control" placeholder="Enter Password" pattern="/{5,15}/" title="Password must be between 5 and 15 characters" required v-model.trim="password">
+                <input type="password" name="password" class="form__control" placeholder="Enter Password" pattern=".{5,15}" title="Password must be between 5 and 15 characters" required v-model.trim="password">
                 <label for="password" class="form__label">Password</label>
             </div>
             <div class="form__info-group">
@@ -41,9 +47,11 @@
 
 <script>
 import axios from 'axios';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
 	name: 'Login',
+	props: ['message'],
 	data: function() {
 		return {
 			email: '',
@@ -52,7 +60,8 @@ export default {
 		};
 	},
 	methods: {
-		handleSubmit(e) {
+		...mapActions(['saveUserData', 'toggleAuthState']),
+		handleSubmit() {
 			this.errors = [];
 			if (this.email && this.password) {
 				axios
@@ -60,12 +69,15 @@ export default {
 					.then(res => {
 						if (res.data.errors) {
 							for (const error of res.data.errors) {
-								const [param] = Object.keys(error);
+								// const [param] = Object.keys(error);
 								const [value] = Object.values(error);
 								this.errors.push(value);
 							}
 						} else {
 							localStorage.setItem('authToken', res.data.token);
+							localStorage.setItem('session_id', res.data.user.session_id);
+							this.$store.dispatch('toggleAuthState', true);
+							this.$router.push({ name: 'UserProfile', params: { username: res.data.user.username } });
 						}
 					});
 			}
@@ -76,7 +88,11 @@ export default {
 		},
 	},
 	mounted() {
-		console.log('Mounted');
+		if (this.message) {
+			setTimeout(() => {
+				this.message = '';
+			}, 1500);
+		}
 	},
 };
 </script>

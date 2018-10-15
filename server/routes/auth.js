@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-
+const uuid = require("uuid");
 const { User } = require("../models/User");
 
 /** Authentication */
 const {
   checkRegistrationFields,
-  checkLoginFields
+  checkLoginFields,
+  createErrorObject
 } = require("../middleware/authenticate");
 
 /** JWT */
@@ -20,14 +21,27 @@ const jwt = require("jsonwebtoken");
  * @access public
  */
 router.post("/register", [checkRegistrationFields], (req, res) => {
+  let errors = [];
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      res.send({ errors: "Email is already taken" }).end();
+      errors.push({ param: "email", msg: "Email is already taken" });
+
+      if (user.username === req.body.username) {
+        errors.push({ param: "username", msg: "Username is already taken" });
+
+        res
+          .send({
+            errors: createErrorObject(errors)
+          })
+          .end();
+      }
     } else {
       const newUser = new User({
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        session_id: uuid.v1()
       });
 
       newUser
@@ -57,6 +71,11 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
  * @access public
  */
 router.post("/login", checkLoginFields, async (req, res) => {
+  await User.updateOne(
+    { email: req.body.email },
+    { $set: { session_id: uuid.v1() } }
+  );
+
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {

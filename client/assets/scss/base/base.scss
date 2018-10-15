@@ -46,6 +46,24 @@ li .nav__link.router-link-exact-active {
 	opacity: 1;
 }
 
+.app {
+	overflow-x: hidden;
+}
+
+.lead {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 1.3em;
+	text-align: center;
+	font-size: 0.9em;
+	line-height: 1.5em;
+	color: rgba(255, 255, 255, 0.8);
+	font-family: 'Russo One';
+	text-transform: uppercase;
+}
+
 .btn {
 	text-decoration: none;
 	color: #fff;
@@ -77,6 +95,12 @@ li .nav__link.router-link-exact-active {
 		border-radius: 5px;
 	}
 
+	&--danger {
+		color: #fff;
+		background: crimson;
+		border-radius: 5px;
+	}
+
 	&--blue {
 		color: #fff;
 		background: #3c9adf;
@@ -92,6 +116,7 @@ li .nav__link.router-link-exact-active {
 
 .page {
 	height: 100%;
+	width: 100%;
 	background: transparent;
 	color: #fff;
 	background: url(./assets/img/BackgroundPath.svg) no-repeat;
@@ -152,16 +177,6 @@ li .nav__link.router-link-exact-active {
 		& > img {
 			width: 50%;
 		}
-	}
-
-	&__footer {
-		color: #fff;
-		padding: 2em;
-		width: 90%;
-		margin: 0 auto;
-		background: transparent;
-		text-align: center;
-		border-top: 1px solid #fff;
 	}
 }
 
