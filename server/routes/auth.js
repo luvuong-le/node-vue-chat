@@ -48,7 +48,7 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
         .save()
         .then(user => {
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: 84000
+            expiresIn: 86400
           });
 
           res.status(200).send({ auth: true, token, user });
@@ -85,7 +85,7 @@ router.post("/login", checkLoginFields, async (req, res) => {
   }
 
   const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-    expiresIn: 3600
+    expiresIn: 86400
   });
 
   res.status(200).send({ auth: true, token, user });

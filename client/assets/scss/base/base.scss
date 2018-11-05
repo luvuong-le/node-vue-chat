@@ -79,6 +79,11 @@ li .nav__link.router-link-exact-active {
 		opacity: 0.5;
 	}
 
+	&--clear {
+		border: 0;
+		font-family: 'Work Sans';
+	}
+
 	&--rounded {
 		border-radius: 20px;
 		border: 2px solid #fff;
@@ -95,13 +100,19 @@ li .nav__link.router-link-exact-active {
 		border-radius: 5px;
 	}
 
+	&--success {
+		color: #fff;
+		background: lightgreen;
+		border-radius: 5px;
+	}
+
 	&--danger {
 		color: #fff;
 		background: crimson;
 		border-radius: 5px;
 	}
 
-	&--blue {
+	&--info {
 		color: #fff;
 		background: #3c9adf;
 		border-radius: 5px;
@@ -140,9 +151,9 @@ li .nav__link.router-link-exact-active {
 	}
 
 	&__title {
-		font-weight: bold;
 		width: auto;
 		display: inline-block;
+		font-family: 'Russo One', sans-serif;
 	}
 
 	&__lead {

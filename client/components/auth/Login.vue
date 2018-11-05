@@ -47,7 +47,7 @@
 
 <script>
 import axios from 'axios';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
 	name: 'Login',
@@ -76,6 +76,8 @@ export default {
 						} else {
 							localStorage.setItem('authToken', res.data.token);
 							localStorage.setItem('session_id', res.data.user.session_id);
+							const { password, ...userData } = res.data.user;
+							localStorage.setItem('user', JSON.stringify(userData));
 							this.$store.dispatch('toggleAuthState', true);
 							this.$router.push({ name: 'UserProfile', params: { username: res.data.user.username } });
 						}

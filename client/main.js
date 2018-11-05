@@ -25,15 +25,14 @@ axios.interceptors.response.use(
     if (err.response.status === 401) {
       localStorage.removeItem("authToken");
       router.push({ name: "Login" });
-    } else if (err.response.status === 404) {
+    }
+    if (err.response.status === 404) {
       router.push({
         name: "UserProfile",
         params: { username: store.getters.getUserData.username }
       });
-    } else {
-      console.log(err.response);
-      return Promise.reject(err);
     }
+    return Promise.reject(err);
   }
 );
 

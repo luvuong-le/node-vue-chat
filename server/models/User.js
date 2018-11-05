@@ -27,6 +27,10 @@ const UserSchema = new Schema({
     type: String,
     default: null
   },
+  location: {
+    type: String,
+    default: null
+  },
   session_id: {
     type: String,
     default: null

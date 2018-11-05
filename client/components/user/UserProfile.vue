@@ -2,7 +2,7 @@
 	<div class="page profile">
 		<div class="section profile__content">
 			<div class="section__heading mt-10">
-				<span class="section__title">My Account</span>
+				<span class="section__title">User Details</span>
 			</div>
 			<div class="section__content">
 				<div class="profile__container">
@@ -23,7 +23,7 @@
 						<span class="profile__item--right">{{ user.location || 'Unknown' }}</span>
 					</div>
 					<div class="profile__actions mt-3">
-						<router-link to="/" class="btn btn--blue">Edit Profile</router-link>
+						<router-link :to="{name: 'EditUserProfile', params: { username: user.username}}" class="btn btn--info">Edit Profile</router-link>
 						<router-link to="/register" class="btn btn--danger">Delete Account</router-link>
 					</div>
 				</div>
@@ -47,18 +47,21 @@ export default {
 		...mapGetters(['getUserData', 'isAuthorized']),
 	},
 	created() {
-		axios
-			.get(`http://localhost:5000/api/user/${localStorage.getItem('session_id')}`, {
-				headers: {
-					Authorization: `bearer ${localStorage.getItem('authToken')}`,
-				},
-			})
-			.then(res => {
-				this.$store.dispatch('saveUserData', res.data[0]);
-				this.$store.dispatch('toggleAuthState', true);
-				this.user = res.data[0];
-			})
-			.catch(err => err);
+		if (localStorage.getItem('session_id')) {
+			axios
+				.get(`http://localhost:5000/api/user/${localStorage.getItem('session_id')}`, {
+					headers: {
+						Authorization: `bearer ${localStorage.getItem('authToken')}`,
+					},
+				})
+				.then(res => {
+					this.$store.dispatch('saveUserData', res.data.user);
+					this.$store.dispatch('toggleAuthState', true);
+					localStorage.setItem('user', JSON.stringify(res.data.user));
+					this.user = res.data.user;
+				})
+				.catch(err => err);
+		}
 	},
 	mounted() {},
 };

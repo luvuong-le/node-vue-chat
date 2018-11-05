@@ -1,22 +1,14 @@
-import axios from "axios";
 import store from "../store";
 import _ from "lodash";
 
-export const checkUserData = async () => {
+export const checkUserData = () => {
   if (
     localStorage.getItem("session_id") &&
     _.isEmpty(store.getters.getUserData)
   ) {
-    const res = await axios.get(
-      `http://localhost:5000/api/user/${localStorage.getItem("session_id")}`,
-      {
-        headers: {
-          Authorization: `bearer ${localStorage.getItem("authToken")}`
-        }
-      }
-    );
+    const userData = localStorage.getItem("user");
 
-    store.dispatch("saveUserData", res.data[0]);
+    store.dispatch("saveUserData", JSON.parse(userData));
     store.dispatch("toggleAuthState", true);
   }
 };

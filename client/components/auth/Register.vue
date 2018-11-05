@@ -78,6 +78,8 @@ export default {
 						} else {
 							localStorage.setItem('authToken', res.data.token);
 							localStorage.setItem('session_id', res.data.user.session_id);
+							const { password, ...userData } = res.data.user;
+							localStorage.setItem('user', JSON.stringify(userData));
 							this.$router.push({ name: 'UserProfile', params: { username: res.data.user.username } });
 						}
 					});

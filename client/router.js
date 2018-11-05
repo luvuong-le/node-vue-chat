@@ -5,6 +5,8 @@ import Home from "./views/Home.vue";
 import Login from "@/components/auth/Login.vue";
 import Register from "@/components/auth/Register.vue";
 import UserProfile from "@/components/user/UserProfile.vue";
+import EditUserProfile from "@/components/user/EditUserProfile.vue";
+import RoomList from "@/components/room/RoomList.vue";
 import { checkUserData } from "./helpers/user";
 import store from "./store";
 
@@ -38,14 +40,35 @@ const router = new Router({
       }
     },
     {
-      path: "/user/:username?",
+      path: "/user/:username",
       name: "UserProfile",
       component: UserProfile,
       props: true,
       meta: {
         requiresAuth: true,
         transitionName: "router-anim",
-        enterActive: "animated flipInX"
+        enterActive: "animated fadeIn"
+      }
+    },
+    {
+      path: "/user/edit/:username?",
+      name: "EditUserProfile",
+      component: EditUserProfile,
+      props: true,
+      meta: {
+        requiresAuth: true,
+        transitionName: "router-anim",
+        enterActive: "animated fadeIn"
+      }
+    },
+    {
+      path: "/rooms",
+      name: "RoomList",
+      component: RoomList,
+      meta: {
+        requiresAuth: true,
+        transitionName: "router-anim",
+        enterActive: "animated fadeIn"
       }
     }
   ]

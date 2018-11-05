@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <Navbar v-if="['UserProfile', 'Home', 'Login', 'Register'].includes($route.name)" />
+    <Navbar v-if="['RoomList','EditUserProfile', 'UserProfile', 'Home', 'Login', 'Register'].includes($route.name)" />
 		<Particle name="particle-js"/>
 		<transition :name="transitionName" :enter-active-class="enterActive" :leave-active-class="leaveActive" mode="out-in">
 			<router-view/>

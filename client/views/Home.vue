@@ -7,7 +7,7 @@
       <div class="section__content">
         <p class="section__lead">Realtime chat application created using Vue JS, Socket IO and Node JS. Create A Room, Join a Room, Chat with people from all over! Connect with new friends and have fun!</p>
         <router-link to="/" class="btn btn--anim btn--white">Learn More</router-link>
-        <router-link to="/register" class="btn btn--anim btn--blue">Register Now</router-link>
+        <router-link to="/register" class="btn btn--anim btn--info">Register Now</router-link>
         <div class="section__graphic">
           <img src="@/assets/img/Desk.svg" alt="">
         </div>
