@@ -38,7 +38,7 @@ describe("GET /users", () => {
       .set("Authorization", token);
 
     expect(response.status).toBe(200);
-    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body).not.toBeNull();
   });
 
   it("should return an error if invalid username is entered", async () => {
