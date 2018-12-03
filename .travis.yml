@@ -17,7 +17,7 @@ before_script:
     - cd ..
 
 script:
-    - npm run test:ci
+    - npm run test
 
 cache:
     directories:

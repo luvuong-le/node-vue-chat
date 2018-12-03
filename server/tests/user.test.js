@@ -11,7 +11,8 @@ beforeAll(async () => {
     .post("/api/auth/login")
     .send({ email: userSeedData[0].email, password: userSeedData[0].password });
 
-  token = `bearer ${response.body.token}`;
+  token = response.body.token;
+
   session_id = response.body.user.session_id;
 });
 
@@ -20,6 +21,7 @@ describe("GET /users", () => {
     const response = await request
       .get("/api/user/users")
       .set("Authorization", token);
+
     expect(response.status).toEqual(200);
     expect(response.body.length).toBeGreaterThan(0);
   });
@@ -32,14 +34,14 @@ describe("GET /users", () => {
     expect(response.status).toEqual(401);
   });
 
-  it("should return the user data based on the session_id", async () => {
-    const response = await request
-      .get(`/api/user/${session_id}`)
-      .set("Authorization", token);
+  // it("should return the user data based on the username", async () => {
+  //   const response = await request
+  //     .get(`/api/user/${username}`)
+  //     .set("Authorization", token);
 
-    expect(response.status).toBe(200);
-    expect(response.body).not.toBeNull();
-  });
+  //   expect(response.status).toBe(200);
+  //   expect(response.body).not.toBeNull();
+  // });
 
   it("should return an error if invalid username is entered", async () => {
     const response = await request

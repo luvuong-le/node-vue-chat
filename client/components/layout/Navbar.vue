@@ -2,10 +2,10 @@
   <header>
     <nav class="nav">
       <div class="navbar__brand">
-          <ion-icon name="rocket" class="navbar__icon navbar__icon--logo"></ion-icon>
-          <router-link to="/" class="navbar__textbrand">Astro Chat</router-link>
+        <ion-icon name="rocket" class="navbar__icon navbar__icon--logo"></ion-icon>
+        <router-link to="/" class="navbar__textbrand">Astro Chat</router-link>
       </div>
-      <span @click="navToggleState = !navToggleState"  class="navbar__toggle">
+      <span @click="navToggleState = !navToggleState" class="navbar__toggle">
         <ion-icon name="menu" class="navbar__icon navbar__toggle--icon"></ion-icon>
       </span>
       <ul class="navbar__nav" v-if="!isAuthorized">
@@ -33,9 +33,9 @@
         </li>
       </ul>
       <SignedInLinks v-if="isAuthorized"/>
-    </nav>  
-    <nav class="snav" v-bind:class = "{'snav--shown': navToggleState}">
-      <Particle name="particlejs-nav" />
+    </nav>
+    <nav class="snav" v-bind:class="{'snav--shown': navToggleState}">
+      <Particle name="particlejs-nav"/>
       <ul class="snav__nav" v-if="!isAuthorized">
         <li @click="this.closeSideNav" class="snav__item">
           <router-link to="/" class="nav__link">Home</router-link>
@@ -60,14 +60,17 @@
       </ul>
 
       <ul class="snav__nav" v-if="isAuthorized">
-        <li @click="this.closeSideNav"  class="nav__item">
-          <router-link :to="{name: 'UserProfile', params: { username: this.$store.getters.getUserData.username}}" class="nav__link nav__link--rounded">Profile</router-link>
+        <li @click="this.closeSideNav" class="nav__item">
+          <router-link
+            :to="{name: 'UserProfile', params: { username: this.$store.getters.getUserData.username}}"
+            class="nav__link nav__link--rounded"
+          >Profile</router-link>
         </li>
         <li @click="this.closeSideNav" class="nav__item">
           <button @click.prevent="logout" class="nav__link nav__link--btn nav__link--rounded">Logout</button>
         </li>
       </ul>
-    </nav> 
+    </nav>
   </header>
 </template>
 
@@ -77,30 +80,30 @@ import Particle from '@/components/layout/Particle.vue';
 import SignedInLinks from '@/components/layout/SignedInLinks.vue';
 
 export default {
-	name: 'Navbar',
-	components: {
-		Particle: Particle,
-		SignedInLinks,
-	},
-	data: function() {
-		return {
-			navToggleState: false,
-		};
-	},
-	computed: {
-		...mapGetters(['getUserData', 'isAuthorized']),
-	},
-	methods: {
-		...mapActions(['toggleAuthState']),
-		closeSideNav() {
-			this.navToggleState = false;
-		},
-	},
-	mounted() {
-		if (localStorage.getItem('authToken')) {
-			this.$store.dispatch('toggleAuthState', true);
-		}
-	},
+    name: 'Navbar',
+    components: {
+        Particle: Particle,
+        SignedInLinks
+    },
+    data: function() {
+        return {
+            navToggleState: false
+        };
+    },
+    computed: {
+        ...mapGetters(['getUserData', 'isAuthorized'])
+    },
+    methods: {
+        ...mapActions(['toggleAuthState']),
+        closeSideNav() {
+            this.navToggleState = false;
+        }
+    },
+    mounted() {
+        if (localStorage.getItem('authToken')) {
+            this.$store.dispatch('toggleAuthState', true);
+        }
+    }
 };
 </script>
 

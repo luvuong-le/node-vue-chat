@@ -11,13 +11,15 @@ let opts = {
 module.exports = function(passport) {
   passport.use(
     new JwtStrategy(opts, (payload, done) => {
-      User.findById(payload.user._id).then(user => {
-        if (user && user.password === payload.user.password) {
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      });
+      User.findById(payload._id)
+        .select("-password")
+        .then(user => {
+          if (user) {
+            return done(null, user);
+          } else {
+            return done(null, false);
+          }
+        });
     })
   );
 };

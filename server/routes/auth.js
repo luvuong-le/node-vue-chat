@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const uuid = require("uuid");
 const { User } = require("../models/User");
+const _ = require("lodash");
 
 /** Authentication */
 const {
@@ -29,13 +30,13 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
 
       if (user.username === req.body.username) {
         errors.push({ param: "username", msg: "Username is already taken" });
-
-        res
-          .send({
-            errors: createErrorObject(errors)
-          })
-          .end();
       }
+
+      res
+        .send({
+          errors: createErrorObject(errors)
+        })
+        .end();
     } else {
       const newUser = new User({
         username: req.body.username,
@@ -46,12 +47,18 @@ router.post("/register", [checkRegistrationFields], (req, res) => {
 
       newUser
         .save()
-        .then(user => {
+        .then(userData => {
+          const user = _.omit(userData.toObject(), ["password"]);
+
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
             expiresIn: 86400
           });
 
-          res.status(200).send({ auth: true, token, user });
+          res.status(200).send({
+            auth: true,
+            token: `Bearer ${token}`,
+            user
+          });
         })
         .catch(err => {
           res.send({
@@ -76,7 +83,9 @@ router.post("/login", checkLoginFields, async (req, res) => {
     { $set: { session_id: uuid.v1() } }
   );
 
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ email: req.body.email }).select(
+    "-password"
+  );
 
   if (!user) {
     return res.status(404).send({
@@ -84,11 +93,11 @@ router.post("/login", checkLoginFields, async (req, res) => {
     });
   }
 
-  const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+  const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {
     expiresIn: 86400
   });
 
-  res.status(200).send({ auth: true, token, user });
+  res.status(200).send({ auth: true, token: `Bearer ${token}`, user });
 });
 
 module.exports = router;

@@ -32,7 +32,7 @@ router.get(
 );
 
 /**
- * @description PUT/user/:session_id
+ * @description PUT /user/current
  * @param  {String} id
  * @param  {Middleware} passport.authenticate
  * @param  {false} session
@@ -40,11 +40,11 @@ router.get(
  * @param  {Object} response
  */
 router.put(
-  "/:session_id",
+  "/current",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await User.findOneAndUpdate(
-      { session_id: req.params.session_id },
+      { _id: req.user.id },
       req.body,
       { fields: { username: 1, email: 1, location: 1 } },
       (err, doc) => {
@@ -60,7 +60,7 @@ router.put(
 );
 
 /**
- * @description GET/user/:session_id
+ * @description GET /user/current
  * @param  {String} id
  * @param  {Middleware} passport.authenticate
  * @param  {false} session
@@ -68,25 +68,28 @@ router.put(
  * @param  {Object} response
  */
 router.get(
-  "/:session_id",
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json(req.user);
+  }
+);
+
+/**
+ * @description DELETE /user/current
+ * @param  {String} id
+ * @param  {Middleware} passport.authenticate
+ * @param  {false} session
+ * @param  {Object} request
+ * @param  {Object} response
+ */
+router.delete(
+  "/current",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const user = await User.find(
-      { session_id: req.params.session_id },
-      "image email username location"
-    ).exec();
+    await User.findOneAndDelete({ _id: req.user.id });
 
-    if (user.length !== 0) {
-      return res
-        .status(200)
-        .send({ user: user[0] })
-        .end();
-    } else {
-      return res
-        .status(404)
-        .send({ error: `No User Found called ${req.params.username}` })
-        .end();
-    }
+    res.json({ success: true });
   }
 );
 

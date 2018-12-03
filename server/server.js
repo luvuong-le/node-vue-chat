@@ -18,6 +18,7 @@ require("./config/passport")(passport);
 /** Routes */
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const profileRoutes = require("./routes/profile");
 
 /** Express */
 const express = require("express");
@@ -42,6 +43,7 @@ app.use(cors());
 /** Routes Definitions */
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/profile", profileRoutes);
 
 if (process.env.NODE_ENV !== "production") {
   logger.add(
