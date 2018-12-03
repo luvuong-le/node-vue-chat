@@ -81,6 +81,7 @@ router.beforeEach((to, from, next) => {
     checkUserData();
     if (to.meta.requiresAuth) {
         if (localStorage.getItem('authToken') === null) {
+            localStorage.clear();
             next({
                 name: 'Login',
                 params: { message: 'You are unauthorized, Please login to access' }
@@ -89,7 +90,7 @@ router.beforeEach((to, from, next) => {
             next();
         }
     } else if (!_.isEmpty(to.meta) && !to.meta.requiresAuth) {
-        if (localStorage.getItem('session_id')) {
+        if (localStorage.getItem('authToken')) {
             next({
                 name: 'UserProfile',
                 params: { username: store.getters.getUserData.username }
