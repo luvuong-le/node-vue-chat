@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: 'Astro Chat Backend',
+            name: 'astro-chat-backend',
             cwd: './server/',
             script: './server/server.js',
             watch: true,

@@ -1,0 +1,14 @@
+{
+    "root": true,
+    "parserOptions": { "ecmaVersion": 6 },
+    "env": {
+        "node": true,
+        "jest": true
+    },
+    "extends": ["plugin:prettier/recommended"],
+    "rules": {
+        "indent": ["error", 4],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"]
+    }
+}

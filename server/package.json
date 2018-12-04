@@ -28,8 +28,12 @@
         "uuid": "^3.3.2"
     },
     "devDependencies": {
+        "eslint": "^5.9.0",
+        "eslint-config-prettier": "^3.3.0",
+        "eslint-plugin-prettier": "^3.0.0",
         "jest": "^23.6.0",
         "morgan": "^1.9.1",
+        "prettier": "^1.15.3",
         "supertest": "^3.3.0",
         "winston": "^3.1.0"
     }

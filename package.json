@@ -1,45 +1,30 @@
 {
-    "name": "astro-chat",
-    "version": "0.1.0",
-    "private": true,
+    "name": "astro-chat-app",
+    "version": "1.0.0",
+    "description": "Astro Chat Application",
+    "main": "ecosystem.config.js",
     "scripts": {
         "seed:data": "npm run seed --prefix server",
-        "dev:client": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint",
-        "test:unit": "vue-cli-service test:unit",
         "server": "pm2 start ecosystem.config.js",
-        "server:kill": "pm2 kill",
+        "server:dev": "pm2 start ecosystem.config.js && pm2 logs",
         "server:test:watch": "npm run test:watch --prefix server",
-        "server:test:local": "npm run seed:data && npm run test:local --prefix server",
         "server:test:ci": "npm run seed:data && npm run test:ci --prefix server",
         "test": "npm run test:unit && npm run server:test:ci",
-        "dev": "npm run server && npm run dev:client",
-        "deploy": "npm run build && npm run server"
+        "dev": "npm run server && npm run dev --prefix client",
+        "build": "npm run build --prefix client"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/luvuong-le/astro-chat.git"
     },
     "author": "Lu-Vuong <lu-vuongle@hotmail.com>",
     "license": "MIT",
-    "dependencies": {
-        "axios": "^0.18.0",
-        "lodash": "^4.17.11",
-        "particles.js": "^2.0.0",
-        "typed.js": "^2.0.9",
-        "vue": "^2.5.17",
-        "vue-router": "^3.0.1",
-        "vuex": "^3.0.1"
+    "bugs": {
+        "url": "https://github.com/luvuong-le/astro-chat/issues"
     },
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "^3.0.0-rc.12",
-        "@vue/cli-plugin-eslint": "^3.0.0-rc.12",
-        "@vue/cli-plugin-unit-jest": "^3.1.0",
-        "@vue/cli-service": "^3.0.0-rc.12",
-        "@vue/eslint-config-prettier": "^3.0.4",
-        "@vue/test-utils": "^1.0.0-beta.20",
-        "babel-core": "7.0.0-bridge.0",
-        "babel-jest": "^23.0.1",
-        "node-sass": "^4.9.0",
-        "pm2": "^3.2.2",
-        "sass-loader": "^7.0.1",
-        "vue-template-compiler": "^2.5.17"
-    }
+    "homepage": "https://github.com/luvuong-le/astro-chat#readme",
+    "dependencies": {
+        "pm2": "^3.2.2"
+    },
+    "devDependencies": {}
 }
