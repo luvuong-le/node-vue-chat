@@ -2,11 +2,11 @@
   <div class="page profile">
     <div class="section profile__content">
       <div class="section__heading mt-10">
-        <span class="section__title">User Details</span>
+        <span class="section__title">{{ user.username }}'s</span>
       </div>
       <div class="section__content">
         <div class="profile__container">
-          <span class="lead">Your current profile</span>
+          <span class="lead">{{ user.username }}'s profile</span>
           <div class="profile__item">
             <ion-icon name="contact" class="icon icon-lg"></ion-icon>
           </div>
@@ -23,11 +23,7 @@
             <span class="profile__item--right">{{ user.location || 'Unknown' }}</span>
           </div>
           <div class="profile__actions mt-3">
-            <router-link
-              :to="{name: 'EditUserProfile', params: { username: user.username}}"
-              class="btn btn--info"
-            >Edit Profile</router-link>
-            <router-link to="/register" class="btn btn--danger">Delete Account</router-link>
+            <a @click="$router.go(-1)" class="btn btn--info">Back</a>
           </div>
         </div>
       </div>
@@ -55,13 +51,8 @@ export default {
     created() {
         if (localStorage.getItem('authToken')) {
             axios
-                .get(`/api/user/current`)
-                .then(res => {
-                    this.$store.dispatch('saveUserData', res.data);
-                    this.$store.dispatch('toggleAuthState', true);
-                    localStorage.setItem('user', JSON.stringify(res.data));
-                    this.user = res.data;
-                })
+                .get(`/api/profile/${this.$route.params.username}`)
+                .then(res => (this.user = res.data))
                 .catch(err => err);
         }
     },

@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app">
     <Navbar
-      v-if="['RoomList','EditUserProfile', 'UserProfile', 'Home', 'Login', 'Register', 'Room'].includes($route.name)"
+      v-if="['Profile','RoomList','EditUserProfile', 'UserProfile', 'Home', 'Login', 'Register', 'Room'].includes($route.name)"
     />
     <Particle name="particle-js"/>
     <transition

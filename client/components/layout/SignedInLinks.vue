@@ -7,7 +7,7 @@
       <router-link
         :to="{name: 'UserProfile', params: { username: this.$store.getters.getUserData.username }}"
         class="nav__link nav__link--rounded"
-      >Profile</router-link>
+      >{{ this.$store.getters.getUserData.username }}</router-link>
     </li>
     <li class="nav__item">
       <button @click.prevent="logout" class="nav__link nav__link--btn nav__link--rounded">Logout</button>

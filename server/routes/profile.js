@@ -16,18 +16,17 @@ const { User } = require('../models/User');
 router.get('/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const user = await User.find(
         { username: req.params.username },
-        'image email username location'
-    ).exec();
+    ).select('-password -session_id').exec();
 
-    if (user.length !== 0) {
+    if (user) {
         return res
             .status(200)
-            .send({ user: user[0] })
+            .json(user[0])
             .end();
     } else {
         return res
             .status(404)
-            .send({ error: `No User Found called ${req.params.username}` })
+            .json({ error: `No User Found called ${req.params.username}` })
             .end();
     }
 });

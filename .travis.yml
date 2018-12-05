@@ -11,10 +11,8 @@ env:
 
 install:
     - npm install
-    - cd server && npm install
-
-before_script:
-    - cd ..
+    - npm install --prefix client
+    - npm install --prefix server
 
 script:
     - npm run test

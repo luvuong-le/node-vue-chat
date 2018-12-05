@@ -44,7 +44,7 @@
             <div slot="body">
               <transition
                 name="fade"
-                enter-active-class="animated slideInLeft"
+                enter-active-class="animated zoomInDown"
                 leave-active-class="animated slideOutRight"
                 mode="out-in"
               >

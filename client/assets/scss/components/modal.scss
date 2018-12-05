@@ -10,6 +10,8 @@
     left: 0;
     background: rgba(0, 0, 0, 0.8);
     z-index: 20;
+    transition: opacity 1s ease;
+    @include flex-center();
 
     &__content {
         font-family: 'Work Sans';
@@ -18,9 +20,9 @@
         background: #18191c;
         border-radius: 5px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-        @include center();
         color: #fff;
         position: relative;
+        transition: opacity 1s ease, transform 1s cubic-bezier(0.42, 0, 0.2, 1.51);
     }
 
     &__header {

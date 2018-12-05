@@ -10,34 +10,41 @@
 */
 
 @mixin respond($breakpoint) {
-	@if $breakpoint == phone {
-		@media only screen and (min-width: 20em) and (max-width: 48em) {
-			@content;
-		}
-	}
+    @if $breakpoint == phone {
+        @media only screen and (min-width: 20em) and (max-width: 48em) {
+            @content;
+        }
+    }
 
-	@if $breakpoint == tablet-portrait {
-		@media only screen and (min-width: 48em) and (max-width: 64em) and (orientation: portrait) {
-			@content;
-		}
-	}
+    @if $breakpoint == tablet-portrait {
+        @media only screen and (min-width: 48em) and (max-width: 64em) and (orientation: portrait) {
+            @content;
+        }
+    }
 
-	@if $breakpoint == tablet-landscape {
-		@media only screen and (min-width: 48em) and (max-width: 64em) {
-			@content;
-		}
-	}
+    @if $breakpoint == tablet-landscape {
+        @media only screen and (min-width: 48em) and (max-width: 64em) {
+            @content;
+        }
+    }
 
-	@if $breakpoint == desktop {
-		@media only screen and (min-width: 64em) and (max-width: 114em) {
-			@content;
-		}
-	}
+    @if $breakpoint == desktop {
+        @media only screen and (min-width: 64em) and (max-width: 114em) {
+            @content;
+        }
+    }
 }
 
 @mixin center() {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin flex-center() {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }

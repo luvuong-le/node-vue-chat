@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Login from '@/components/auth/Login.vue';
 import Register from '@/components/auth/Register.vue';
+import Profile from '@/components/profile/Profile.vue';
 import UserProfile from '@/components/user/UserProfile.vue';
 import EditUserProfile from '@/components/user/EditUserProfile.vue';
 import RoomList from '@/components/room/RoomList.vue';
@@ -79,6 +80,16 @@ const router = new Router({
             path: '/room/:roomname',
             name: 'Room',
             component: Room,
+            meta: {
+                requiresAuth: true,
+                transitionName: 'router-anim',
+                enterActive: 'animated fadeIn'
+            }
+        },
+        {
+            path: '/profile/:username',
+            name: 'Profile',
+            component: Profile,
             meta: {
                 requiresAuth: true,
                 transitionName: 'router-anim',
