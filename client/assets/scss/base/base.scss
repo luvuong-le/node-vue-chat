@@ -1,201 +1,221 @@
 @import '../abstract/keyframes.scss';
+@import '../abstract/variables.scss';
 @import '../abstract/util.scss';
 @import '../vendors/animate.scss';
 
 *,
 *::before,
 *::after {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 html,
 body {
-	height: 100%;
-	background: #18191c;
-	font-family: 'Work Sans', sans-serif;
+    height: 100%;
+    background: #18191c;
+    font-family: 'Work Sans', sans-serif;
 }
 
 header {
-	background: #18191c;
-	border-bottom: 1px solid #fff;
-	width: 100%;
-	position: relative;
-	z-index: 10;
+    background: #18191c;
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    position: relative;
+    z-index: 10;
 
-	@include respond(phone) {
-		position: fixed;
-		top: 0;
-	}
+    @include respond(phone) {
+        position: fixed;
+        top: 0;
+    }
 }
 
 img {
-	width: 100%;
+    width: 100%;
 }
 
 nav a {
-	text-decoration: none;
-	color: #fff;
-	margin: 0 0.5rem;
+    text-decoration: none;
+    color: #fff;
+    margin: 0 0.5rem;
 }
 
 li .nav__link.router-link-exact-active {
-	font-weight: bold;
-	color: #fff;
-	opacity: 1;
+    font-weight: bold;
+    color: #fff;
+    opacity: 1;
 }
 
 .app {
-	overflow-x: hidden;
+    overflow-x: hidden;
+}
+
+.public,
+.private {
+    font-weight: bold;
+}
+
+.public {
+    color: lightgreen;
+}
+
+.private {
+    color: crimson;
 }
 
 .lead {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	margin-bottom: 1.3em;
-	text-align: center;
-	font-size: 0.9em;
-	line-height: 1.5em;
-	color: rgba(255, 255, 255, 0.8);
-	font-family: 'Russo One';
-	text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1.3em;
+    text-align: center;
+    font-size: 0.9em;
+    line-height: 1.5em;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Russo One';
+    text-transform: uppercase;
 }
 
 .btn {
-	text-decoration: none;
-	color: #fff;
-	text-align: center;
-	font-size: 0.9em;
-	margin: 0 1em;
-	padding: 12px 50px;
-	display: inline-block;
-	cursor: pointer;
-	transition: transform 1s ease, opacity 0.5s ease;
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    font-size: 0.9em;
+    margin: 0 1em;
+    padding: 12px 50px;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 1s ease, opacity 0.5s ease;
 
-	&:hover {
-		opacity: 0.5;
-	}
+    &:hover {
+        opacity: 0.5;
+    }
 
-	&--clear {
-		border: 0;
-		font-family: 'Work Sans';
-	}
+    &--clear {
+        border: 0;
+        font-family: 'Work Sans';
+    }
 
-	&--rounded {
-		border-radius: 20px;
-		border: 2px solid #fff;
-		padding: 5px 17px 7px;
-	}
+    &--rounded {
+        border-radius: 20px;
+        border: 2px solid #fff;
+        padding: 5px 17px 7px;
+    }
 
-	&--anim {
-		animation: hover 1s linear infinite;
-	}
+    &--anim {
+        animation: hover 1s linear infinite;
+    }
 
-	&--white {
-		color: #000;
-		background: #fff;
-		border-radius: 5px;
-	}
+    &--white {
+        color: #000;
+        background: #fff;
+        border-radius: 5px;
+    }
 
-	&--success {
-		color: #fff;
-		background: lightgreen;
-		border-radius: 5px;
-	}
+    &--success {
+        color: #fff;
+        background: lightgreen;
+        border-radius: 5px;
+    }
 
-	&--danger {
-		color: #fff;
-		background: crimson;
-		border-radius: 5px;
-	}
+    &--danger {
+        color: #fff;
+        background: crimson;
+        border-radius: 5px;
+    }
 
-	&--info {
-		color: #fff;
-		background: #3c9adf;
-		border-radius: 5px;
-		animation-delay: 0.8s;
-	}
+    &--info {
+        color: #fff;
+        background: #3c9adf;
+        border-radius: 5px;
+        animation-delay: 0.8s;
+    }
+
+    &--modal {
+        width: 100%;
+        margin: 0;
+        height: 100%;
+    }
 }
 
 .icon {
-	font-size: 1.5em;
-	margin: 0 0.4em;
+    font-size: 1.5em;
+    margin: 0 0.4em;
 }
 
 .page {
-	height: 100%;
-	width: 100%;
-	background: transparent;
-	color: #fff;
-	background: url(./assets/img/BackgroundPath.svg) no-repeat;
-	background-size: 100%;
-	background-position: bottom center;
-	position: relative;
-	z-index: 2;
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    color: #fff;
+    background: url(./assets/img/BackgroundPath.svg) no-repeat;
+    background-size: 100%;
+    background-position: bottom center;
+    position: relative;
+    z-index: 2;
 }
 
 .section {
-	height: 100vh;
-	width: 100%;
-	position: relative;
-	padding: 1rem;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    padding: 1rem;
 }
 
 .section {
-	&__heading {
-		font-size: 2.5rem;
-		text-align: center;
-	}
+    &__heading {
+        font-size: 2.5rem;
+        text-align: center;
+    }
 
-	&__title {
-		width: auto;
-		display: inline-block;
-		font-family: 'Russo One', sans-serif;
-	}
+    &__title {
+        width: auto;
+        display: inline-block;
+        font-family: 'Russo One', sans-serif;
+    }
 
-	&__lead {
-		text-align: center;
-		width: 50%;
-		margin: 1em auto 3em auto;
-		font-size: 0.9em;
-		line-height: 1.5em;
-		color: rgba(255, 255, 255, 0.8);
-	}
+    &__lead {
+        text-align: center;
+        width: 50%;
+        margin: 1em auto 3em auto;
+        font-size: 0.9em;
+        line-height: 1.5em;
+        color: rgba(255, 255, 255, 0.8);
+    }
 
-	&:first-child {
-		height: calc(100vh - 66px);
-	}
+    &:first-child {
+        height: calc(100vh - 66px);
+    }
 
-	&__landing {
-		margin: 4em 0 10em 0;
+    &__landing {
+        margin: 4em 0 10em 0;
 
-		@include respond(phone) {
-			margin: 10em 0;
-		}
-	}
+        @include respond(phone) {
+            margin: 10em 0;
+        }
+    }
 
-	&__content {
-		text-align: center;
-	}
+    &__content {
+        text-align: center;
+    }
 
-	&__graphic {
-		width: 100%;
-		margin: 4em 0;
+    &__graphic {
+        width: 100%;
+        margin: 4em 0;
 
-		& > img {
-			width: 50%;
-		}
-	}
+        & > img {
+            width: 50%;
+        }
+    }
 }
 
 .particle {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
 }

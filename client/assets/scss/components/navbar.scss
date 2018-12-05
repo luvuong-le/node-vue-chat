@@ -1,145 +1,145 @@
 .nav {
-	display: flex;
-	align-items: center;
-	width: 85%;
-	padding: 1em 0;
-	margin: 0 auto;
+    display: flex;
+    align-items: center;
+    width: 85%;
+    padding: 1em 0;
+    margin: 0 auto;
 
-	@include respond(tablet-landscape) {
-		width: 90%;
-	}
+    @include respond(tablet-landscape) {
+        width: 90%;
+    }
 
-	&__link {
-		color: rgba(255, 255, 255, 0.7);
-		transition: opacity 0.5s ease;
+    &__link {
+        color: rgba(255, 255, 255, 0.7);
+        transition: opacity 0.5s ease;
 
-		&--rounded {
-			border-radius: 20px;
-			border: 2px solid #fff;
-			padding: 5px 17px 7px;
+        &--rounded {
+            border-radius: 20px;
+            border: 2px solid #fff;
+            padding: 5px 17px 7px;
 
-			&:hover {
-				opacity: 0.5;
-			}
-		}
+            &:hover {
+                opacity: 0.5;
+            }
+        }
 
-		&--btn {
-			background: transparent;
-			font-family: 'Work Sans', sans-serif;
-			color: #fff;
-			cursor: pointer;
-		}
-	}
+        &--btn {
+            background: transparent;
+            font-family: 'Work Sans', sans-serif;
+            color: #fff;
+            cursor: pointer;
+        }
+    }
 
-	&__item {
-		list-style: none;
-		font-size: 0.8em;
-		display: flex;
-		align-items: center;
-	}
+    &__item {
+        list-style: none;
+        font-size: 0.8em;
+        display: flex;
+        align-items: center;
+    }
 }
 
 .navbar {
-	&__brand {
-		font-weight: bold;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		font-size: 1.2em;
-		display: flex;
-		align-items: center;
-	}
+    &__brand {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+    }
 
-	&__textbrand {
-		font-family: 'Russo One', sans-serif;
-		animation: fadeIn 0.5s ease;
-	}
+    &__textbrand {
+        font-family: 'Russo One', sans-serif;
+        animation: fadeIn 0.5s ease;
+    }
 
-	&__icon {
-		font-size: 2.5em;
-		color: #fff;
+    &__icon {
+        font-size: 2.5em;
+        color: #fff;
 
-		&--logo {
-			transform: rotate(45deg);
-			font-size: 1.8em;
-			color: #fff;
-			animation: zoomIn 0.5s linear;
-		}
-	}
+        &--logo {
+            transform: rotate(45deg);
+            font-size: 1.8em;
+            color: #fff;
+            animation: zoomIn 0.5s linear;
+        }
+    }
 
-	&__nav {
-		display: flex;
-		margin: 0 1em;
-		align-items: center;
+    &__nav {
+        display: flex;
+        margin: 0 1em;
+        align-items: center;
 
-		@include respond(phone) {
-			display: none;
-		}
+        @include respond(phone) {
+            display: none;
+        }
 
-		&--right {
-			flex-grow: 1;
-			text-align: right;
-			justify-content: flex-end;
-		}
-	}
+        &--right {
+            flex-grow: 1;
+            text-align: right;
+            justify-content: flex-end;
+        }
+    }
 
-	&__toggle {
-		position: relative;
-		z-index: 10;
-		display: none;
-		flex-grow: 1;
-		text-align: right;
-		justify-content: flex-end;
-		cursor: pointer;
+    &__toggle {
+        position: relative;
+        z-index: 10;
+        display: none;
+        flex-grow: 1;
+        text-align: right;
+        justify-content: flex-end;
+        cursor: pointer;
 
-		@include respond(phone) {
-			display: initial;
-		}
+        @include respond(phone) {
+            display: initial;
+        }
 
-		&--icon {
-			font-size: 2em;
-		}
-	}
+        &--icon {
+            font-size: 2em;
+        }
+    }
 }
 
 .snav {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	z-index: 99;
-	padding: 1em;
-	border-top: 1px solid #fff;
-	background: url(../../assets/img/BackgroundPath.svg) no-repeat, rgba(24, 25, 28, 1);
-	background-size: 100%;
-	background-position: bottom center;
-	transform: translateX(100%);
-	transition: transform 0.5s ease;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    padding: 1em;
+    border-top: 1px solid #fff;
+    background: url(../../assets/img/BackgroundPath.svg) no-repeat, rgba(24, 25, 28, 1);
+    background-size: 100%;
+    background-position: bottom center;
+    transform: translateX(100%);
+    transition: transform 0.5s ease;
 
-	&--shown {
-		transform: translateX(0);
-	}
+    &--shown {
+        transform: translateX(0);
+    }
 
-	&__nav {
-		position: relative;
-		z-index: 50;
-		display: flex;
-		flex-flow: column;
-		margin: 0 1em;
-		align-items: flex-start;
-	}
+    &__nav {
+        position: relative;
+        z-index: 50;
+        display: flex;
+        flex-flow: column;
+        margin: 0 1em;
+        align-items: flex-start;
+    }
 
-	&__item {
-		list-style: none;
-		width: 100%;
-		padding: 1em;
+    &__item {
+        list-style: none;
+        width: 100%;
+        padding: 1em;
 
-		& > a {
-			color: #fff;
-			font-weight: bold;
-		}
-	}
+        & > a {
+            color: #fff;
+            font-weight: bold;
+        }
+    }
 
-	// &__footer {
-	// 	position: absolute;
-	// 	bottom: 20%;
-	// }
+    // &__footer {
+    // 	position: absolute;
+    // 	bottom: 20%;
+    // }
 }

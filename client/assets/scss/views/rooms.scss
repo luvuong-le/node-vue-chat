@@ -1,0 +1,62 @@
+@import '../abstract//variables.scss';
+
+.rooms {
+    background: $primary-container-background;
+    box-shadow: $primary-container-box-shadow;
+    width: 60%;
+    max-width: 600px;
+    margin: 1rem auto;
+
+    &__list {
+        margin: 0;
+        padding: 1rem;
+        height: 500px;
+        max-height: 500px;
+        overflow: auto;
+
+        &-item {
+            list-style: none;
+            margin: 1rem 0;
+            transition: opacity 0.5s ease;
+
+            &:hover {
+                opacity: 0.6;
+            }
+
+            &-link {
+                text-decoration: none;
+                color: #fff;
+            }
+        }
+    }
+
+    &__item {
+        &-container {
+            display: flex;
+            padding: 1rem;
+            border-radius: 3px;
+            border: 1px solid #eeeeee;
+        }
+
+        &-details {
+            width: 50%;
+            text-align: left;
+        }
+
+        /** List Item Actions */
+        &-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        &-action {
+            width: 50%;
+            align-self: center;
+            text-align: right;
+        }
+    }
+
+    &__actions {
+        padding: 1rem;
+    }
+}

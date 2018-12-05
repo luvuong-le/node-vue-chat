@@ -1,5 +1,6 @@
 const { app } = require('../server');
 const { userSeedData } = require('./seed/seedData');
+
 const supertest = require('supertest');
 
 let token;
@@ -11,7 +12,7 @@ beforeAll(async () => {
         .send({ email: userSeedData[0].email, password: userSeedData[0].password });
 
     token = response.body.token;
-});
+})
 
 describe('GET /api/room', () => {
     it('should return an array of rooms', async () => {
@@ -37,13 +38,51 @@ describe('POST /api/room', () => {
         const response = await request
             .post('/api/room')
             .send({
-                room_name: 'Jest Test Room',
+                room_name: 'Jests Test Room',
                 password: ''
             })
             .set('Authorization', token);
 
         expect(response.status).toEqual(200);
         expect(response.body).not.toBeNull();
+        expect(Object.keys(response.body).length).toBeGreaterThan(0);
+    });
+});
+
+
+describe('PUT /api/room/:room_name', () => {
+    it('should update the room name', async () => {
+        const response = await request
+            .post('/api/room/update')
+            .send({ room_name: 'Jests Test Room', new_room_name: 'Jest Test Room'})
+            .set('Authorization', token);
+
+        expect(response.status).toEqual(200);
+        expect(response.body).not.toBeNull();
+        expect(response.body.name).toEqual('Jest Test Room');
+        expect(Object.keys(response.body).length).toBeGreaterThan(0);
+    })
+})
+
+
+describe('DELETE /api/room/:room_name', () => {
+    it('should delete a room based on the name', async () => {
+        const room_name = 'Jest Test Room';
+        let response = await request.delete(`/api/room/${room_name}`).set('Authorization', token);
+
+        expect(response.status).toEqual(200);
+        expect(Object.keys(response.body).length).toBeGreaterThan(0);
+
+        response = await request.get('/api/room').set('Authorization', token);
+
+        expect(response.body).not.toContain(room_name);
+    });
+
+    it('should return an error with a unknown room name', async () => {
+        const room_name = 'Jest sTest Room';
+        let response = await request.delete(`/api/room/${room_name}`).set('Authorization', token);
+
+        expect(response.status).toEqual(404);
         expect(Object.keys(response.body).length).toBeGreaterThan(0);
     });
 });

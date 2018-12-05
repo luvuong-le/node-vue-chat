@@ -34,6 +34,10 @@ module.exports = {
         {
             name: 'Test Room #2',
             password: ''
+        },
+        {
+            name: 'Test Room',
+            password: ''
         }
     ]
 };

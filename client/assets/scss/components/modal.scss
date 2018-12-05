@@ -1,0 +1,45 @@
+@import '@/assets/scss/abstract/variables.scss';
+
+.modal {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 20;
+
+    &__content {
+        font-family: 'Work Sans';
+        width: 500px;
+        height: 500px;
+        background: #18191c;
+        border-radius: 5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+        @include center();
+        color: #fff;
+        position: relative;
+    }
+
+    &__header {
+        position: relative;
+        bottom: 0;
+        padding: 2rem 1rem;
+        height: 15%;
+    }
+
+    &__body {
+        height: 75%;
+    }
+
+    &__footer {
+        height: 10%;
+        border-top: 1px solid white;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+    }
+}

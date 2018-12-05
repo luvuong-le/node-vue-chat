@@ -1,131 +1,136 @@
 .form {
-	position: relative;
-	z-index: 10;
-	width: 480px;
-	margin: 0 auto;
-	padding: 3em 1em;
-	background: #18191c;
-	box-shadow: 1px 1px 1px 1px #000;
-	transform: translateY(30px);
+    position: relative;
+    z-index: 10;
+    width: 480px;
+    margin: 0 auto;
+    padding: 3em 1em;
+    background: #18191c;
+    box-shadow: 1px 1px 1px 1px #000;
+    transform: translateY(30px);
 
-	@include respond(phone) {
-		width: 80%;
-	}
+    &--nbs {
+        background: none;
+        box-shadow: none;
+    }
 
-	&__input-group {
-		position: relative;
-		width: auto;
-	}
+    @include respond(phone) {
+        width: 80%;
+    }
 
-	&__label {
-		position: absolute;
-		top: 50%;
-		left: 10px;
-		opacity: 0.5;
-		font-weight: bold;
-		margin: -10px 22px;
-		text-transform: uppercase;
-		transition: top 0.5s ease, left 0.5s ease, opacity 1s ease;
-	}
+    &__input-group {
+        position: relative;
+        width: auto;
+    }
 
-	&__control {
-		position: relative;
-		padding: 1em;
-		border-radius: 3px;
-		border: 1px solid #fff;
-		background: transparent;
-		margin: 1.5em 0 2.5em 0;
-		z-index: 1;
-		width: 90%;
-		color: #fff;
-		font-weight: bold;
-		font-family: 'Work Sans', sans-serif;
-		outline: none;
+    &__label {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        opacity: 0.5;
+        font-weight: bold;
+        margin: -10px 22px;
+        text-transform: uppercase;
+        transition: top 0.5s ease, left 0.5s ease, opacity 1s ease;
+    }
 
-		&:focus + label,
-		&:focus:valid + label,
-		&:valid + label,
-		&:focus:invalid + label {
-			opacity: 1;
-			top: 0;
-			left: 0;
-		}
+    &__control {
+        position: relative;
+        padding: 1em;
+        border-radius: 3px;
+        border: 1px solid #fff;
+        background: transparent;
+        margin: 1.5em 0 2.5em 0;
+        z-index: 1;
+        width: 90%;
+        color: #fff;
+        font-weight: bold;
+        font-family: 'Work Sans', sans-serif;
+        outline: none;
 
-		&:invalid + label {
-			opacity: 0;
-		}
+        &:focus + label,
+        &:focus:valid + label,
+        &:valid + label,
+        &:focus:invalid + label {
+            opacity: 1;
+            top: 0;
+            left: 0;
+        }
 
-		&:focus:invalid {
-			border: 1px solid crimson;
-		}
+        &:invalid + label {
+            opacity: 0;
+        }
 
-		&:focus:valid {
-			border: 1px solid lightgreen;
-		}
-	}
+        &:focus:invalid {
+            border: 1px solid crimson;
+        }
 
-	&__submit {
-		text-decoration: none;
-		color: #fff;
-		text-align: center;
-		margin: 1em 1em 0 1em;
-		padding: 12px;
-		width: 90%;
-		display: inline-block;
-		cursor: pointer;
-		color: #fff;
-		background: #3c9adf;
-		border-radius: 3px;
-		border: 0;
-		font-weight: bold;
-		text-transform: uppercase;
-		font-size: 1em;
-		font-family: 'Work Sans', sans-serif;
-	}
+        &:focus:valid {
+            border: 1px solid lightgreen;
+        }
+    }
 
-	&__link {
-		text-decoration: none;
-		color: #fff;
-		font-weight: bold;
+    &__submit {
+        text-decoration: none;
+        color: #fff;
+        text-align: center;
+        margin: 1em 1em 0 1em;
+        padding: 12px;
+        width: 90%;
+        display: inline-block;
+        cursor: pointer;
+        color: #fff;
+        background: #3c9adf;
+        border-radius: 3px;
+        border: 0;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 1em;
+        font-family: 'Work Sans', sans-serif;
+    }
 
-		@include respond(phone) {
-			margin: 1em 0 0 0;
-		}
-	}
+    &__link {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
 
-	&__icon {
-		position: absolute;
-		top: 30px;
-		right: 15px;
-		font-size: 1.5em;
-		margin: 0 0.8em;
-		z-index: 2;
-	}
+        @include respond(phone) {
+            margin: 1em 0 0 0;
+        }
+    }
 
-	&__lead {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		margin-bottom: 1.3em;
-		text-align: center;
-		font-size: 0.9em;
-		line-height: 1.5em;
-		color: rgba(255, 255, 255, 0.8);
-	}
+    &__icon {
+        position: absolute;
+        top: 30px;
+        right: 15px;
+        font-size: 1.5em;
+        margin: 0 0.8em;
+        z-index: 2;
+    }
 
-	&__error {
-		display: inline-block;
-		width: 90%;
-		background: rgba(79%, 19%, 17%, 0.9);
-		border-radius: 3px;
-		margin: 1em 1em 0 1em;
-		padding: 12px;
-		color: #fff;
-		font-weight: bold;
+    &__lead {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 1.3em;
+        text-align: center;
+        font-size: 0.9em;
+        line-height: 1.5em;
+        color: rgba(255, 255, 255, 0.8);
+    }
 
-		& span {
-			display: block;
-		}
-	}
+    &__error {
+        display: inline-block;
+        width: 90%;
+        background: rgba(79%, 19%, 17%, 0.9);
+        border-radius: 3px;
+        margin: 1em 1em 0 1em;
+        padding: 12px;
+        color: #fff;
+        font-weight: bold;
+
+        & span {
+            display: block;
+        }
+    }
 }

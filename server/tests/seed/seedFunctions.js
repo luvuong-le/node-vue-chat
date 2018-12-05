@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { mongoose } = require('../../db/mongoose');
+const { mongoose, connect } = require('../../db/mongoose');
 const { User } = require('../../models/User');
 const { Room } = require('../../models/Room');
 const { userSeedData, roomSeedData } = require('./seedData');
@@ -11,9 +11,13 @@ const populateData = async () => {
     //     return Promise.all([userOne, userTwo]).then(() => done());
     //   });
 
+    if (mongoose.connection.readyState === 0) {
+        connect();
+    }
+
     let userId;
 
-    console.log('[PROCESS:SEED] Seeding User Data');
+    console.log('\n[PROCESS:SEED] Seeding User Data');
 
     await User.deleteMany({}).exec();
 
