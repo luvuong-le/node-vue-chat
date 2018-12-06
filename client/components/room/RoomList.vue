@@ -9,10 +9,7 @@
         <div class="rooms">
           <ul class="rooms__list">
             <li v-for="(room, index) in rooms" :key="index" class="rooms__list-item">
-              <router-link
-                :to="{ name: 'Room', params: { roomname: room.name}}"
-                class="rooms__list-item-link"
-              >
+              <a href="#" class="rooms__list-item-link" @click.prevent="handleRoomClick(room)">
                 <div class="rooms__item-container">
                   <div class="rooms__item-details">
                     <p>{{ room.name }}</p>
@@ -34,10 +31,51 @@
                     </div>
                   </div>
                 </div>
-              </router-link>
+              </a>
             </li>
           </ul>
-          <modal name="create-room" ref="createRoom">
+          <!-- Private Room Enter Modal -->
+          <Modal name="private-room" ref="privateRoom">
+            <div slot="header">
+              <h2 class="text-upper">Enter {{ this.privateRoomName || 'Private Room' }}</h2>
+            </div>
+            <div slot="body">
+              <transition
+                name="fade"
+                enter-active-class="animated zoomInDown"
+                leave-active-class="animated slideOutRight"
+                mode="out-in"
+              >
+                <div v-show="errors.length !== 0" class="form__error">
+                  <transition
+                    name="fade"
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+                    mode="out-in"
+                  >
+                    <span v-for="(error, index) in errors" v-bind:key="index">{{ error }}</span>
+                  </transition>
+                </div>
+              </transition>
+              <form @submit="handlePrivateRoomCheck" slot="body" class="form form--nbs p-0 pt-3">
+                <div class="form__input-group">
+                  <ion-icon name="pricetags" class="form__icon"></ion-icon>
+                  <input
+                    type="password"
+                    name="password"
+                    class="form__control"
+                    placeholder="Enter Password"
+                    v-model.trim="privateRoomPassword"
+                  >
+                  <label for="password" class="form__label">Password</label>
+                </div>
+
+                <button type="submit" class="btn btn--clear btn--info">Enter Room</button>
+              </form>
+            </div>
+          </Modal>
+          <!-- Create Room Modal -->
+          <Modal name="create-room" ref="createRoom">
             <div slot="header">
               <h2 class="text-upper">Create Room</h2>
             </div>
@@ -74,7 +112,7 @@
                 <div class="form__input-group">
                   <ion-icon name="pricetags" class="form__icon"></ion-icon>
                   <input
-                    type="text"
+                    type="password"
                     name="password"
                     class="form__control"
                     placeholder="Enter Password"
@@ -88,7 +126,7 @@
                 <button type="submit" class="btn btn--clear btn--danger">Create Room</button>
               </form>
             </div>
-          </modal>
+          </Modal>
           <div class="rooms__actions">
             <a @click="openModal" class="btn btn--info">Create Room</a>
             <a @click="fetchRoomData" class="btn btn--info">Refresh Rooms</a>
@@ -107,13 +145,15 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'RoomList',
     components: {
-        modal: Modal
+        Modal: Modal
     },
     data: function() {
         return {
             rooms: null,
             room_name: null,
+            privateRoomName: null,
             password: null,
+            privateRoomPassword: null,
             errors: []
         };
     },
@@ -169,14 +209,49 @@ export default {
         },
         handleDelete(e) {
             e.preventDefault();
-            console.dir(e.target);
-            // Delete
             axios
                 .delete(`/api/room/${e.target.name}`)
                 .then(res => {
                     console.log(res.data);
                     this.rooms = this.rooms.filter(room => room._id !== res.data._id);
                     this.$store.dispatch('deleteRoom', res.data);
+                })
+                .catch(err => console.log(err));
+        },
+        handleRoomClick(room) {
+            if (room.access) {
+                this.$router.push({ name: 'Room', params: { roomname: room.name } });
+            } else {
+                this.privateRoomName = room.name;
+                this.$refs.privateRoom.setData('room', room);
+                this.$refs.privateRoom.open();
+            }
+        },
+        handlePrivateRoomCheck(e) {
+            e.preventDefault();
+            axios
+                .post('/api/room/verify', {
+                    room_name: this.$refs.privateRoom.modalData.room.name,
+                    password: this.privateRoomPassword
+                })
+                .then(res => {
+                    if (res.data.errors) {
+                        for (const error of res.data.errors) {
+                            const [value] = Object.values(error);
+                            this.errors.push(value);
+                        }
+                    } else {
+                        if (res.data.success) {
+                            this.$router.push({
+                                name: 'Room',
+                                params: { roomname: this.$refs.privateRoom.modalData.room.name }
+                            });
+                        }
+                    }
+
+                    setTimeout(() => {
+                        this.errors = [];
+                    }, 1500);
                 })
                 .catch(err => console.log(err));
         }

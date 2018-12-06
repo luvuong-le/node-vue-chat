@@ -31,15 +31,10 @@ axios.interceptors.response.use(
     function(err) {
         if (err.response.status === 401) {
             localStorage.removeItem('authToken');
+            store.dispatch('TOGGLE_AUTH_STATE', false);
             router.push({
                 name: 'Login',
                 params: { message: 'Session has expired, please login again' }
-            });
-        }
-        if (err.response.status === 404) {
-            router.push({
-                name: 'UserProfile',
-                params: { username: store.getters.getUserData.username }
             });
         }
         return Promise.reject(err);

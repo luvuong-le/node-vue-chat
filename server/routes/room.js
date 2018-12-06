@@ -8,10 +8,10 @@ const { Room } = require('../models/Room');
 const { createErrorObject, checkCreateRoomFields } = require('../middleware/authenticate');
 
 /**
- * @description GET /api/rooms
+ * @description GET /api/room
  */
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const rooms = await Room.find({}).populate('user', ['username']).exec();
+    const rooms = await Room.find({}).populate('user', ['username']).select('-password').exec();
 
     if (rooms) {
         return res.status(200).json(rooms);
@@ -68,6 +68,40 @@ router.post('/', [passport.authenticate('jwt', { session: false }), checkCreateR
                 return res.json(err);
             });
     }
+});
+
+router.post('/verify', passport.authenticate('jwt', {session: false}), async(req, res) => {
+
+    if (!req.body.password === true) {
+        return res.json({
+            errors: createErrorObject([{
+                param: 'password_required',
+                msg: 'Password is required'
+            }])
+        });
+    }
+
+    const room = await Room.findOne({ name: req.body.room_name }).exec();
+
+    if (room) {
+        const verified = await room.isValidPassword(req.body.password);
+
+        if (verified === true) {
+            return res.status(200).json({ success: true })
+        } else {
+            return res.json({
+                errors: createErrorObject([{
+                    param: 'invalid_password',
+                    msg: 'Invalid Password'
+                }])
+            });
+        }
+    } else {
+        return res
+            .status(404)
+            .json({ errors: `No room with name ${req.params.room_name} found` });
+    }
+
 });
 
 

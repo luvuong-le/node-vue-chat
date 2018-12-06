@@ -47,6 +47,17 @@ describe('POST /api/room', () => {
         expect(response.body).not.toBeNull();
         expect(Object.keys(response.body).length).toBeGreaterThan(0);
     });
+    
+    it('should verify a private room password', async () => {
+        const response = await request
+            .post('/api/room/verify')
+            .send({ room_name: 'Private Room', password: 'private' })
+            .set('Authorization', token);
+
+        expect(response.status).toEqual(200);
+        expect(response.body).not.toBeNull();
+        expect(response.body.success).toBeTruthy();
+    })
 });
 
 

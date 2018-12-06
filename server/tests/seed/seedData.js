@@ -38,6 +38,10 @@ module.exports = {
         {
             name: 'Test Room',
             password: ''
+        },
+        {
+            name: 'Private Room',
+            password: 'private'
         }
     ]
 };

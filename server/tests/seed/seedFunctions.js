@@ -36,6 +36,7 @@ const populateData = async () => {
         await new Room({
             name: room.name,
             user: userId,
+            access: room.password ? false : true,
             password: room.password
         }).save();
     }
