@@ -1,0 +1,110 @@
+.chat {
+    height: 100%;
+    position: relative;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+
+    &__header {
+        text-align: left;
+        padding: 1rem 0;
+        margin: 0 1rem;
+        display: flex;
+        background: rgba($color: #18191c, $alpha: 0.8);
+        border-bottom: 1px solid #ccc;
+    }
+
+    &__actions {
+        flex-grow: 1;
+        text-align: right;
+
+        & > * {
+            cursor: pointer;
+        }
+    }
+
+    &__content {
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+        width: 100%;
+    }
+
+    /** User List */
+
+    /** User List Container */
+    &c-__userlist {
+        position: relative;
+    }
+
+    /** User List [UL]*/
+    &__userlist {
+        margin: 0;
+        padding: 1rem;
+    }
+
+    &__user {
+        display: flex;
+        width: 100%;
+        margin: 1rem 0;
+
+        &-item {
+            display: flex;
+        }
+
+        &-avatar {
+            height: 50px;
+            width: 50px;
+            border-radius: 100%;
+            border: 3px solid green;
+        }
+
+        &-details {
+            display: flex;
+            align-items: center;
+            margin: 0 1rem;
+        }
+    }
+
+    /** Message List */
+    &__c-messagelist {
+        height: 100%;
+        padding: 1rem 0;
+        background: rgba($color: #18191c, $alpha: 0.8);
+        overflow: auto;
+    }
+
+    &__messages {
+        margin: 0;
+        list-style: none;
+        padding: 0 1rem;
+    }
+
+    &__message {
+        margin: 2rem 0;
+
+        &-item {
+            display: flex;
+        }
+
+        &-details {
+            background: #3c9adf;
+            padding: 0.5rem;
+            border-radius: 10px;
+            text-align: left;
+            margin: 0 1rem;
+            align-self: center;
+        }
+    }
+
+    /** Input List */
+    &__input {
+        display: flex;
+        padding: 1rem 0;
+        margin: 0 1rem;
+        border-top: 1px solid #fff;
+
+        &-control {
+            width: 100%;
+        }
+    }
+}

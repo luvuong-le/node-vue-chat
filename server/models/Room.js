@@ -24,6 +24,10 @@ const RoomSchema = new Schema({
         type: Boolean,
         default: true
     },
+    accessIds: {
+        type: Array,
+        default: []
+    },
     users: {
         type: Array,
         default: []

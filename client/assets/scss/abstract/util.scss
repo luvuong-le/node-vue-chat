@@ -8,6 +8,10 @@
     padding-top: 15px !important;
 }
 
+.m-0 {
+    margin: 0 !important;
+}
+
 .mt-3 {
     margin-top: 30px;
 }
@@ -46,4 +50,17 @@
 
 .text-upper {
     text-transform: uppercase;
+}
+
+.u-max-height {
+    height: 100%;
+    max-height: 100%;
+}
+
+.u-border-rad-0 {
+    border-radius: 0 !important;
+}
+
+.u-flex-right {
+    justify-content: flex-end;
 }

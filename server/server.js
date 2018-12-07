@@ -27,7 +27,10 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
 
+/** Socket IO */
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 /** Serve Static Files */
 app.use(express.static(path.join(__dirname, '../public')));
@@ -55,8 +58,35 @@ if (process.env.NODE_ENV !== 'production') {
     );
 }
 
+/** Socket IO Connections */
+io.on('connection', socket => {
+    logger.info('[SOCKET-IO] User Connected');
+
+    /** Socket Events */
+    socket.on('disconnect', () => {
+        logger.info('User Disconnected');
+        io.emit('User Disconnected');
+    });
+
+    socket.on('hello_world', data => {
+        console.log('Hello message from Client: ', data);
+    });
+
+    socket.on('joinRoom', data => {
+        socket.join(data.room.name, () => {
+            console.log('Emitting new message');
+            io.to(data.room.name).emit('userJoined', data.user.username);
+        });
+
+        socket.emit('joinedRoom', data);
+
+        // Send a message to room
+        io.to(data.room.name).emit('socketIORoom', 'test');
+    });
+});
+
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(process.env.PORT || 5000, () => {
+    server.listen(process.env.PORT || 5000, () => {
         logger.info(`[LOG=SERVER] Server started on port ${process.env.PORT}`);
     });
 }

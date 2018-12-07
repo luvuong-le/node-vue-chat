@@ -1,17 +1,18 @@
 <template>
-  <div class="chat__userlist">
-    <h1>Chat Input</h1>
-  </div>
+	<div class="chat__input">
+		<input type="text" class="chat__input-control" placeholder="Enter Message">
+		<button class="btn btn--clear btn--info m-0 u-border-rad-0">Send</button>
+	</div>
 </template>
 
 
 <script>
 export default {
-    name: 'ChatInput',
-    data: function() {
-        return {};
-    },
-    mounted() {}
+	name: 'ChatInput',
+	data: function() {
+		return {};
+	},
+	mounted() {}
 };
 </script>
 

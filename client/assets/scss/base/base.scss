@@ -186,7 +186,7 @@ li .nav__link.router-link-exact-active {
     }
 
     &:first-child {
-        height: calc(100vh - 66px);
+        height: calc(100vh - 68px);
     }
 
     &__landing {
@@ -218,4 +218,5 @@ li .nav__link.router-link-exact-active {
     right: 0;
     bottom: 0;
     z-index: 1;
+    overflow: hidden;
 }
