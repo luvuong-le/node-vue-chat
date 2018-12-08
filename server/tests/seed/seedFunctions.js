@@ -2,7 +2,8 @@ require('dotenv').config();
 const { mongoose, connect } = require('../../db/mongoose');
 const { User } = require('../../models/User');
 const { Room } = require('../../models/Room');
-const { userSeedData, roomSeedData } = require('./seedData');
+const { Message } = require('../../models/Message');
+const { userSeedData, roomSeedData, messageSeedData } = require('./seedData');
 
 const populateData = async () => {
     //   User.remove({}).then(() => {
@@ -16,6 +17,7 @@ const populateData = async () => {
     }
 
     let userId;
+    let roomId;
 
     console.log('\n[PROCESS:SEED] Seeding User Data');
 
@@ -33,15 +35,30 @@ const populateData = async () => {
     await Room.deleteMany({}).exec();
 
     for (let room of roomSeedData) {
-        await new Room({
+        const roomData = await new Room({
             name: room.name,
             user: userId,
             access: room.password ? false : true,
             password: room.password
         }).save();
+        roomId = roomData._id;
     }
 
     console.log('[PROCESS:FIN] Completed Seeding Room Data');
+
+    console.log('[PROCESS:SEED] Seeding Message Data');
+
+    await Message.deleteMany({}).exec();
+
+    for (let message of messageSeedData) {
+        await new Message({
+            content: message.content,
+            user: userId,
+            room: roomId
+        }).save();
+    }
+
+    console.log('[PROCESS:FIN] Completed Seeding Message Data');
 
     await mongoose.connection.close();
 };

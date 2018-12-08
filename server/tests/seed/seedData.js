@@ -43,5 +43,16 @@ module.exports = {
             name: 'Private Room',
             password: 'private'
         }
+    ],
+    messageSeedData: [
+        {
+            content: 'Test Message 11'
+        },
+        {
+            content: 'Test Message 2'
+        },
+        {
+            content: 'Test Message 3'
+        }
     ]
 };

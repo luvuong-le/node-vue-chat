@@ -1,3 +1,4 @@
+/** Dotenv Environment Variables */
 require('dotenv').config();
 
 /** Connect to MongoDB */
@@ -20,6 +21,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const profileRoutes = require('./routes/profile');
 const roomRoutes = require('./routes/room');
+const messageRoutes = require('./routes/messages');
 
 /** Express */
 const express = require('express');
@@ -49,6 +51,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/room', roomRoutes);
+app.use('/api/messages', messageRoutes);
 
 if (process.env.NODE_ENV !== 'production') {
     logger.add(
@@ -68,20 +71,15 @@ io.on('connection', socket => {
         io.emit('User Disconnected');
     });
 
-    socket.on('hello_world', data => {
-        console.log('Hello message from Client: ', data);
-    });
-
-    socket.on('joinRoom', data => {
+    socket.on('userJoined', data => {
+        /** Join User in Room */
         socket.join(data.room.name, () => {
             console.log('Emitting new message');
-            io.to(data.room.name).emit('userJoined', data.user.username);
+
+            // Store Admin message in database
+            // Emit data back to the client
+            io.to(data.room.name).emit('receivedMessage', data.user.username);
         });
-
-        socket.emit('joinedRoom', data);
-
-        // Send a message to room
-        io.to(data.room.name).emit('socketIORoom', 'test');
     });
 });
 

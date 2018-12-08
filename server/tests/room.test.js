@@ -5,6 +5,7 @@ const supertest = require('supertest');
 
 let token;
 let request = supertest(app);
+let roomId;
 
 beforeAll(async () => {
     const response = await request
@@ -12,25 +13,6 @@ beforeAll(async () => {
         .send({ email: userSeedData[0].email, password: userSeedData[0].password });
 
     token = response.body.token;
-})
-
-describe('GET /api/room', () => {
-    it('should return an array of rooms', async () => {
-        const response = await request.get('/api/room').set('Authorization', token);
-
-        expect(response.status).toEqual(200);
-        expect(response.body.length).toBeGreaterThan(0);
-    });
-
-    it('should get the room by room name', async () => {
-        const response = await request
-            .get('/api/room/Test%20Room%20%231')
-            .set('Authorization', token);
-
-        expect(response.status).toEqual(200);
-        expect(response.body).not.toBeNull();
-        expect(Object.keys(response.body).length).toBeGreaterThan(0);
-    });
 });
 
 describe('POST /api/room', () => {
@@ -43,11 +25,13 @@ describe('POST /api/room', () => {
             })
             .set('Authorization', token);
 
+        roomId = response.body._id;
+
         expect(response.status).toEqual(200);
         expect(response.body).not.toBeNull();
         expect(Object.keys(response.body).length).toBeGreaterThan(0);
     });
-    
+
     it('should verify a private room password', async () => {
         const response = await request
             .post('/api/room/verify')
@@ -57,24 +41,41 @@ describe('POST /api/room', () => {
         expect(response.status).toEqual(200);
         expect(response.body).not.toBeNull();
         expect(response.body.success).toBeTruthy();
-    })
+    });
 });
 
+describe('GET /api/room', () => {
+    it('should return an array of rooms', async () => {
+        const response = await request.get('/api/room').set('Authorization', token);
+
+        expect(response.status).toEqual(200);
+        expect(response.body.length).toBeGreaterThan(0);
+    });
+
+    it('should get the room by room id', async () => {
+        const response = await request
+            .get(`/api/room/${roomId.toString()}`)
+            .set('Authorization', token);
+
+        expect(response.status).toEqual(200);
+        expect(response.body).not.toBeNull();
+        expect(Object.keys(response.body).length).toBeGreaterThan(0);
+    });
+});
 
 describe('PUT /api/room/:room_name', () => {
     it('should update the room name', async () => {
         const response = await request
-            .post('/api/room/update')
-            .send({ room_name: 'Jests Test Room', new_room_name: 'Jest Test Room'})
+            .post('/api/room/update/name')
+            .send({ room_name: 'Jests Test Room', new_room_name: 'Jest Test Room' })
             .set('Authorization', token);
 
         expect(response.status).toEqual(200);
         expect(response.body).not.toBeNull();
         expect(response.body.name).toEqual('Jest Test Room');
         expect(Object.keys(response.body).length).toBeGreaterThan(0);
-    })
-})
-
+    });
+});
 
 describe('DELETE /api/room/:room_name', () => {
     it('should delete a room based on the name', async () => {

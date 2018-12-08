@@ -77,7 +77,7 @@ const router = new Router({
             }
         },
         {
-            path: '/room/:roomname',
+            path: '/room/:id',
             name: 'Room',
             component: Room,
             meta: {

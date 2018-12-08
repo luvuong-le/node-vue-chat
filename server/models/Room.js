@@ -29,7 +29,12 @@ const RoomSchema = new Schema({
         default: []
     },
     users: {
-        type: Array,
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ],
         default: []
     }
 });
@@ -40,7 +45,7 @@ RoomSchema.methods.isValidPassword = function(password) {
 
 // Before Saving hash the password with bcrypt, using the default 10 rounds for salt
 RoomSchema.pre('save', function(next) {
-    if (this.password !== '') {
+    if (this.password !== '' && this.isModified('password')) {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(this.password, salt, (err, res) => {
                 this.password = res;

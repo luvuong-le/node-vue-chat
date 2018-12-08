@@ -1,6 +1,6 @@
 {
     "root": true,
-    "parserOptions": { "ecmaVersion": 6 },
+    "parserOptions": { "ecmaVersion": 2017 },
     "env": {
         "node": true,
         "jest": true

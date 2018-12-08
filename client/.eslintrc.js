@@ -8,7 +8,11 @@ module.exports = {
     rules: {
         'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-        "indent": ["error", 4],
+        'indent': 'off',
+        'vue/script-indent': [ {
+            'baseIndent': 1
+        }]
+        // "indent": ["error", 4],
         // "quotes": ["error", "single"],
         // "semi": ["error", "always"]
     },
