@@ -1,19 +1,19 @@
 <template>
-  <div id="app" class="app">
-    <Navbar
-      v-if="['Profile','RoomList','EditUserProfile', 'UserProfile', 'Home', 'Login', 'Register', 'Room'].includes($route.name)"
-    />
-    <Particle name="particle-js"/>
-    <transition
-      :name="transitionName"
-      :enter-active-class="enterActive"
-      :leave-active-class="leaveActive"
-      mode="out-in"
-    >
-      <router-view/>
-    </transition>
-    <Footer v-if="['Home', 'Login', 'Register'].includes($route.name)"/>
-  </div>
+    <div id="app" class="app">
+        <Navbar
+            v-if="['Profile','RoomList','EditUserProfile', 'UserProfile', 'Home', 'Login', 'Register', 'Room'].includes($route.name)"
+        />
+        <Particle name="particle-js"/>
+        <transition
+            :name="transitionName"
+            :enter-active-class="enterActive"
+            :leave-active-class="leaveActive"
+            mode="out-in"
+        >
+            <router-view/>
+        </transition>
+        <Footer v-if="['Home', 'Login', 'Register'].includes($route.name)"/>
+    </div>
 </template>
 
 <script>

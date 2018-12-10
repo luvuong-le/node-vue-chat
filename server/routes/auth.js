@@ -37,6 +37,7 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
             }).end();
         } else {
             const newUser = new User({
+                handle: req.body.handle,
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,

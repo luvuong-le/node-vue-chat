@@ -45,7 +45,7 @@ const router = new Router({
             }
         },
         {
-            path: '/user/:username',
+            path: '/user/:handle',
             name: 'UserProfile',
             component: UserProfile,
             props: true,
@@ -56,7 +56,7 @@ const router = new Router({
             }
         },
         {
-            path: '/user/edit/:username?',
+            path: '/user/:handle/edit',
             name: 'EditUserProfile',
             component: EditUserProfile,
             props: true,
@@ -87,7 +87,7 @@ const router = new Router({
             }
         },
         {
-            path: '/profile/:username',
+            path: '/profile/:handle',
             name: 'Profile',
             component: Profile,
             meta: {
@@ -115,7 +115,7 @@ router.beforeEach((to, from, next) => {
         if (localStorage.getItem('authToken')) {
             next({
                 name: 'UserProfile',
-                params: { username: store.getters.getUserData.username }
+                params: { handle: store.getters.getUserData.handle }
             });
         } else {
             next();

@@ -1,6 +1,7 @@
 @import '../abstract/keyframes.scss';
 @import '../abstract/variables.scss';
 @import '../abstract/util.scss';
+@import '../abstract/animations.scss';
 @import '../vendors/animate.scss';
 
 *,
@@ -140,13 +141,38 @@ li .nav__link.router-link-exact-active {
     }
 }
 
+.badge {
+    display: flex;
+    border-radius: 15px;
+    padding: 5px;
+    height: auto;
+    width: auto;
+    justify-content: center;
+    align-items: center;
+
+    &--info {
+        color: #fff;
+        background: #3c9adf;
+    }
+
+    &--danger {
+        color: #fff;
+        background: crimson;
+    }
+
+    &--success {
+        color: #fff;
+        background: lightgreen;
+    }
+}
+
 .icon {
     font-size: 1.5em;
     margin: 0 0.4em;
 }
 
 .page {
-    height: 100%;
+    height: 100vh;
     width: 100%;
     background: transparent;
     color: #fff;
@@ -168,6 +194,10 @@ li .nav__link.router-link-exact-active {
     &__heading {
         font-size: 2.5rem;
         text-align: center;
+
+        @include respond(phone) {
+            margin-top: 100px;
+        }
     }
 
     &__title {
@@ -187,6 +217,11 @@ li .nav__link.router-link-exact-active {
 
     &:first-child {
         height: calc(100vh - 68px);
+
+        @include respond(phone) {
+            height: 100vh;
+            overflow: hidden;
+        }
     }
 
     &__landing {

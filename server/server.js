@@ -33,6 +33,7 @@ const cors = require('cors');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const { ADD_MESSAGE, GET_MESSAGES } = require('./actions/socketio');
 
 /** Serve Static Files */
 app.use(express.static(path.join(__dirname, '../public')));
@@ -71,15 +72,47 @@ io.on('connection', socket => {
         io.emit('User Disconnected');
     });
 
+    /** Join User in Room */
     socket.on('userJoined', data => {
-        /** Join User in Room */
-        socket.join(data.room.name, () => {
-            console.log('Emitting new message');
+        socket.join(data.room.name, async () => {
+            console.log('New user joining');
 
             // Store Admin message in database
-            // Emit data back to the client
-            io.to(data.room.name).emit('receivedMessage', data.user.username);
+            // ADD_MESSAGE(data);
+
+            // Get list of messages to send back to client
+            io.to(data.room.name).emit('receivedNewUser', JSON.stringify(await GET_MESSAGES(data)));
         });
+    });
+
+    /** User Exit Room */
+    socket.on('exitRoom', data => {
+        socket.leave(data.room.name, async () => {
+            console.log('User Exiting Room');
+
+            // Store Admin message in database
+            // ADD_MESSAGE(data);
+
+            // Send back to user
+            io.to(data.room.name).emit(
+                'receivedMessage',
+                JSON.stringify({
+                    data
+                })
+            );
+
+            io.to(data.room.name).emit('receivedUserExit', data.room);
+        });
+    });
+
+    socket.on('newMessage', async data => {
+        console.log('Sending new message', data.content);
+
+        // Store Admin message in database
+        const newMessage = await ADD_MESSAGE(data);
+
+        // Emit data back to the client for display
+        io.to(data.room.name).emit('receivedNewMessage', JSON.stringify(newMessage));
     });
 });
 

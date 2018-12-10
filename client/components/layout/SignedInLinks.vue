@@ -5,7 +5,7 @@
         </li>-->
         <li class="nav__item">
             <router-link
-                :to="{name: 'UserProfile', params: { username: this.$store.getters.getUserData.username }}"
+                :to="{name: 'UserProfile', params: { handle: this.$store.getters.getUserData.handle }}"
                 class="nav__link nav__link--rounded"
             >{{ this.$store.getters.getUserData.username }}</router-link>
         </li>

@@ -6,73 +6,86 @@
             </div>
             <div class="section__content">
                 <p class="section__lead">Enter a room and start chatting!</p>
-                <div class="rooms">
+                <div class="rooms" v-if="rooms">
+                    <div class="rooms__header">
+                        <div class="rooms__details">
+                            <div class="rooms__details-item">
+                                Total Rooms:
+                                <span class="badge badge--info">{{ rooms.length }}</span>
+                            </div>
+                            <div class="rooms__details-item">
+                                Private Rooms:
+                                <span
+                                    class="badge badge--danger"
+                                >{{ getPrivateRooms.length }}</span>
+                            </div>
+                            <div class="rooms__details-item">
+                                Public Rooms:
+                                <span
+                                    class="badge badge--success"
+                                >{{ getPublicRooms.length }}</span>
+                            </div>
+                        </div>
+                        <input
+                            type="text"
+                            class="rooms__search-input"
+                            placeholder="Search room"
+                            v-model.trim="searchInput"
+                        >
+                    </div>
                     <ul class="rooms__list">
-                        <li v-for="(room, index) in rooms" :key="index" class="rooms__list-item">
-                            <a
-                                :href="`room/${room._id}`"
-                                class="rooms__list-item-link"
-                                @click.prevent="handleRoomClick(room)"
+                        <transition-group name="slideUp">
+                            <li
+                                v-for="(room, index) in filteredRooms"
+                                :key="index"
+                                class="rooms__list-item"
                             >
-                                <div class="rooms__item-container">
-                                    <div class="rooms__item-details">
-                                        <p>{{ room.name }}</p>
-                                        <p
-                                            :class="{ public: room.access, private: !room.access}"
-                                        >{{ room.access === true ? 'Public': 'Private' }}</p>
-                                        <p>
-                                            <strong>Users:</strong>
-                                            {{ room.users.length }}
-                                        </p>
-                                        <p>
-                                            <strong>Room Admin:</strong>
-                                            {{ room.user.username }}
-                                        </p>
-                                    </div>
-                                    <div class="rooms__item-actions">
-                                        <div
-                                            v-show="getUserData._id === room.user._id"
-                                            class="rooms__item-action"
-                                        >
-                                            <a
-                                                @click="handleDelete"
-                                                :name="room.name"
-                                                class="btn btn--danger"
-                                            >Delete</a>
+                                <a
+                                    :href="`room/${room._id}`"
+                                    class="rooms__list-item-link"
+                                    @click.prevent="handleRoomClick(room)"
+                                >
+                                    <div class="rooms__item-container">
+                                        <div class="rooms__item-details">
+                                            <p>{{ room.name }}</p>
+                                            <p
+                                                :class="{ public: room.access, private: !room.access}"
+                                            >{{ room.access === true ? 'Public': 'Private' }}</p>
+                                            <p>
+                                                <strong>Users:</strong>
+                                                {{ room.users.length }}
+                                            </p>
+                                            <p>
+                                                <strong>Room Admin:</strong>
+                                                {{ room.user.username }}
+                                            </p>
+                                        </div>
+                                        <div class="rooms__item-actions">
+                                            <div
+                                                v-show="getUserData._id === room.user._id"
+                                                class="rooms__item-action"
+                                            >
+                                                <a
+                                                    @click.stop="handleDelete"
+                                                    :name="room.name"
+                                                    class="btn btn--danger"
+                                                >Delete</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                        </transition-group>
                     </ul>
                     <!-- Private Room Enter Modal -->
                     <Modal name="private-room" ref="privateRoom">
-                        <div slot="header">
+                        <template slot="header">
                             <h2
                                 class="text-upper"
                             >Enter {{ this.privateRoomName || 'Private Room' }}</h2>
-                        </div>
-                        <div slot="body">
-                            <transition
-                                name="fade"
-                                enter-active-class="animated zoomInDown"
-                                leave-active-class="animated slideOutRight"
-                                mode="out-in"
-                            >
-                                <div v-show="errors.length !== 0" class="form__error">
-                                    <transition
-                                        name="fade"
-                                        enter-active-class="animated fadeIn"
-                                        leave-active-class="animated fadeOut"
-                                        mode="out-in"
-                                    >
-                                        <span
-                                            v-for="(error, index) in errors"
-                                            v-bind:key="index"
-                                        >{{ error }}</span>
-                                    </transition>
-                                </div>
-                            </transition>
+                        </template>
+                        <template slot="body">
+                            <Error :errors="errors"/>
                             <form
                                 @submit="handlePrivateRoomCheck"
                                 slot="body"
@@ -92,36 +105,17 @@
 
                                 <button type="submit" class="btn btn--clear btn--info">Enter Room</button>
                             </form>
-                        </div>
+                        </template>
                     </Modal>
                     <!-- Create Room Modal -->
                     <Modal name="create-room" ref="createRoom">
-                        <div slot="header">
+                        <template slot="header">
                             <h2 class="text-upper">Create Room</h2>
-                        </div>
-                        <div slot="body">
-                            <transition
-                                name="fade"
-                                enter-active-class="animated zoomInDown"
-                                leave-active-class="animated slideOutRight"
-                                mode="out-in"
-                            >
-                                <div v-show="errors.length !== 0" class="form__error">
-                                    <transition
-                                        name="fade"
-                                        enter-active-class="animated fadeIn"
-                                        leave-active-class="animated fadeOut"
-                                        mode="out-in"
-                                    >
-                                        <span
-                                            v-for="(error, index) in errors"
-                                            v-bind:key="index"
-                                        >{{ error }}</span>
-                                    </transition>
-                                </div>
-                            </transition>
+                        </template>
+                        <template slot="body">
+                            <Error :errors="errors"/>
                             <form
-                                @submit="handleSubmit"
+                                @submit="handleCreateRoom"
                                 slot="body"
                                 class="form form--nbs p-0 pt-3"
                             >
@@ -152,7 +146,7 @@
 
                                 <button type="submit" class="btn btn--clear btn--danger">Create Room</button>
                             </form>
-                        </div>
+                        </template>
                     </Modal>
                     <div class="rooms__actions">
                         <a @click="openModal" class="btn btn--info">Create Room</a>
@@ -168,11 +162,13 @@
 import axios from 'axios';
 import Modal from '@/components/layout/Modal';
 import { mapActions, mapGetters } from 'vuex';
+import Error from '../error/Error.vue';
 
 export default {
     name: 'RoomList',
     components: {
-        Modal: Modal
+        Modal: Modal,
+        Error
     },
     data: function() {
         return {
@@ -181,11 +177,23 @@ export default {
             privateRoomName: null,
             password: null,
             privateRoomPassword: null,
+            searchInput: '',
             errors: []
         };
     },
     computed: {
-        ...mapGetters(['getUserData', 'getRoomData', 'getSocket'])
+        ...mapGetters(['getUserData', 'getRoomData', 'getSocket']),
+        getPrivateRooms() {
+            return this.rooms.filter(room => room.access === false);
+        },
+        getPublicRooms() {
+            return this.rooms.filter(room => room.access === true);
+        },
+        filteredRooms() {
+            return this.rooms.filter(room =>
+                room.name.toLowerCase().includes(this.searchInput.toLowerCase())
+            );
+        }
     },
     methods: {
         ...mapActions(['updateRoomData', 'addRoom', 'deleteRoom', 'saveCurrentRoom']),
@@ -194,7 +202,16 @@ export default {
                 .get('/api/room')
                 .then(res => {
                     this.$store.dispatch('updateRoomData', res.data);
-                    this.rooms = res.data;
+                    this.rooms = res.data.sort((a, b) => {
+                        if (
+                            a.user._id === this.getUserData._id ||
+                            b.user._id === this.getUserData._id
+                        ) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    });
                 })
                 .catch(err => {
                     console.log(err);
@@ -207,12 +224,11 @@ export default {
             axios
                 .post('/api/room/update/users', { room_name: room.name })
                 .then(() => {
-                    // this.$store.dispatch('saveCurrentRoom', res.data);
                     this.$router.push({ name: 'Room', params: { id: room._id } });
                 })
                 .catch(err => console.log(err));
         },
-        handleSubmit(e) {
+        handleCreateRoom(e) {
             e.preventDefault();
 
             axios
@@ -227,7 +243,7 @@ export default {
                             this.errors.push(value);
                         }
                     } else {
-                        this.rooms.push(res.data);
+                        this.rooms.unshift(res.data);
                         this.$store.dispatch('addRoom', res.data);
                         this.room_name = null;
                         this.password = null;
@@ -247,20 +263,17 @@ export default {
             axios
                 .delete(`/api/room/${e.target.name}`)
                 .then(res => {
-                    console.log(res.data);
                     this.rooms = this.rooms.filter(room => room._id !== res.data._id);
                     this.$store.dispatch('deleteRoom', res.data);
                 })
                 .catch(err => console.log(err));
         },
         handleRoomClick(room) {
-            // this.$store.dispatch('saveCurrentRoom', room);
             if (
                 room.access ||
                 this.getUserData._id === room.user._id ||
                 room.accessIds.includes(this.getUserData._id)
             ) {
-                // this.$router.push({ name: 'Room', params: { roomname: room.name } });
                 this.enterRoom(room);
             } else {
                 this.privateRoomName = room.name;
@@ -281,12 +294,9 @@ export default {
                             const [value] = Object.values(error);
                             this.errors.push(value);
                         }
+                        this.privateRoomPassword = null;
                     } else {
                         if (res.data.success) {
-                            // this.$router.push({
-                            //     name: 'Room',
-                            //     params: { roomname: this.$refs.privateRoom.modalData.room.name }
-                            // });
                             this.enterRoom(this.$refs.privateRoom.modalData.room);
                         }
                     }

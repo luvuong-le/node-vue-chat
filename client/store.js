@@ -9,7 +9,8 @@ export default new Vuex.Store({
         authUser: {},
         currentRoom: null,
         rooms: [],
-        socket: null
+        socket: null,
+        newUserGreetings: []
     },
     getters: {
         getUserData: state => state.authUser,
@@ -39,6 +40,12 @@ export default new Vuex.Store({
         },
         ASSIGN_SOCKET: (state, payload) => {
             state.socket = payload;
+        },
+        LEAVE_ROOM: (state, payload) => {
+            state.currentRoom.users = payload;
+        },
+        REMOVE_ACCESS_ID: (state, payload) => {
+            state.currentRoom = payload;
         }
     },
     actions: {
@@ -62,6 +69,12 @@ export default new Vuex.Store({
         },
         saveCurrentRoom: (context, payload) => {
             context.commit('SAVE_CURRENT_ROOM', payload);
+        },
+        leaveRoom: (context, payload) => {
+            context.commit('REMOVE_USER_ID', payload);
+        },
+        removeAccessId: (context, payload) => {
+            context.commit('REMOVE_ACCESS_ID', payload);
         }
     }
 });

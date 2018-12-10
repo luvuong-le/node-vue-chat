@@ -45,9 +45,12 @@ export default {
         padding: 1rem 0;
         margin: 0 1rem;
         border-bottom: 1px solid #fff;
+        display: flex;
+        align-items: center;
     }
 
     &__body {
+        height: auto;
         overflow: auto;
     }
 

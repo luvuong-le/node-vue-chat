@@ -5,19 +5,15 @@ import store from './store';
 import axios from 'axios';
 import io from 'socket.io-client';
 import setAuthToken from './utils/authToken';
+import moment from 'moment';
 
 Vue.config.productionTip = false;
 Vue.config.ignoredElements = ['ion-icons', /^ion-/];
+Vue.prototype.moment = moment;
 
 /** Socket IO Client - Store in Vuex State for use in components */
 const socket = io('http://localhost:5000');
 store.dispatch('assignSocket', socket);
-
-// socket.on('socketIORoom', data => {
-//     console.log(data);
-// });
-
-// socket.emit('hello_world', { hello: 'world' });
 
 /** Check for auth token on refresh and set authorization header for incoming requests */
 if (localStorage.authToken) {

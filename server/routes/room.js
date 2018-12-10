@@ -163,8 +163,6 @@ router.post('/update/name', passport.authenticate('jwt', { session: false }), as
 router.post('/update/users', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const room = await Room.findOne({ name: req.body.room_name }).populate('users', ['username']);
 
-    console.log(room);
-
     if (room) {
         if (!room.users.find(room => room._id.toString() === req.user.id)) {
             room.users.push(req.user.id);

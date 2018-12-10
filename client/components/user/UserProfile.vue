@@ -9,10 +9,14 @@
                     :to="{name: 'RoomList'}"
                     class="btn btn--info mt-3 center"
                 >Start Chatting!</router-link>
-                <div class="profile__container">
+                <div class="profile__container" v-if="user">
                     <span class="lead">Your current profile</span>
                     <div class="profile__item">
                         <ion-icon name="contact" class="icon icon-lg"></ion-icon>
+                    </div>
+                    <div class="profile__item">
+                        <span class="profile__item--left">Search Handle</span>
+                        <span class="profile__item--right">{{ user.handle }}</span>
                     </div>
                     <div class="profile__item">
                         <span class="profile__item--left">Email</span>
@@ -26,9 +30,9 @@
                         <span class="profile__item--left">Location</span>
                         <span class="profile__item--right">{{ user.location || 'Unknown' }}</span>
                     </div>
-                    <div class="profile__actions mt-3">
+                    <div class="profile__actions mt-3" v-if="user">
                         <router-link
-                            :to="{name: 'EditUserProfile', params: { username: user.username}}"
+                            :to="{name: 'EditUserProfile', params: { handle: user.handle }}"
                             class="btn btn--info"
                         >Edit Profile</router-link>
                         <router-link to="/register" class="btn btn--danger">Delete Account</router-link>
@@ -47,7 +51,7 @@ export default {
     name: 'UserProfile',
     data: function() {
         return {
-            user: {}
+            user: null
         };
     },
     computed: {

@@ -1,13 +1,14 @@
 const { app } = require('../server');
 const supertest = require('supertest');
 const { userSeedData } = require('./seed/seedData');
-const { populateData } = require('./seed/seedFunctions');
+const slugify = require('slugify');
 
 describe('POST /auth', () => {
     let request = supertest(app);
 
     it('should register a user and return a token', async () => {
         const response = await request.post('/api/auth/register').send({
+            handle: slugify('newUser100'),
             email: 'newUser@gmail.com',
             username: 'newUser100',
             password: 'newUserTest'

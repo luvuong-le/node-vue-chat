@@ -1,78 +1,67 @@
 <template>
-  <div class="page profile">
-    <div class="section profile__content">
-      <div class="section__heading mt-10">
-        <span class="section__title">Update Account</span>
-      </div>
-      <div class="section__content">
-        <form @submit.prevent="handleSubmit" class="form">
-          <div class="profile__item">
-            <ion-icon name="contact" class="icon icon-lg"></ion-icon>
-          </div>
-          <div class="form__input-group">
-            <ion-icon name="pricetags" class="form__icon"></ion-icon>
-            <input
-              type="text"
-              name="username"
-              class="form__control"
-              placeholder="Enter New Username"
-              v-model.trim="username"
-            >
-            <label for="username" class="form__label">Username</label>
-          </div>
-          <div class="form__input-group">
-            <ion-icon name="person" class="form__icon"></ion-icon>
-            <input
-              type="email"
-              name="email"
-              class="form__control"
-              placeholder="Enter New Email"
-              v-model.trim="email"
-            >
-            <label for="email" class="form__label">Email</label>
-          </div>
-          <div class="form__input-group">
-            <ion-icon name="map" class="form__icon"></ion-icon>
-            <input
-              type="location"
-              name="location"
-              class="form__control"
-              placeholder="Enter New Location"
-              v-model.trim="location"
-            >
-            <label for="location" class="form__label">Location</label>
-          </div>
-          <transition
-            name="fade"
-            enter-active-class="animated fadeIn"
-            leave-active-class="animated fadeOut"
-            mode="out-in"
-          >
-            <div v-show="errors.length !== 0" class="form__error">
-              <transition-group
-                name="fade"
-                enter-active-class="animated fadeIn"
-                leave-active-class="animated fadeOut"
-                mode="out-in"
-              >
-                <span v-for="(error, index) in errors" v-bind:key="index">{{ error }}</span>
-              </transition-group>
+    <div class="page profile">
+        <div class="section profile__content">
+            <div class="section__heading mt-10">
+                <span class="section__title">Update Account</span>
             </div>
-          </transition>
-          <a @click="handleBackBtn" class="btn btn--info">Back</a>
-          <button type="submit" class="btn btn--clear btn--danger">Update Account</button>
-        </form>
-      </div>
+            <div class="section__content">
+                <form @submit.prevent="handleSubmit" class="form">
+                    <div class="profile__item">
+                        <ion-icon name="contact" class="icon icon-lg"></ion-icon>
+                    </div>
+                    <div class="form__input-group">
+                        <ion-icon name="pricetags" class="form__icon"></ion-icon>
+                        <input
+                            type="text"
+                            name="username"
+                            class="form__control"
+                            placeholder="Enter New Username"
+                            v-model.trim="username"
+                        >
+                        <label for="username" class="form__label">Username</label>
+                    </div>
+                    <div class="form__input-group">
+                        <ion-icon name="person" class="form__icon"></ion-icon>
+                        <input
+                            type="email"
+                            name="email"
+                            class="form__control"
+                            placeholder="Enter New Email"
+                            v-model.trim="email"
+                        >
+                        <label for="email" class="form__label">Email</label>
+                    </div>
+                    <div class="form__input-group">
+                        <ion-icon name="map" class="form__icon"></ion-icon>
+                        <input
+                            type="location"
+                            name="location"
+                            class="form__control"
+                            placeholder="Enter New Location"
+                            v-model.trim="location"
+                        >
+                        <label for="location" class="form__label">Location</label>
+                    </div>
+                    <Error :errors="errors"/>
+                    <a @click="handleBackBtn" class="btn btn--info">Back</a>
+                    <button type="submit" class="btn btn--clear btn--danger">Update Account</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex';
+import slugify from 'slugify';
+import Error from '../error/Error.vue';
 
 export default {
-    name: 'UserProfile',
+    name: 'EditUserProfile',
+    components: {
+        Error
+    },
     data: function() {
         return {
             user: {},
@@ -100,6 +89,7 @@ export default {
 
         handleSubmit() {
             const updatedUserDetails = {
+                handle: slugify(this.username.toLowerCase()),
                 email: this.email,
                 username: this.username,
                 location: this.location
@@ -114,7 +104,7 @@ export default {
                         localStorage.setItem('user', JSON.stringify(res.data.user));
                         this.$router.replace({
                             name: 'UserProfile',
-                            params: { username: updatedUserDetails.username }
+                            params: { handle: updatedUserDetails.handle }
                         });
                     })
                     .catch(err => err);

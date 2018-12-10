@@ -9,6 +9,7 @@
         padding: 1rem 0;
         margin: 0 1rem;
         display: flex;
+        align-items: center;
         background: rgba($color: #18191c, $alpha: 0.8);
         border-bottom: 1px solid #ccc;
     }
@@ -64,37 +65,81 @@
             align-items: center;
             margin: 0 1rem;
             width: 80%;
+            font-family: 'Russo One';
         }
     }
 
     /** Message List */
     &__c-messagelist {
-        height: 100%;
+        height: auto;
         padding: 1rem 0;
         background: rgba($color: #18191c, $alpha: 0.8);
-        overflow: auto;
     }
 
     &__messages {
         margin: 0;
         list-style: none;
         padding: 0 1rem;
+        overflow: auto;
+        height: 700px;
     }
 
     &__message {
         margin: 2rem 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
 
         &-item {
             display: flex;
         }
 
+        &-body {
+        }
+
         &-details {
+            margin: 0 1rem;
+            display: flex;
+            color: rgb(158, 158, 158);
+
+            & span {
+                margin: 0 5px;
+            }
+        }
+
+        &-content {
+            position: relative;
             background: #3c9adf;
             padding: 0.5rem;
-            border-radius: 10px;
+            border-radius: 8px;
             text-align: left;
             margin: 0 1rem;
             align-self: center;
+            font-family: 'Work Sans';
+            white-space: pre-line;
+
+            &--left::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: -6px;
+                border-radius: 10px;
+                border-color: transparent #3c9adf transparent transparent;
+                border-width: 10px;
+                border-style: solid;
+                transform: translate(-50%, -50%);
+            }
+
+            &--right::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                bottom: 0px;
+                right: -26px;
+                border-radius: 10px;
+                border-color: transparent transparent transparent #3c9adf;
+                border-width: 10px;
+                border-style: solid;
+                transform: translate(-50%, -50%);
+            }
         }
     }
 
@@ -106,7 +151,13 @@
         border-top: 1px solid #fff;
 
         &-control {
+            position: relative;
+            padding: 1rem 0 0 0.5rem;
+            font-family: 'Russo One';
+            font-size: 0.9rem !important;
             width: 100%;
+            resize: none;
+            box-sizing: border-box;
         }
     }
 }

@@ -3,7 +3,6 @@ const { userSeedData } = require('./seed/seedData');
 const supertest = require('supertest');
 
 let token;
-let session_id;
 let request = supertest(app);
 
 beforeAll(async () => {
@@ -12,8 +11,6 @@ beforeAll(async () => {
         .send({ email: userSeedData[0].email, password: userSeedData[0].password });
 
     token = response.body.token;
-
-    session_id = response.body.session_id;
 });
 
 describe('GET /users', () => {
@@ -32,14 +29,12 @@ describe('GET /users', () => {
         expect(response.status).toEqual(401);
     });
 
-    // it("should return the user data based on the username", async () => {
-    //   const response = await request
-    //     .get(`/api/user/${username}`)
-    //     .set("Authorization", token);
+    it('should return the user data from the current user', async () => {
+        const response = await request.get('/api/user/current').set('Authorization', token);
 
-    //   expect(response.status).toBe(200);
-    //   expect(response.body).not.toBeNull();
-    // });
+        expect(response.status).toBe(200);
+        expect(response.body).not.toBeNull();
+    });
 
     it('should return an error if invalid username is entered', async () => {
         const response = await request.get('/api/user/unknown').set('Authorization', token);

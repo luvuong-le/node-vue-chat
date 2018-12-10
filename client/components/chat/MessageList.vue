@@ -1,42 +1,96 @@
 <template>
-	<div class="chat__c-messagelist">
-		<ul class="chat__messages">
-			<li class="chat__message">
-				<div class="chat__message-item">
-					<img src="https://img.icons8.com/color/48/000000/user.png" class="chat__user-avatar" alt>
-					<div class="chat__message-details">
-						<span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi accusantium odio mollitia reprehenderit similique qui ipsum, voluptatum deserunt maiores iusto, optio, explicabo deleniti quod quis porro numquam sed animi magnam?</span>
-					</div>
-				</div>
-			</li>
-			<li class="chat__message">
-				<div class="chat__message-item">
-					<img src="https://img.icons8.com/color/48/000000/user.png" class="chat__user-avatar" alt>
-					<div class="chat__message-details">
-						<span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi accusantium odio.</span>
-					</div>
-				</div>
-			</li>
-			<li class="chat__message">
-				<div class="chat__message-item u-flex-right">
-					<div class="chat__message-details">
-						<span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi accusantium odio.</span>
-					</div>
-					<img src="https://img.icons8.com/color/48/000000/user.png" class="chat__user-avatar" alt>
-				</div>
-			</li>
-		</ul>
-	</div>
+    <div class="chat__c-messagelist">
+        <ul class="chat__messages" ref="messages">
+            <transition-group name="slideDown">
+                <li class="chat__message" v-for="(message, index) in messages" :key="index">
+                    <div
+                        class="chat__message-item u-flex-right"
+                        v-if="!message.admin && message.user._id === user._id"
+                    >
+                        <div class="chat__message-body">
+                            <div class="chat__message-content chat__message-content--right">
+                                <span>{{ message.content }}</span>
+                            </div>
+                            <div class="chat__message-details">
+                                <span>{{ message.user.username }}</span>
+                                <span>{{ moment(message.created_at).fromNow() }}</span>
+                            </div>
+                        </div>
+                        <img
+                            src="https://img.icons8.com/color/48/000000/user.png"
+                            class="chat__user-avatar"
+                            alt
+                        >
+                    </div>
+                    <div class="chat__message-item u-flex-center" v-else-if="message.admin">
+                        <img
+                            src="https://img.icons8.com/dusk/64/000000/businessman.png"
+                            class="chat__user-avatar"
+                            alt
+                        >
+                        <div class="chat__message-body">
+                            <div class="chat__message-content">
+                                <span>{{ message.content }}</span>
+                            </div>
+                            <div class="chat__message-details">
+                                <span>Admin</span>
+                                <span>{{ moment(message.created_at).fromNow() }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat__message-item" v-else>
+                        <img
+                            src="https://img.icons8.com/color/48/000000/user.png"
+                            class="chat__user-avatar"
+                            alt
+                        >
+                        <div class="chat__message-body">
+                            <div class="chat__message-content chat__message-content--left">
+                                <span>{{ message.content }}</span>
+                            </div>
+                            <div class="chat__message-details">
+                                <span>{{ message.user.username }}</span>
+                                <span>{{ moment(message.created_at).fromNow() }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </transition-group>
+        </ul>
+    </div>
 </template>
 
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
-	name: 'MessageList',
-	data: function() {
-		return {};
-	},
-	mounted() {}
+    name: 'MessageList',
+    props: ['messages'],
+    computed: {
+        ...mapGetters(['getUserData'])
+    },
+    data: function() {
+        return {
+            user: null
+        };
+    },
+    created() {
+        this.user = this.getUserData;
+    },
+    methods: {
+        scrollMessages() {
+            var container = this.$refs.messages;
+            container.scrollTop = container.scrollHeight;
+        }
+    },
+    mounted() {
+        this.scrollMessages();
+    },
+    updated() {
+        this.scrollMessages();
+    }
 };
 </script>
 

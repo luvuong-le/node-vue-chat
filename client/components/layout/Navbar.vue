@@ -62,9 +62,9 @@
             <ul class="snav__nav" v-if="isAuthorized">
                 <li @click="this.closeSideNav" class="nav__item">
                     <router-link
-                        :to="{name: 'UserProfile', params: { username: this.$store.getters.getUserData.username}}"
+                        :to="{name: 'UserProfile', params: { handle: this.$store.getters.getUserData.handle}}"
                         class="nav__link nav__link--rounded"
-                    >Profile</router-link>
+                    >{{ this.$store.getters.getUserData.username }}</router-link>
                 </li>
                 <li @click="this.closeSideNav" class="nav__item">
                     <button
@@ -105,6 +105,10 @@ export default {
     mounted() {
         if (localStorage.getItem('authToken')) {
             this.$store.dispatch('toggleAuthState', true);
+        } else {
+            localStorage.clear();
+            this.$store.dispatch('toggleAuthState', false);
+            this.$router.push({ name: 'Login' });
         }
     }
 };

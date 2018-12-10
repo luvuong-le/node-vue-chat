@@ -4,6 +4,7 @@ const { User } = require('../../models/User');
 const { Room } = require('../../models/Room');
 const { Message } = require('../../models/Message');
 const { userSeedData, roomSeedData, messageSeedData } = require('./seedData');
+const slugify = require('slugify');
 
 const populateData = async () => {
     //   User.remove({}).then(() => {
@@ -24,7 +25,12 @@ const populateData = async () => {
     await User.deleteMany({}).exec();
 
     for (let user of userSeedData) {
-        const userData = await new User(user).save();
+        const userData = await new User({
+            handle: slugify(user.username),
+            username: user.username,
+            email: user.email,
+            password: user.password
+        }).save();
         userId = userData._id;
     }
 

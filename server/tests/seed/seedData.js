@@ -12,7 +12,7 @@ module.exports = {
         },
         {
             email: 'test3@hotmail.com',
-            username: 'testing3',
+            username: 'testing 3',
             password: 'testing33'
         },
         {
