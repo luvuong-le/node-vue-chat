@@ -34,3 +34,16 @@
     opacity: 1;
     transform: translateY(0px);
 }
+
+/** Slide Left Animation */
+.slideLeft-enter,
+.slideLeft-leave-to {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.slideLeft-leave,
+.slideLeft-enter-to {
+    opacity: 1;
+    transform: translateX(0);
+}

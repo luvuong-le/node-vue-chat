@@ -74,45 +74,63 @@ io.on('connection', socket => {
 
     /** Join User in Room */
     socket.on('userJoined', data => {
-        socket.join(data.room.name, async () => {
+        socket.join(data.room._id, async () => {
             console.log('New user joining');
 
             // Store Admin message in database
             // ADD_MESSAGE(data);
 
             // Get list of messages to send back to client
-            io.to(data.room.name).emit('receivedNewUser', JSON.stringify(await GET_MESSAGES(data)));
+            io.to(data.room._id).emit('receivedNewUser', JSON.stringify(await GET_MESSAGES(data)));
         });
     });
 
     /** User Exit Room */
     socket.on('exitRoom', data => {
-        socket.leave(data.room.name, async () => {
+        socket.leave(data.room._id, async () => {
             console.log('User Exiting Room');
 
             // Store Admin message in database
             // ADD_MESSAGE(data);
 
             // Send back to user
-            io.to(data.room.name).emit(
+            io.to(data.room._id).emit(
                 'receivedMessage',
                 JSON.stringify({
                     data
                 })
             );
 
-            io.to(data.room.name).emit('receivedUserExit', data.room);
+            io.to(data.room._id).emit('receivedUserExit', data.room);
         });
     });
 
+    /** New Message Event */
     socket.on('newMessage', async data => {
         console.log('Sending new message', data.content);
 
-        // Store Admin message in database
         const newMessage = await ADD_MESSAGE(data);
 
         // Emit data back to the client for display
-        io.to(data.room.name).emit('receivedNewMessage', JSON.stringify(newMessage));
+        io.to(data.room._id).emit('receivedNewMessage', JSON.stringify(newMessage));
+    });
+
+    /** Room Deleted Event */
+    socket.on('roomDeleted', async data => {
+        io.to(data.room._id).emit('receivedNewMessage', JSON.stringify(data));
+        io.to(data.room._id).emit('roomDeleted', JSON.stringify(data));
+        io.emit('roomListUpdated', JSON.stringify(data));
+    });
+
+    /** Room Added Event */
+    socket.on('roomAdded', async data => {
+        io.emit('roomAdded', JSON.stringify(data));
+    });
+
+    /** Room Updated Event */
+    socket.on('roomUpdateEvent', async data => {
+        io.in(data.room._id).emit('roomUpdated', JSON.stringify(data));
+        io.emit('roomNameUpdated', JSON.stringify(data));
     });
 });
 

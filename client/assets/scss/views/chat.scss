@@ -1,8 +1,19 @@
 .chat {
     height: 100%;
     position: relative;
-    display: grid;
-    grid-template-columns: 300px 1fr;
+    // display: grid;
+    // grid-template-columns: 300px 1fr;
+    display: flex;
+
+    &__content {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-flow: column;
+        background: rgba(24, 25, 28, 0.6);
+        margin-left: 300px;
+        transition: all 0.5s ease;
+    }
 
     &__header {
         text-align: left;
@@ -23,17 +34,10 @@
         }
     }
 
-    &__content {
-        height: 100%;
-        display: flex;
-        flex-flow: column;
-        width: 100%;
-    }
-
     /** User List */
 
     /** User List Container */
-    &c-__userlist {
+    &__c-userlist {
         position: relative;
     }
 
@@ -48,6 +52,7 @@
         display: flex;
         width: 100%;
         margin: 1rem 0;
+        transition: all 0.5s ease;
 
         &-item {
             display: flex;
@@ -90,9 +95,6 @@
 
         &-item {
             display: flex;
-        }
-
-        &-body {
         }
 
         &-details {

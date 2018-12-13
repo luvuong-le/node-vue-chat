@@ -38,7 +38,7 @@ axios.interceptors.response.use(
     function(err) {
         if (err.response.status === 401) {
             localStorage.removeItem('authToken');
-            store.dispatch('TOGGLE_AUTH_STATE', false);
+            store.dispatch('toggleAuthState', false);
             router.push({
                 name: 'Login',
                 params: { message: 'Session has expired, please login again' }

@@ -162,7 +162,7 @@ li .nav__link.router-link-exact-active {
 
     &--success {
         color: #fff;
-        background: lightgreen;
+        background: green;
     }
 }
 
@@ -172,13 +172,14 @@ li .nav__link.router-link-exact-active {
 }
 
 .page {
-    height: 100vh;
+    height: 100%;
     width: 100%;
     background: transparent;
     color: #fff;
     background: url(./assets/img/BackgroundPath.svg) no-repeat;
     background-size: 100%;
     background-position: bottom center;
+    background-attachment: fixed;
     position: relative;
     z-index: 2;
 }

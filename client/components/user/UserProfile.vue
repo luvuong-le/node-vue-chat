@@ -9,28 +9,28 @@
                     :to="{name: 'RoomList'}"
                     class="btn btn--info mt-3 center"
                 >Start Chatting!</router-link>
-                <div class="profile__container" v-if="user">
+                <div class="infobox__container" v-if="user">
                     <span class="lead">Your current profile</span>
-                    <div class="profile__item">
+                    <div class="infobox__item">
                         <ion-icon name="contact" class="icon icon-lg"></ion-icon>
                     </div>
-                    <div class="profile__item">
-                        <span class="profile__item--left">Search Handle</span>
-                        <span class="profile__item--right">{{ user.handle }}</span>
+                    <div class="infobox__item">
+                        <span class="infobox__item--left">Search Handle</span>
+                        <span class="infobox__item--right">{{ user.handle }}</span>
                     </div>
-                    <div class="profile__item">
-                        <span class="profile__item--left">Email</span>
-                        <span class="profile__item--right">{{ user.email }}</span>
+                    <div class="infobox__item">
+                        <span class="infobox__item--left">Email</span>
+                        <span class="infobox__item--right">{{ user.email }}</span>
                     </div>
-                    <div class="profile__item">
-                        <span class="profile__item--left">Username</span>
-                        <span class="profile__item--right">{{ user.username }}</span>
+                    <div class="infobox__item">
+                        <span class="infobox__item--left">Username</span>
+                        <span class="infobox__item--right">{{ user.username }}</span>
                     </div>
-                    <div class="profile__item">
-                        <span class="profile__item--left">Location</span>
-                        <span class="profile__item--right">{{ user.location || 'Unknown' }}</span>
+                    <div class="infobox__item">
+                        <span class="infobox__item--left">Location</span>
+                        <span class="infobox__item--right">{{ user.location || 'Unknown' }}</span>
                     </div>
-                    <div class="profile__actions mt-3" v-if="user">
+                    <div class="infobox__actions mt-3" v-if="user">
                         <router-link
                             :to="{name: 'EditUserProfile', params: { handle: user.handle }}"
                             class="btn btn--info"
@@ -80,4 +80,5 @@ export default {
 
 <style lang="scss">
 @import '@/assets/scss/views/profile.scss';
+@import '@/assets/scss/components/infobox.scss';
 </style>

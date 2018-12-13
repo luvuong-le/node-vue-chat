@@ -125,15 +125,18 @@ router.post('/verify', passport.authenticate('jwt', { session: false }), async (
 router.delete('/:room_name', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const room = await Room.findOneAndDelete({ name: req.params.room_name })
+            .populate('user', ['username'])
             .select('-password')
             .lean();
 
         if (room) {
             return res.status(200).json(room);
         } else {
-            return res
-                .status(404)
-                .json({ errors: `No room with name ${req.params.room_name} found` });
+            return res.status(404).json({
+                errors: `No room with name ${
+                    req.params.room_name
+                } found, You will now be redirected`
+            });
         }
     } catch (err) {
         return res.status(404).json(err);
@@ -148,7 +151,9 @@ router.post('/update/name', passport.authenticate('jwt', { session: false }), as
         { name: req.body.room_name },
         { name: req.body.new_room_name },
         { fields: { password: 0 }, new: true }
-    );
+    )
+        .populate('user', ['username'])
+        .populate('users', ['username']);
 
     if (room) {
         return res.status(200).json(room);

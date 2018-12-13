@@ -3,45 +3,53 @@ const bcrypt = require('bcryptjs');
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
-    handle: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true
+const UserSchema = new Schema(
+    {
+        handle: {
+            type: String,
+            required: true,
+            trim: true,
+            unique: true
+        },
+        username: {
+            type: String,
+            required: true,
+            trim: true,
+            unique: true,
+            maxlength: ['15', 'Username should be less than 15 characters']
+        },
+        email: {
+            type: String,
+            required: true,
+            trim: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            minlength: ['5', 'Password should be greater than 5 characters'],
+            maxlength: ['20', 'Password should be less than 20 characters'],
+            required: true
+        },
+        image: {
+            type: String,
+            default: null
+        },
+        location: {
+            type: String,
+            default: null
+        },
+        session_id: {
+            type: String,
+            default: null
+        }
     },
-    username: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,
-        maxlength: ['15', 'Username should be less than 15 characters']
-    },
-    email: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        minlength: ['5', 'Password should be greater than 5 characters'],
-        maxlength: ['20', 'Password should be less than 20 characters'],
-        required: true
-    },
-    image: {
-        type: String,
-        default: null
-    },
-    location: {
-        type: String,
-        default: null
-    },
-    session_id: {
-        type: String,
-        default: null
+    {
+        timestamps: {
+            createdAt: 'created_at',
+            updatedAt: 'updated_at'
+        }
     }
-});
+);
 
 UserSchema.methods.isValidPassword = function(password) {
     return bcrypt.compare(password, this.password);

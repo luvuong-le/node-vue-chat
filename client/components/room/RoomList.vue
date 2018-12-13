@@ -29,54 +29,56 @@
                         <input
                             type="text"
                             class="rooms__search-input"
-                            placeholder="Search room"
+                            placeholder="Search room by name | Enter 'my_rooms' for a list of your created rooms"
                             v-model.trim="searchInput"
                         >
                     </div>
-                    <ul class="rooms__list">
-                        <transition-group name="slideUp">
-                            <li
-                                v-for="(room, index) in filteredRooms"
-                                :key="index"
-                                class="rooms__list-item"
-                            >
-                                <a
-                                    :href="`room/${room._id}`"
-                                    class="rooms__list-item-link"
-                                    @click.prevent="handleRoomClick(room)"
+                    <transition name="slideDown">
+                        <ul class="rooms__list">
+                            <transition-group name="slideUp">
+                                <li
+                                    v-for="(room, index) in filteredRooms"
+                                    :key="index"
+                                    class="rooms__list-item"
                                 >
-                                    <div class="rooms__item-container">
-                                        <div class="rooms__item-details">
-                                            <p>{{ room.name }}</p>
-                                            <p
-                                                :class="{ public: room.access, private: !room.access}"
-                                            >{{ room.access === true ? 'Public': 'Private' }}</p>
-                                            <p>
-                                                <strong>Users:</strong>
-                                                {{ room.users.length }}
-                                            </p>
-                                            <p>
-                                                <strong>Room Admin:</strong>
-                                                {{ room.user.username }}
-                                            </p>
-                                        </div>
-                                        <div class="rooms__item-actions">
-                                            <div
-                                                v-show="getUserData._id === room.user._id"
-                                                class="rooms__item-action"
-                                            >
-                                                <a
-                                                    @click.stop="handleDelete"
-                                                    :name="room.name"
-                                                    class="btn btn--danger"
-                                                >Delete</a>
+                                    <a
+                                        :href="`room/${room._id}`"
+                                        class="rooms__list-item-link"
+                                        @click.prevent="handleRoomClick(room)"
+                                    >
+                                        <div class="rooms__item-container">
+                                            <div class="rooms__item-details">
+                                                <p>{{ room.name }}</p>
+                                                <p
+                                                    :class="{ public: room.access, private: !room.access}"
+                                                >{{ room.access === true ? 'Public': 'Private' }}</p>
+                                                <p>
+                                                    <strong>Users:</strong>
+                                                    {{ room.users.length }}
+                                                </p>
+                                                <p>
+                                                    <strong>Room Admin:</strong>
+                                                    {{ room.user.username }}
+                                                </p>
+                                            </div>
+                                            <div class="rooms__item-actions">
+                                                <div
+                                                    v-show="getUserData._id === room.user._id"
+                                                    class="rooms__item-action"
+                                                >
+                                                    <a
+                                                        @click.stop="handleDelete"
+                                                        :name="room.name"
+                                                        class="btn btn--danger"
+                                                    >Delete</a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </transition-group>
-                    </ul>
+                                    </a>
+                                </li>
+                            </transition-group>
+                        </ul>
+                    </transition>
                     <!-- Private Room Enter Modal -->
                     <Modal name="private-room" ref="privateRoom">
                         <template slot="header">
@@ -172,7 +174,7 @@ export default {
     },
     data: function() {
         return {
-            rooms: null,
+            rooms: [],
             room_name: null,
             privateRoomName: null,
             password: null,
@@ -190,28 +192,37 @@ export default {
             return this.rooms.filter(room => room.access === true);
         },
         filteredRooms() {
-            return this.rooms.filter(room =>
-                room.name.toLowerCase().includes(this.searchInput.toLowerCase())
-            );
+            if (this.searchInput.toLowerCase() === 'my_rooms') {
+                return this.rooms.filter(room => room.user._id === this.getUserData._id);
+            } else {
+                return this.rooms
+                    .slice()
+                    .sort(this.sortAlphabetical)
+                    .filter(room =>
+                        room.name.toLowerCase().includes(this.searchInput.toLowerCase())
+                    );
+            }
         }
     },
     methods: {
         ...mapActions(['updateRoomData', 'addRoom', 'deleteRoom', 'saveCurrentRoom']),
+        sortAlphabetical(a, b) {
+            let roomA = a.name.toUpperCase();
+            let roomB = b.name.toUpperCase();
+            if (roomA < roomB) {
+                return -1;
+            }
+            if (roomA > roomB) {
+                return 1;
+            }
+            return 0;
+        },
         fetchRoomData() {
             axios
                 .get('/api/room')
                 .then(res => {
                     this.$store.dispatch('updateRoomData', res.data);
-                    this.rooms = res.data.sort((a, b) => {
-                        if (
-                            a.user._id === this.getUserData._id ||
-                            b.user._id === this.getUserData._id
-                        ) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    });
+                    this.rooms = res.data;
                 })
                 .catch(err => {
                     console.log(err);
@@ -243,11 +254,11 @@ export default {
                             this.errors.push(value);
                         }
                     } else {
-                        this.rooms.unshift(res.data);
                         this.$store.dispatch('addRoom', res.data);
                         this.room_name = null;
                         this.password = null;
                         this.$refs.createRoom.close();
+                        this.getSocket.emit('roomAdded', res.data);
                     }
                 })
                 .catch(err => {
@@ -263,8 +274,14 @@ export default {
             axios
                 .delete(`/api/room/${e.target.name}`)
                 .then(res => {
-                    this.rooms = this.rooms.filter(room => room._id !== res.data._id);
+                    // this.rooms = this.rooms.filter(room => room._id !== res.data._id);
                     this.$store.dispatch('deleteRoom', res.data);
+                    this.getSocket.emit('roomDeleted', {
+                        room: res.data,
+                        user: this.getUserData,
+                        admin: true,
+                        content: `${res.data.user.username} deleted room ${res.data.name}`
+                    });
                 })
                 .catch(err => console.log(err));
         },
@@ -307,6 +324,25 @@ export default {
                 })
                 .catch(err => console.log(err));
         }
+    },
+    created() {
+        this.getSocket.on('roomAdded', data => {
+            this.rooms.unshift(JSON.parse(data));
+        });
+
+        this.getSocket.on('roomListUpdated', data => {
+            this.rooms = this.rooms.filter(room => room._id !== JSON.parse(data).room._id);
+        });
+
+        this.getSocket.on('roomNameUpdated', data => {
+            let updateIndex = 0;
+            this.rooms.forEach((room, index) => {
+                if (room._id === JSON.parse(data).room._id) {
+                    updateIndex = index;
+                }
+            });
+            this.rooms.splice(updateIndex, 1, JSON.parse(data).room);
+        });
     },
     mounted() {
         this.fetchRoomData();

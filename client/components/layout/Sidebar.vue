@@ -1,17 +1,19 @@
 <template>
-    <div v-show="visible" class="sidebar">
-        <div class="sidebar__header">
-            <slot name="header">
-                <h4>Default Header</h4>
-            </slot>
+    <transition name="slideLeft" mode="out-in">
+        <div v-show="visible" class="sidebar">
+            <div class="sidebar__header">
+                <slot name="header">
+                    <h4>Default Header</h4>
+                </slot>
+            </div>
+            <div class="sidebar__body">
+                <slot name="body"></slot>
+            </div>
+            <div class="sidebar__footer">
+                <slot name="footer"></slot>
+            </div>
         </div>
-        <div class="sidebar__body">
-            <slot name="body"></slot>
-        </div>
-        <div class="sidebar__footer">
-            <slot name="footer"></slot>
-        </div>
-    </div>
+    </transition>
 </template>
 
 
@@ -23,6 +25,11 @@ export default {
             visible: true
         };
     },
+    methods: {
+        toggle() {
+            this.visible = !this.visible;
+        }
+    },
     mounted() {}
 };
 </script>
@@ -32,21 +39,20 @@ export default {
 .sidebar {
     height: 100vh;
     position: fixed;
-    top: initial;
     left: 0;
     background: rgba($color: #101113, $alpha: 0.9);
-    width: 100%;
-    max-width: 300px;
+    width: 300px;
     overflow: auto;
     display: flex;
     flex-flow: column;
+    transition: all 0.5s ease;
 
     &__header {
+        display: flex;
+        align-items: center;
         padding: 1rem 0;
         margin: 0 1rem;
         border-bottom: 1px solid #fff;
-        display: flex;
-        align-items: center;
     }
 
     &__body {

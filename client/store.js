@@ -33,6 +33,7 @@ export default new Vuex.Store({
             state.currentRoom = payload;
         },
         DELETE_ROOM: (state, payload) => {
+            state.currentRoom = null;
             state.rooms = state.rooms.filter(room => room._id !== payload._id);
         },
         TOGGLE_AUTH_STATE: (state, payload) => {
