@@ -12,15 +12,17 @@
                                 <span>{{ message.content }}</span>
                             </div>
                             <div class="chat__message-details">
-                                <span>{{ message.user.username }}</span>
+                                <span>{{ message.user.handle }}</span>
                                 <span>{{ moment(message.created_at).fromNow() }}</span>
                             </div>
                         </div>
                         <img
-                            src="https://img.icons8.com/color/48/000000/user.png"
+                            v-if="!message.user.social"
+                            :src="message.user.image"
                             class="chat__user-avatar"
                             alt
                         >
+                        <img v-else :src="message.user.social.image" class="chat__user-avatar" alt>
                     </div>
                     <div class="chat__message-item u-flex-center" v-else-if="message.admin">
                         <img
@@ -41,16 +43,18 @@
 
                     <div class="chat__message-item" v-else>
                         <img
-                            src="https://img.icons8.com/color/48/000000/user.png"
+                            v-if="!message.user.social"
+                            :src="message.user.image"
                             class="chat__user-avatar"
                             alt
                         >
+                        <img v-else :src="message.user.social.image" class="chat__user-avatar" alt>
                         <div class="chat__message-body">
                             <div class="chat__message-content chat__message-content--left">
                                 <span>{{ message.content }}</span>
                             </div>
                             <div class="chat__message-details">
-                                <span>{{ message.user.username }}</span>
+                                <span>{{ message.user.handle }}</span>
                                 <span>{{ moment(message.created_at).fromNow() }}</span>
                             </div>
                         </div>

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const url = require('url');
 const passport = require('passport');
 
 const { Room } = require('../models/Room');
@@ -29,8 +28,8 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
  */
 router.get('/:room_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const room = await Room.findById(req.params.room_id)
-        .populate('user', ['username'])
-        .populate('users', ['username'])
+        .populate('user', ['username', 'social', 'image', 'handle'])
+        .populate('users', ['username', 'social', 'image', 'handle'])
         .exec();
 
     if (room) {

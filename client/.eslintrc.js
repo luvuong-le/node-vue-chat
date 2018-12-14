@@ -12,9 +12,6 @@ module.exports = {
         'vue/script-indent': [ {
             'baseIndent': 1
         }]
-        // "indent": ["error", 4],
-        // "quotes": ["error", "single"],
-        // "semi": ["error", "always"]
     },
     parserOptions: {
         parser: 'babel-eslint'

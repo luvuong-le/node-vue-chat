@@ -10,9 +10,17 @@ module.exports = {
             room: data.room._id
         }).save();
 
-        return Message.populate(newMessage, { path: 'user', select: 'username' });
+        return Message.populate(newMessage, {
+            path: 'user',
+            select: 'username social handle image'
+        });
     },
     GET_MESSAGES: async data => {
-        return await Message.find({ room: data.room._id }).populate('user', ['username']);
+        return await Message.find({ room: data.room._id }).populate('user', [
+            'username',
+            'social',
+            'handle',
+            'image'
+        ]);
     }
 };

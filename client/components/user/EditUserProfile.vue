@@ -6,21 +6,25 @@
             </div>
             <div class="section__content">
                 <form @submit.prevent="handleSubmit" class="form">
-                    <div class="profile__item">
-                        <ion-icon name="contact" class="icon icon-lg"></ion-icon>
+                    <div class="profile__item" v-if="this.getUserData.social.id === null">
+                        <img :src="user.image" alt class="profile__image">
                     </div>
+                    <div class="profile__item" v-else>
+                        <img :src="user.social.image" alt class="profile__image">
+                    </div>
+                    <br>
                     <div class="form__input-group">
                         <ion-icon name="pricetags" class="form__icon"></ion-icon>
                         <input
                             type="text"
-                            name="username"
+                            name="handle"
                             class="form__control"
-                            placeholder="Enter New Username"
-                            v-model.trim="username"
+                            placeholder="Enter New Handle"
+                            v-model.trim="handle"
                         >
-                        <label for="username" class="form__label">Username</label>
+                        <label for="username" class="form__label">Display Handle</label>
                     </div>
-                    <div class="form__input-group">
+                    <div class="form__input-group" v-if="this.getUserData.social.id === null">
                         <ion-icon name="person" class="form__icon"></ion-icon>
                         <input
                             type="email"
@@ -68,9 +72,9 @@ export default {
             email:
                 this.$store.getters.getUserData.email ||
                 JSON.parse(localStorage.getItem('user')).email,
-            username:
-                this.$store.getters.getUserData.username ||
-                JSON.parse(localStorage.getItem('user')).username,
+            handle:
+                this.$store.getters.getUserData.handle ||
+                JSON.parse(localStorage.getItem('user')).handle,
             location:
                 this.$store.getters.getUserData.location ||
                 JSON.parse(localStorage.getItem('user')).location,
@@ -89,13 +93,12 @@ export default {
 
         handleSubmit() {
             const updatedUserDetails = {
-                handle: slugify(this.username.toLowerCase()),
+                handle: slugify(this.handle.toLowerCase()),
                 email: this.email,
-                username: this.username,
                 location: this.location
             };
 
-            if (localStorage.getItem('session_id')) {
+            if (localStorage.getItem('authToken')) {
                 axios
                     .put(`/api/user/current`, updatedUserDetails)
                     .then(res => {

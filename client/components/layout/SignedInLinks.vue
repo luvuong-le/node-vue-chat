@@ -7,7 +7,7 @@
             <router-link
                 :to="{name: 'UserProfile', params: { handle: this.$store.getters.getUserData.handle }}"
                 class="nav__link nav__link--rounded"
-            >{{ this.$store.getters.getUserData.username }}</router-link>
+            >{{ this.$store.getters.getUserData.handle }}</router-link>
         </li>
         <li class="nav__item">
             <button
@@ -20,6 +20,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import axios from 'axios';
 
 export default {
     name: 'SignedInLinks',
@@ -32,14 +33,20 @@ export default {
         ...mapGetters(['getUserData', 'isAuthorized'])
     },
     created() {
-        this.username = this.$store.getters.getUserData.username;
+        this.username = this.getUserData.username;
     },
     methods: {
         logout() {
             if (localStorage.getItem('authToken')) {
                 localStorage.clear();
                 this.$store.dispatch('toggleAuthState', false);
-                this.$router.push({ name: 'Login' });
+                axios
+                    .post('/api/auth/logout', {
+                        username: this.username
+                    })
+                    .then(() => {
+                        this.$router.push({ name: 'Login' });
+                    });
             }
         }
     }

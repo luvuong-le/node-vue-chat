@@ -1,18 +1,28 @@
+const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
-const uuid = require('uuid');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const { User } = require('../models/User');
-const _ = require('lodash');
+const { GOOGLE_CONFIG, FACEBOOK_CONFIG } = require('../config/config');
+const { createAvatar } = require('../actions/tinygraph');
+const socialAuthActions = require('../actions/socialAuthActions');
 
-/** Authentication */
+/** Middleware */
 const {
     checkRegistrationFields,
     checkLoginFields,
     createErrorObject
 } = require('../middleware/authenticate');
 
-/** JWT */
-const jwt = require('jsonwebtoken');
+const addSocketIdtoSession = (req, res, next) => {
+    req.session.socketId = req.query.socketId;
+    next();
+};
+
+/** Social Passport Auth */
+const googleAuth = passport.authenticate('google', GOOGLE_CONFIG.options);
+const facebookAuth = passport.authenticate('facebook');
 
 /**
  * @description  POST /register
@@ -41,7 +51,7 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
-                session_id: uuid.v1()
+                image: createAvatar(req.body.username)
             });
 
             newUser
@@ -49,7 +59,7 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
                 .then(userData => {
                     const user = _.omit(userData.toObject(), ['password']);
 
-                    const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+                    const token = jwt.sign(user, process.env.JWT_SECRET, {
                         expiresIn: 86400
                     });
 
@@ -77,8 +87,6 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
  * @access public
  */
 router.post('/login', checkLoginFields, async (req, res) => {
-    await User.updateOne({ email: req.body.email }, { $set: { session_id: uuid.v1() } });
-
     const user = await User.findOne({ email: req.body.email }).select('-password');
 
     if (!user) {
@@ -93,5 +101,35 @@ router.post('/login', checkLoginFields, async (req, res) => {
 
     res.status(200).send({ auth: true, token: `Bearer ${token}`, user });
 });
+
+router.post('/logout', async (req, res) => {
+    const user = await User.findOne({ username: req.body.username }).select('-password');
+
+    if (!user) {
+        return res.status(404).send({
+            error: 'No User Found'
+        });
+    }
+
+    user.social.id = null;
+    user.social.image = null;
+    user.social.email = null;
+
+    await user.save();
+
+    res.status(200).send({ success: true });
+});
+
+/** Social Auth Routes */
+router.get('/google', addSocketIdtoSession, googleAuth);
+router.get('/facebook', addSocketIdtoSession, facebookAuth);
+
+/** Social Auth Callbacks */
+router.get(
+    '/google/redirect',
+    passport.authenticate('google', { failureRedirect: '/api/auth/google' }),
+    socialAuthActions.google
+);
+router.get('/facebook/redirect', facebookAuth, socialAuthActions.facebook);
 
 module.exports = router;

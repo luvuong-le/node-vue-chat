@@ -6,7 +6,14 @@
             </div>
             <div class="section__content">
                 <p class="section__lead">We hope you will enjoy our application!</p>
-
+                <div class="social">
+                    <OAuth
+                        provider="facebook"
+                        icon="logo-facebook"
+                        classes="social__item--facebook"
+                    />
+                    <OAuth provider="google" icon="logo-googleplus" classes="social__item--google"/>
+                </div>
                 <form @submit.prevent="handleSubmit" class="form">
                     <span class="form__lead">
                         <ion-icon name="person-add" class="icon"></ion-icon>We always welcome new astros!
@@ -66,11 +73,15 @@
 import axios from 'axios';
 import slugify from 'slugify';
 import Error from '../error/Error.vue';
+import OAuth from '../social/OAuth.vue';
+import setAuthToken from '../../utils/authToken';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'Register',
     components: {
-        Error
+        Error,
+        OAuth
     },
     data: function() {
         return {
@@ -80,7 +91,11 @@ export default {
             errors: []
         };
     },
+    computed: {
+        ...mapGetters(['getSocket'])
+    },
     methods: {
+        ...mapActions(['saveUserData', 'toggleAuthState']),
         handleSubmit() {
             this.errors = [];
 
@@ -100,8 +115,11 @@ export default {
                             }
                         } else {
                             localStorage.setItem('authToken', res.data.token);
-                            localStorage.setItem('session_id', res.data.user.session_id);
                             localStorage.setItem('user', JSON.stringify(res.data.user));
+                            this.$store.dispatch('toggleAuthState', true);
+
+                            setAuthToken(res.data.token);
+
                             this.$router.push({
                                 name: 'UserProfile',
                                 params: { handle: res.data.user.handle }
@@ -114,7 +132,8 @@ export default {
                 this.errors = [];
             }, 1500);
         }
-    }
+    },
+    mounted() {}
 };
 </script>
 

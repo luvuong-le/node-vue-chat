@@ -39,7 +39,7 @@ router.put('/current', passport.authenticate('jwt', { session: false }), async (
     await User.findOneAndUpdate(
         { _id: req.user.id },
         req.body,
-        { fields: { username: 1, email: 1, location: 1 } },
+        { fields: { handle: 1, email: 1, location: 1 } },
         (err, doc) => {
             if (err) return res.send(500, { error: err });
 

@@ -11,16 +11,23 @@
                 >Start Chatting!</router-link>
                 <div class="infobox__container" v-if="user">
                     <span class="lead">Your current profile</span>
-                    <div class="infobox__item">
-                        <ion-icon name="contact" class="icon icon-lg"></ion-icon>
+                    <div class="infobox__item" v-if="user.social.id === null">
+                        <img :src="user.image" alt class="profile__image">
+                    </div>
+                    <div class="infobox__item" v-else>
+                        <img :src="user.social.image" alt class="profile__image">
                     </div>
                     <div class="infobox__item">
-                        <span class="infobox__item--left">Search Handle</span>
+                        <span class="infobox__item--left">Display Handle</span>
                         <span class="infobox__item--right">{{ user.handle }}</span>
                     </div>
                     <div class="infobox__item">
                         <span class="infobox__item--left">Email</span>
-                        <span class="infobox__item--right">{{ user.email }}</span>
+                        <span
+                            class="infobox__item--right"
+                            v-if="user.social.email === null"
+                        >{{ user.email }}</span>
+                        <span class="infobox__item--right" v-else>{{ user.social.email }}</span>
                     </div>
                     <div class="infobox__item">
                         <span class="infobox__item--left">Username</span>

@@ -18,27 +18,37 @@ const UserSchema = new Schema(
             unique: true,
             maxlength: ['15', 'Username should be less than 15 characters']
         },
+        social: {
+            id: {
+                type: String,
+                default: null
+            },
+            image: {
+                type: String,
+                default: null
+            },
+            email: {
+                type: String,
+                default: null
+            }
+        },
         email: {
             type: String,
-            required: true,
             trim: true,
-            unique: true
+            unique: true,
+            default: null
         },
         password: {
             type: String,
             minlength: ['5', 'Password should be greater than 5 characters'],
             maxlength: ['20', 'Password should be less than 20 characters'],
-            required: true
+            default: null
         },
         image: {
             type: String,
             default: null
         },
         location: {
-            type: String,
-            default: null
-        },
-        session_id: {
             type: String,
             default: null
         }

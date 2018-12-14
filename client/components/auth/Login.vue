@@ -7,6 +7,14 @@
             <div class="section__content">
                 <Error :errorMessage="errorMessage"/>
                 <p class="section__lead">Welcome Back!</p>
+                <div class="social">
+                    <OAuth
+                        provider="facebook"
+                        icon="logo-facebook"
+                        classes="social__item--facebook"
+                    />
+                    <OAuth provider="google" icon="logo-googleplus" classes="social__item--google"/>
+                </div>
                 <form @submit.prevent="handleSubmit" class="form">
                     <span class="form__lead">
                         <ion-icon name="rocket" class="icon"></ion-icon>We are excited to see you again!
@@ -53,6 +61,7 @@
 <script>
 import axios from 'axios';
 import Error from '../error/Error.vue';
+import OAuth from '../social/OAuth.vue';
 import { mapActions } from 'vuex';
 import setAuthToken from '../../utils/authToken';
 
@@ -60,7 +69,8 @@ export default {
     name: 'Login',
     props: ['message'],
     components: {
-        Error
+        Error,
+        OAuth
     },
     data: function() {
         return {
@@ -89,11 +99,7 @@ export default {
                             }
                         } else {
                             localStorage.setItem('authToken', res.data.token);
-
-                            localStorage.setItem('session_id', res.data.user.session_id);
-
                             localStorage.setItem('user', JSON.stringify(res.data.user));
-
                             this.$store.dispatch('toggleAuthState', true);
 
                             setAuthToken(res.data.token);

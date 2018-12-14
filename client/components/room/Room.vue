@@ -26,12 +26,19 @@
                                     >
                                         <div class="chat__user-item">
                                             <img
-                                                src="https://img.icons8.com/color/48/000000/user.png"
+                                                v-if="user.social.id === null"
+                                                :src="user.image"
+                                                class="chat__user-avatar"
+                                                alt
+                                            >
+                                            <img
+                                                v-else
+                                                :src="user.social.image"
                                                 class="chat__user-avatar"
                                                 alt
                                             >
                                             <div class="chat__user-details">
-                                                <span>{{ user.username }}</span>
+                                                <span>{{ user.handle }}</span>
                                             </div>
                                         </div>
                                     </li>
@@ -105,9 +112,7 @@
                         </div>
                         <div class="infobox__item">
                             <span class="infobox__item--left">Room Admin</span>
-                            <span
-                                class="infobox__item--right"
-                            >{{ this.getCurrentRoom.user.username }}</span>
+                            <span class="infobox__item--right">{{ this.getCurrentRoom.user.handle }}</span>
                         </div>
                         <div class="infobox__item">
                             <span class="infobox__item--left">Created</span>

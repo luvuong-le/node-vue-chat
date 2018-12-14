@@ -1,0 +1,19 @@
+module.exports = {
+    GOOGLE_CONFIG: {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/api/auth/google/redirect',
+        options: {
+            scope: [
+                'https://www.googleapis.com/auth/plus.login',
+                'https://www.googleapis.com/auth/userinfo.email'
+            ]
+        }
+    },
+    FACEBOOK_CONFIG: {
+        clientID: process.env.FACEBOOK_CLIENT_ID,
+        clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        callbackURL: '/api/auth/facebook/redirect',
+        profileFields: ['id', 'displayName', 'name', 'gender', 'emails', 'picture.type(large)']
+    }
+};

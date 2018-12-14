@@ -3,6 +3,7 @@ const { mongoose, connect } = require('../../db/mongoose');
 const { User } = require('../../models/User');
 const { Room } = require('../../models/Room');
 const { Message } = require('../../models/Message');
+const { createAvatar } = require('../../actions/tinygraph');
 const { userSeedData, roomSeedData, messageSeedData } = require('./seedData');
 const slugify = require('slugify');
 
@@ -29,7 +30,8 @@ const populateData = async () => {
             handle: slugify(user.username),
             username: user.username,
             email: user.email,
-            password: user.password
+            password: user.password,
+            image: createAvatar(user.username)
         }).save();
         userId = userData._id;
     }

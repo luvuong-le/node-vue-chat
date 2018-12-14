@@ -16,15 +16,9 @@ const { logger } = require('./config/logModule');
 const passport = require('passport');
 require('./config/passport')(passport);
 
-/** Routes */
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
-const profileRoutes = require('./routes/profile');
-const roomRoutes = require('./routes/room');
-const messageRoutes = require('./routes/messages');
-
 /** Express */
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
@@ -35,6 +29,13 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const { ADD_MESSAGE, GET_MESSAGES } = require('./actions/socketio');
 
+/** Routes */
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const profileRoutes = require('./routes/profile');
+const roomRoutes = require('./routes/room');
+const messageRoutes = require('./routes/messages');
+
 /** Serve Static Files */
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -42,10 +43,17 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use(passport.initialize());
 app.use(expressValidator());
 app.use(cors());
+app.use(
+    session({
+        secret: process.env.EXPRESS_SESSION_KEY,
+        resave: true,
+        saveUninitialized: true
+    })
+);
+app.set('io', io);
 
 /** Routes Definitions */
 app.use('/api/auth', authRoutes);
