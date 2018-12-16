@@ -47,8 +47,10 @@
                         <label for="location" class="form__label">Location</label>
                     </div>
                     <Error :errors="errors"/>
-                    <a @click="handleBackBtn" class="btn btn--info">Back</a>
-                    <button type="submit" class="btn btn--clear btn--danger">Update Account</button>
+                    <div class="form__actions">
+                        <a @click="handleBackBtn" class="btn btn--info">Back</a>
+                        <button type="submit" class="btn btn--clear btn--danger">Update Account</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -23,6 +23,10 @@
         color: #fff;
         position: relative;
         transition: opacity 1s ease, transform 1s cubic-bezier(0.42, 0, 0.2, 1.51);
+
+        @include respond(phone) {
+            width: 90%;
+        }
     }
 
     &__header {

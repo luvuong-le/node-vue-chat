@@ -95,13 +95,17 @@ router.post('/login', checkLoginFields, async (req, res) => {
         });
     }
 
-    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {
-        expiresIn: 86400
-    });
+    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, { expiresIn: 86400 });
 
     res.status(200).send({ auth: true, token: `Bearer ${token}`, user });
 });
 
+/**
+ * @description POST /logout
+ * @param  {} request
+ * @param  {} response
+ * @access public
+ */
 router.post('/logout', async (req, res) => {
     const user = await User.findOne({ username: req.body.username }).select('-password');
 
@@ -110,12 +114,6 @@ router.post('/logout', async (req, res) => {
             error: 'No User Found'
         });
     }
-
-    user.social.id = null;
-    user.social.image = null;
-    user.social.email = null;
-
-    await user.save();
 
     res.status(200).send({ success: true });
 });

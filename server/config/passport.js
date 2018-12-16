@@ -37,67 +37,74 @@ module.exports = function(passport) {
         })
     );
 
-    passport.use(
-        new GoogleStrategy(GOOGLE_CONFIG, function(accessToken, refreshToken, profile, done) {
-            User.findOne({ username: profile.displayName })
-                .then(user => {
-                    if (user) {
-                        user.social.id = profile.id;
-                        user.social.email = profile.emails[0].value;
-                        user.social.image = profile.photos[0].value.replace('?sz=50', '');
+    if (process.env.NODE_ENV !== 'test') {
+        passport.use(
+            new GoogleStrategy(GOOGLE_CONFIG, function(accessToken, refreshToken, profile, done) {
+                User.findOne({ username: profile.displayName })
+                    .then(user => {
+                        if (user) {
+                            user.social.id = profile.id;
+                            user.social.email = profile.emails[0].value;
+                            user.social.image = profile.photos[0].value.replace('?sz=50', '');
 
-                        user.save().then(user => {
-                            return done(null, user);
-                        });
-                    } else {
-                        new User({
-                            social: {
-                                id: profile.id,
-                                email: profile.emails[0].value,
-                                image: profile.photos[0].value.replace('?sz=50', '')
-                            },
-                            handle: slugify(profile.displayName.toLowerCase()),
-                            username: profile.displayName
-                        })
-                            .save()
-                            .then(user => {
+                            user.save().then(user => {
                                 return done(null, user);
                             });
-                    }
-                })
-                .catch(err => console.log(err));
-        })
-    );
+                        } else {
+                            new User({
+                                social: {
+                                    id: profile.id,
+                                    email: profile.emails[0].value,
+                                    image: profile.photos[0].value.replace('?sz=50', '')
+                                },
+                                handle: slugify(profile.displayName.toLowerCase()),
+                                username: profile.displayName
+                            })
+                                .save()
+                                .then(user => {
+                                    return done(null, user);
+                                });
+                        }
+                    })
+                    .catch(err => console.log(err));
+            })
+        );
 
-    passport.use(
-        new FacebookStrategy(FACEBOOK_CONFIG, function(accessToken, refreshToken, profile, done) {
-            User.findOne({ username: profile.displayName })
-                .then(user => {
-                    if (user) {
-                        user.social.id = profile.id;
-                        user.social.image = profile.photos[0].value;
-                        user.social.email = profile.emails[0].value;
+        passport.use(
+            new FacebookStrategy(FACEBOOK_CONFIG, function(
+                accessToken,
+                refreshToken,
+                profile,
+                done
+            ) {
+                User.findOne({ username: profile.displayName })
+                    .then(user => {
+                        if (user) {
+                            user.social.id = profile.id;
+                            user.social.image = profile.photos[0].value;
+                            user.social.email = profile.emails[0].value;
 
-                        user.save().then(user => {
-                            return done(null, user);
-                        });
-                    } else {
-                        new User({
-                            social: {
-                                id: profile.id,
-                                image: profile.photos[0].value,
-                                email: profile.emails[0].value
-                            },
-                            handle: slugify(profile.displayName.toLowerCase()),
-                            username: profile.displayName
-                        })
-                            .save()
-                            .then(user => {
+                            user.save().then(user => {
                                 return done(null, user);
                             });
-                    }
-                })
-                .catch(err => console.log(err));
-        })
-    );
+                        } else {
+                            new User({
+                                social: {
+                                    id: profile.id,
+                                    image: profile.photos[0].value,
+                                    email: profile.emails[0].value
+                                },
+                                handle: slugify(profile.displayName.toLowerCase()),
+                                username: profile.displayName
+                            })
+                                .save()
+                                .then(user => {
+                                    return done(null, user);
+                                });
+                        }
+                    })
+                    .catch(err => console.log(err));
+            })
+        );
+    }
 };

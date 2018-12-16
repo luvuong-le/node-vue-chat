@@ -20,10 +20,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import axios from 'axios';
 
 export default {
     name: 'SignedInLinks',
+    props: ['logout'],
     data: function() {
         return {
             username: null
@@ -32,24 +32,9 @@ export default {
     computed: {
         ...mapGetters(['getUserData', 'isAuthorized'])
     },
-    created() {
-        this.username = this.getUserData.username;
-    },
-    methods: {
-        logout() {
-            if (localStorage.getItem('authToken')) {
-                localStorage.clear();
-                this.$store.dispatch('toggleAuthState', false);
-                axios
-                    .post('/api/auth/logout', {
-                        username: this.username
-                    })
-                    .then(() => {
-                        this.$router.push({ name: 'Login' });
-                    });
-            }
-        }
-    }
+    methods: {},
+    created() {},
+    mounted() {}
 };
 </script>
 

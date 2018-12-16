@@ -22,7 +22,7 @@ export default {
     name: 'Sidebar',
     data: function() {
         return {
-            visible: true
+            visible: window.innerWidth < 768 ? false : true
         };
     },
     methods: {
@@ -46,6 +46,7 @@ export default {
     display: flex;
     flex-flow: column;
     transition: all 0.5s ease;
+    z-index: 10;
 
     &__header {
         display: flex;
@@ -67,6 +68,7 @@ export default {
         justify-content: center;
         align-items: flex-end;
         margin-bottom: 85px;
+        z-index: 3;
     }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="page roomList">
-        <section class="section">
-            <div class="section__heading mt-3">
+        <section class="section section--mmt">
+            <div class="section__heading mt-6">
                 <span class="section__title">Room List</span>
             </div>
             <div class="section__content">

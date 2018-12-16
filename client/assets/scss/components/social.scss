@@ -1,6 +1,27 @@
 .social {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: 480px;
+    margin: 0 auto;
+
+    @include respond(phone) {
+        flex-flow: column;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    &__btn {
+        margin: 0;
+        padding: 0;
+
+        @include respond(phone) {
+            width: 300px;
+            margin: 5px auto;
+            padding: 0 1em;
+        }
+    }
 
     &__item {
         padding: 1rem;

@@ -107,12 +107,13 @@
     height: 100%;
     z-index: 99;
     padding: 1em;
+    right: 0;
     border-top: 1px solid #fff;
     background: url(../../assets/img/BackgroundPath.svg) no-repeat, rgba(24, 25, 28, 1);
     background-size: 100%;
     background-position: bottom center;
     transform: translateX(100%);
-    transition: transform 0.5s ease;
+    transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
 
     &--shown {
         transform: translateX(0);
@@ -125,6 +126,9 @@
         flex-flow: column;
         margin: 0 1em;
         align-items: flex-start;
+
+        @include respond(phone) {
+        }
     }
 
     &__item {
@@ -136,10 +140,9 @@
             color: #fff;
             font-weight: bold;
         }
-    }
 
-    // &__footer {
-    // 	position: absolute;
-    // 	bottom: 20%;
-    // }
+        @include respond(phone) {
+            text-align: center;
+        }
+    }
 }

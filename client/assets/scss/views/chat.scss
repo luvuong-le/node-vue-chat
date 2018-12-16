@@ -3,6 +3,10 @@
     position: relative;
     display: flex;
 
+    @include respond(phone) {
+        height: calc(100vh - 70px);
+    }
+
     &__content {
         height: 100%;
         width: 100%;
@@ -11,6 +15,10 @@
         background: rgba(24, 25, 28, 0.6);
         margin-left: 300px;
         transition: all 0.5s ease;
+
+        @include respond(phone) {
+            margin-left: 0px;
+        }
     }
 
     &__header {
@@ -41,6 +49,8 @@
 
     /** User List [UL]*/
     &__userlist {
+        display: flex;
+        flex-flow: column;
         margin: 0;
         padding: 1rem;
         list-style-type: none;
@@ -75,9 +85,15 @@
 
     /** Message List */
     &__c-messagelist {
-        height: auto;
-        padding: 1rem 0;
+        height: 100%;
+        padding: 0;
         background: rgba($color: #18191c, $alpha: 0.8);
+        overflow: hidden;
+
+        @include respond(phone) {
+            height: 100%;
+            padding: 0;
+        }
     }
 
     &__messages {
@@ -85,7 +101,11 @@
         list-style: none;
         padding: 0 1rem;
         overflow: auto;
-        height: 700px;
+        height: 100%;
+
+        @include respond(phone) {
+            height: 100%;
+        }
     }
 
     &__message {
@@ -153,12 +173,28 @@
 
         &-control {
             position: relative;
-            padding: 1rem 0 0 0.5rem;
+            padding: 1rem 0 1rem 0.5rem;
             font-family: 'Russo One';
             font-size: 0.9rem !important;
             width: 100%;
             resize: none;
             box-sizing: border-box;
+        }
+    }
+}
+
+.userlist {
+    &__actions {
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        & div:last-child {
+            flex-grow: 1;
+            text-align: right;
+        }
+
+        @include respond(phone) {
         }
     }
 }

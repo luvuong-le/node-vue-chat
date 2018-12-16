@@ -6,9 +6,9 @@
             </div>
             <div class="footer__right">
                 <span>Created under the MIT License</span>
-                <router-link to="https://github.com/luvuong-le" class="nav__link">
+                <a href="https://github.com/luvuong-le" class="nav__link">
                     <ion-icon name="logo-github" class="footer__icon"></ion-icon>
-                </router-link>
+                </a>
             </div>
         </div>
     </footer>
@@ -16,7 +16,7 @@
 
 <script>
 export default {
-	name: 'Footer',
+    name: 'Footer'
 };
 </script>
 

@@ -1,14 +1,19 @@
 <template>
-    <div class="page room">
-        <section class="section p-0">
-            <div class="section__content u-max-height">
+    <div class="page page--room">
+        <section class="section section--room section--mmt p-0">
+            <div class="section__content u-max-height p-0">
                 <div class="chat">
                     <Sidebar name="userlist" ref="userList">
                         <template slot="header">
-                            <div>
-                                <ion-icon name="person" class="icon"></ion-icon>
+                            <div class="userlist__actions">
+                                <div>
+                                    <ion-icon name="contacts" class="icon"></ion-icon>
+                                </div>
+                                <span class="section__title">Online Users</span>
+                                <div @click="toggleUserList">
+                                    <ion-icon name="backspace" class="icon"></ion-icon>
+                                </div>
                             </div>
-                            <span class="section__title">Online Users</span>
                         </template>
                         <template slot="body">
                             <input
@@ -150,7 +155,7 @@ export default {
             users: null,
             messages: null,
             newRoomName: '',
-            sidebarVisible: true,
+            sidebarVisible: window.innerWidth < 768 ? false : true,
             searchInput: ''
         };
     },
@@ -173,8 +178,8 @@ export default {
             }
         },
         sortAlphabetical(a, b) {
-            let roomA = a.name.toUpperCase();
-            let roomB = b.name.toUpperCase();
+            let roomA = a.username.toUpperCase();
+            let roomB = b.username.toUpperCase();
             if (roomA < roomB) {
                 return -1;
             }
@@ -233,7 +238,6 @@ export default {
             this.$refs.roomDetails.open();
         },
         toggleUserList() {
-            console.log('Toggling User List');
             this.$refs.userList.toggle();
             this.sidebarVisible = !this.sidebarVisible;
         }

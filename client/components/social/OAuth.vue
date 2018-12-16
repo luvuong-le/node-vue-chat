@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn--clear p-0" @click="startAuth" :disabled="disabled">
+    <button class="social__btn btn btn--clear p-0" @click="startAuth" :disabled="disabled">
         <div class="social__item" v-bind:class="this.classes">
             <ion-icon :name="icon" class="icon"></ion-icon>
             Connect With {{ provider }}

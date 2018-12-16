@@ -5,8 +5,12 @@
                 <ion-icon name="rocket" class="navbar__icon navbar__icon--logo"></ion-icon>
                 <router-link to="/" class="navbar__textbrand">Astro Chat</router-link>
             </div>
-            <span @click="navToggleState = !navToggleState" class="navbar__toggle">
-                <ion-icon name="menu" class="navbar__icon navbar__toggle--icon"></ion-icon>
+            <span class="navbar__toggle">
+                <ion-icon
+                    name="menu"
+                    @click="navToggleState = !navToggleState"
+                    class="navbar__icon navbar__toggle--icon"
+                ></ion-icon>
             </span>
             <ul class="navbar__nav" v-if="!isAuthorized">
                 <li class="nav__item">
@@ -32,7 +36,7 @@
                     <router-link to="/register" class="nav__link nav__link--rounded">Sign Up</router-link>
                 </li>
             </ul>
-            <SignedInLinks v-if="isAuthorized"/>
+            <SignedInLinks :logout="logout" v-if="isAuthorized"/>
         </nav>
         <nav class="snav" v-bind:class="{'snav--shown': navToggleState}">
             <Particle name="particlejs-nav"/>
@@ -50,7 +54,7 @@
                     <router-link to="/login" class="nav__link nav__link--rounded">Login</router-link>
                 </li>
                 <li @click="this.closeSideNav" class="snav__item">
-                    <router-link to="/register" class="nav__link nav__link--rounded">Sign Up</router-link>
+                    <router-link to="/register" class="nav__link nav__link--rounded">Register</router-link>
                 </li>
                 <li class="snav__item">
                     <router-link to="https://github.com/luvuong-le" class="nav__link">
@@ -60,13 +64,13 @@
             </ul>
 
             <ul class="snav__nav" v-if="isAuthorized">
-                <li @click="this.closeSideNav" class="nav__item">
+                <li @click="this.closeSideNav" class="snav__item">
                     <router-link
                         :to="{name: 'UserProfile', params: { handle: this.$store.getters.getUserData.handle}}"
                         class="nav__link nav__link--rounded"
                     >{{ this.$store.getters.getUserData.username }}</router-link>
                 </li>
-                <li @click="this.closeSideNav" class="nav__item">
+                <li @click="this.closeSideNav" class="snav__item">
                     <button
                         @click.prevent="logout"
                         class="nav__link nav__link--btn nav__link--rounded"
@@ -100,6 +104,13 @@ export default {
         ...mapActions(['toggleAuthState']),
         closeSideNav() {
             this.navToggleState = false;
+        },
+        logout() {
+            if (localStorage.getItem('authToken')) {
+                localStorage.clear();
+                this.$store.dispatch('toggleAuthState', false);
+                this.$router.push({ name: 'Login' });
+            }
         }
     },
     mounted() {

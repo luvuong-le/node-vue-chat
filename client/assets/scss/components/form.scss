@@ -14,12 +14,18 @@
     }
 
     @include respond(phone) {
-        width: 80%;
+        width: 95%;
     }
 
     &__input-group {
         position: relative;
         width: auto;
+    }
+
+    &__info-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     &__label {
@@ -94,7 +100,7 @@
         font-weight: bold;
 
         @include respond(phone) {
-            margin: 1em 0 0 0;
+            margin: 0.5rem;
         }
     }
 
@@ -131,6 +137,17 @@
 
         & span {
             display: block;
+        }
+    }
+
+    &__actions {
+        width: 100%;
+
+        @include respond(phone) {
+            & > * {
+                width: 100%;
+                margin: 0.5em 0;
+            }
         }
     }
 }

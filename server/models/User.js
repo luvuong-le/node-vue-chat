@@ -40,8 +40,6 @@ const UserSchema = new Schema(
         },
         password: {
             type: String,
-            minlength: ['5', 'Password should be greater than 5 characters'],
-            maxlength: ['20', 'Password should be less than 20 characters'],
             default: null
         },
         image: {
@@ -67,12 +65,16 @@ UserSchema.methods.isValidPassword = function(password) {
 
 // Before Saving hash the password with bcrypt, using the default 10 rounds for salt
 UserSchema.pre('save', function(next) {
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(this.password, salt, (err, res) => {
-            this.password = res;
-            next();
+    if (this.password !== '' && this.isModified('password')) {
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(this.password, salt, (err, res) => {
+                this.password = res;
+                next();
+            });
         });
-    });
+    } else {
+        next();
+    }
 });
 
 const User = mongoose.model('User', UserSchema);

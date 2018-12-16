@@ -41,8 +41,8 @@ const checkLoginFields = async (req, res, next) => {
     if (!user) {
         errors.push({ param: 'email', msg: 'No User Found with that email' });
     } else {
-        if (!(await user.isValidPassword(req.body.password))) {
-            errors.push({ param: 'password', msg: "Password doesn't match" });
+        if (req.body.password !== null && !(await user.isValidPassword(req.body.password))) {
+            errors.push({ param: 'password', msg: 'Incorrect Password' });
         }
     }
 
@@ -57,13 +57,23 @@ const checkLoginFields = async (req, res, next) => {
 
 const checkCreateRoomFields = async (req, res, next) => {
     if (!req.body.room_name) {
-        req.check('room_name').not().isEmpty().withMessage('Room name is required')
+        req.check('room_name')
+            .not()
+            .isEmpty()
+            .withMessage('Room name is required');
     } else {
-        req.check('room_name').isString().isLength({ min: 3, max: 20 }).withMessage('Room name must be between 5 and 20 characters');
+        req.check('room_name')
+            .isString()
+            .isLength({ min: 3, max: 20 })
+            .withMessage('Room name must be between 5 and 20 characters');
     }
 
     if (req.body.password) {
-        req.check('password').not().isEmpty().isLength({min: 5, max: 15}).withMessage('Password should be between 5 and 15 characters');
+        req.check('password')
+            .not()
+            .isEmpty()
+            .isLength({ min: 5, max: 15 })
+            .withMessage('Password should be between 5 and 15 characters');
     }
 
     const errors = req.validationErrors();
@@ -75,7 +85,7 @@ const checkCreateRoomFields = async (req, res, next) => {
     } else {
         next();
     }
-}
+};
 
 module.exports = {
     checkLoginFields,

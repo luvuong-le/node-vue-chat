@@ -1,4 +1,4 @@
-const options = [
+const shapes = [
     'squares',
     'isogrids',
     'spaceinvaders',
@@ -6,11 +6,28 @@ const options = [
     'labs/isogrids/hexa16'
 ];
 
-const getRandomOption = () => {
-    return options[Math.floor(Math.random() * options.length)];
+const themes = [
+    'seascape',
+    'frogideas',
+    'sugarsweets',
+    'heatwave',
+    'daisygarden',
+    'summerwarmth',
+    'bythepool',
+    'duskfalling',
+    'berrypie',
+    'base'
+];
+
+const numColors = ['2', '3', '4'];
+
+const getRandomOption = array => {
+    return array[Math.floor(Math.random() * array.length)];
 };
 module.exports = {
     createAvatar: username => {
-        return `http://tinygraphs.com/${getRandomOption(options)}/${username}`;
+        return `http://tinygraphs.com/${getRandomOption(
+            shapes
+        )}/${username}?theme=${getRandomOption(themes)}&numcolors=${getRandomOption(numColors)}`;
     }
 };

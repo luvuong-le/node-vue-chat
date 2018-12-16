@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <img
-                            v-if="!message.user.social"
+                            v-if="!message.user.social.id"
                             :src="message.user.image"
                             class="chat__user-avatar"
                             alt
@@ -43,7 +43,7 @@
 
                     <div class="chat__message-item" v-else>
                         <img
-                            v-if="!message.user.social"
+                            v-if="!message.user.social.id"
                             :src="message.user.image"
                             class="chat__user-avatar"
                             alt

@@ -4,6 +4,8 @@
 @import '../abstract/animations.scss';
 @import '../vendors/animate.scss';
 
+@import '../components/social.scss';
+
 *,
 *::before,
 *::after {
@@ -182,6 +184,10 @@ li .nav__link.router-link-exact-active {
     background-attachment: fixed;
     position: relative;
     z-index: 2;
+
+    @include respond(phone) {
+        height: 100%;
+    }
 }
 
 .section {
@@ -189,15 +195,13 @@ li .nav__link.router-link-exact-active {
     width: 100%;
     position: relative;
     padding: 1rem;
-}
 
-.section {
     &__heading {
         font-size: 2.5rem;
         text-align: center;
 
         @include respond(phone) {
-            margin-top: 100px;
+            // margin-top: 100px;
         }
     }
 
@@ -214,14 +218,23 @@ li .nav__link.router-link-exact-active {
         font-size: 0.9em;
         line-height: 1.5em;
         color: rgba(255, 255, 255, 0.8);
+
+        @include respond(phone) {
+            width: 100%;
+        }
     }
 
     &:first-child {
-        height: calc(100vh - 68px);
+        // height: calc(100vh - 68px);
 
         @include respond(phone) {
-            height: 100vh;
-            overflow: hidden;
+            height: 100%;
+        }
+    }
+
+    &--mmt {
+        @include respond(phone) {
+            margin-top: 60px;
         }
     }
 
@@ -229,12 +242,16 @@ li .nav__link.router-link-exact-active {
         margin: 4em 0 10em 0;
 
         @include respond(phone) {
-            margin: 10em 0;
+            margin: 8em 0 0 0;
         }
     }
 
     &__content {
         text-align: center;
+
+        @include respond(phone) {
+            padding-bottom: 100px;
+        }
     }
 
     &__graphic {
@@ -242,7 +259,14 @@ li .nav__link.router-link-exact-active {
         margin: 4em 0;
 
         & > img {
-            width: 50%;
+            width: 100%;
+        }
+    }
+
+    &--room {
+        height: calc(100vh - 68px);
+        @include respond(phone) {
+            margin-top: 70px;
         }
     }
 }
