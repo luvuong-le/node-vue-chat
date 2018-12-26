@@ -1,5 +1,7 @@
 /** Dotenv Environment Variables */
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 /** Connect to MongoDB */
 require('./db/mongoose');
@@ -189,6 +191,14 @@ io.on('connection', socket => {
         io.emit('roomNameUpdated', JSON.stringify(data));
     });
 });
+
+/** Serve static assets if production */
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../client/dist'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+    });
+}
 
 if (process.env.NODE_ENV !== 'test') {
     server.listen(process.env.PORT || 5000, () => {

@@ -11,7 +11,9 @@
         "server:test:ci": "npm run test:ci --prefix server",
         "test": "npm run test --prefix client && npm run server:test:ci",
         "dev": "npm run server && npm run dev --prefix client",
-        "build": "npm run build --prefix client"
+        "build": "npm run build --prefix client",
+        "start": "npm run server",
+        "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
     },
     "repository": {
         "type": "git",
