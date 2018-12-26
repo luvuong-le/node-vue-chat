@@ -42,9 +42,31 @@
                             :to="{name: 'EditUserProfile', params: { handle: user.handle }}"
                             class="btn btn--info"
                         >Edit Profile</router-link>
-                        <router-link to="/register" class="btn btn--danger">Delete Account</router-link>
+                        <a
+                            href="#"
+                            @click.prevent="handleDeleteModal"
+                            class="btn btn--danger"
+                        >Delete Account</a>
                     </div>
                 </div>
+                <Modal name="deleteUser" ref="deleteUser">
+                    <template slot="header">
+                        <h2 class="text-upper">Delete Account</h2>
+                    </template>
+                    <template slot="body">
+                        <p class="lead">Warning: This action cannot be undone</p>
+                        <p
+                            class="lead mt-6"
+                        >Are you sure you want to permanently delete your account?</p>
+                        <div class="actions mt-6">
+                            <a
+                                href="#"
+                                @click.prevent="handleDelete"
+                                class="btn btn--danger"
+                            >Yes, Delete Account</a>
+                        </div>
+                    </template>
+                </Modal>
             </div>
         </div>
     </div>
@@ -52,10 +74,15 @@
 
 <script>
 import axios from 'axios';
+import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
+import Modal from '@/components/layout/Modal.vue';
 
 export default {
     name: 'UserProfile',
+    components: {
+        Modal
+    },
     data: function() {
         return {
             user: null
@@ -65,19 +92,28 @@ export default {
         ...mapGetters(['getUserData', 'isAuthorized'])
     },
     methods: {
-        ...mapActions(['saveUserData', 'toggleAuthState'])
+        ...mapActions(['saveUserData', 'toggleAuthState', 'deleteUserAccount']),
+        handleDeleteModal() {
+            this.$refs.deleteUser.open();
+        },
+        handleDelete() {
+            this.$store.dispatch('deleteUserAccount');
+            this.$refs.deleteUser.close();
+            this.$router.push({ name: 'Login' });
+        }
     },
     created() {
-        if (localStorage.getItem('authToken')) {
+        if (localStorage.getItem('authToken') && _.isEmpty(this.getUserData)) {
             axios
                 .get(`/api/user/current`)
                 .then(res => {
                     this.$store.dispatch('saveUserData', res.data);
                     this.$store.dispatch('toggleAuthState', true);
-                    localStorage.setItem('user', JSON.stringify(res.data));
                     this.user = res.data;
                 })
                 .catch(err => err);
+        } else {
+            this.user = this.getUserData;
         }
     },
     mounted() {}

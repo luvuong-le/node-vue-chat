@@ -9,6 +9,7 @@ import UserProfile from '@/components/user/UserProfile.vue';
 import EditUserProfile from '@/components/user/EditUserProfile.vue';
 import RoomList from '@/components/room/RoomList.vue';
 import Room from '@/components/room/Room.vue';
+import NotFound from '@/components/error/NotFound.vue';
 import { checkUserData } from './helpers/user';
 import store from './store';
 
@@ -95,12 +96,16 @@ const router = new Router({
                 transitionName: 'router-anim',
                 enterActive: 'animated fadeIn'
             }
+        },
+        {
+            path: '*',
+            component: NotFound
         }
     ]
 });
 
-router.beforeEach((to, from, next) => {
-    checkUserData();
+router.beforeEach(async (to, from, next) => {
+    await checkUserData(next);
     if (to.meta.requiresAuth) {
         if (localStorage.getItem('authToken') === null) {
             localStorage.clear();
@@ -123,6 +128,7 @@ router.beforeEach((to, from, next) => {
     } else {
         next();
     }
+    next();
 });
 
 export default router;

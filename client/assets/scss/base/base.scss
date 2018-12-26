@@ -224,9 +224,8 @@ li .nav__link.router-link-exact-active {
         }
     }
 
+    // Not required??
     &:first-child {
-        // height: calc(100vh - 68px);
-
         @include respond(phone) {
             height: 100%;
         }
@@ -255,11 +254,14 @@ li .nav__link.router-link-exact-active {
     }
 
     &__graphic {
-        width: 100%;
-        margin: 4em 0;
+        width: 80%;
+        margin: 4em auto;
 
         & > img {
-            width: 100%;
+            width: 70%;
+            @include respond(phone) {
+                width: 100%;
+            }
         }
     }
 

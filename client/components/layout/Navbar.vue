@@ -36,7 +36,7 @@
                     <router-link to="/register" class="nav__link nav__link--rounded">Sign Up</router-link>
                 </li>
             </ul>
-            <SignedInLinks :logout="logout" v-if="isAuthorized"/>
+            <SignedInLinks :logout="logout" :user="user" v-if="isAuthorized"/>
         </nav>
         <nav class="snav" v-bind:class="{'snav--shown': navToggleState}">
             <Particle name="particlejs-nav"/>
@@ -66,9 +66,10 @@
             <ul class="snav__nav" v-if="isAuthorized">
                 <li @click="this.closeSideNav" class="snav__item">
                     <router-link
-                        :to="{name: 'UserProfile', params: { handle: this.$store.getters.getUserData.handle}}"
+                        v-if="Object.keys(user).length > 0"
+                        :to="{name: 'UserProfile', params: { handle: user.handle}}"
                         class="nav__link nav__link--rounded"
-                    >{{ this.$store.getters.getUserData.username }}</router-link>
+                    >{{ user.handle }}</router-link>
                 </li>
                 <li @click="this.closeSideNav" class="snav__item">
                     <button
@@ -98,7 +99,10 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['getUserData', 'isAuthorized'])
+        ...mapGetters(['getUserData', 'isAuthorized']),
+        user() {
+            return this.getUserData;
+        }
     },
     methods: {
         ...mapActions(['toggleAuthState']),
@@ -113,13 +117,12 @@ export default {
             }
         }
     },
-    mounted() {
+    created() {
         if (localStorage.getItem('authToken')) {
             this.$store.dispatch('toggleAuthState', true);
         } else {
             localStorage.clear();
             this.$store.dispatch('toggleAuthState', false);
-            this.$router.push({ name: 'Login' });
         }
     }
 };

@@ -50,7 +50,7 @@
                         <span>Don't have an account?</span>
                         <router-link to="/register" class="form__link btn btn--rounded">Register</router-link>
                     </div>
-                    <Error v-bind:errors="errors"/>
+                    <Error :errors="errors"/>
                     <button type="submit" class="form__submit">Login</button>
                 </form>
             </div>
@@ -99,8 +99,8 @@ export default {
                             }
                         } else {
                             localStorage.setItem('authToken', res.data.token);
-                            localStorage.setItem('user', JSON.stringify(res.data.user));
                             this.$store.dispatch('toggleAuthState', true);
+                            this.$store.dispatch('saveUserData', res.data.user);
 
                             setAuthToken(res.data.token);
 

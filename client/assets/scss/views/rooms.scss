@@ -20,10 +20,18 @@
         justify-content: center;
         align-items: center;
 
+        @include respond(phone) {
+            margin: 0 0.8rem;
+        }
+
         &-item {
             display: flex;
             align-items: center;
             font-weight: bold;
+
+            @include respond(phone) {
+                text-align: left;
+            }
         }
 
         & span {
@@ -60,23 +68,41 @@
             padding: 1rem;
             border-radius: 3px;
             border: 1px solid #eeeeee;
+
+            @include respond(phone) {
+                flex-flow: column;
+            }
         }
 
         &-details {
             width: 50%;
             text-align: left;
+
+            @include respond(phone) {
+                width: 100%;
+                text-align: center;
+            }
         }
 
         /** List Item Actions */
         &-actions {
             display: flex;
             justify-content: flex-end;
+
+            @include respond(phone) {
+                justify-content: center;
+            }
         }
 
         &-action {
             width: 50%;
             align-self: center;
             text-align: right;
+
+            @include respond(phone) {
+                width: initial;
+                margin: 0.5rem 0;
+            }
         }
     }
 
@@ -106,5 +132,9 @@
         color: #fff;
         font-weight: bold;
         font-family: 'Work Sans', sans-serif;
+
+        @include respond(phone) {
+            width: 90%;
+        }
     }
 }

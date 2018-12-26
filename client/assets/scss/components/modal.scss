@@ -21,11 +21,13 @@
         border-radius: 5px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
         color: #fff;
-        position: relative;
+        position: absolute;
+        @include center();
         transition: opacity 1s ease, transform 1s cubic-bezier(0.42, 0, 0.2, 1.51);
 
         @include respond(phone) {
             width: 90%;
+            margin-top: 2rem;
         }
     }
 
@@ -40,11 +42,19 @@
     &__body {
         height: 75%;
         text-align: center;
+
+        @include respond(phone) {
+            overflow: auto;
+        }
     }
 
     &__footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
         height: 10%;
         border-top: 1px solid white;
+        z-index: 3;
 
         &:hover {
             background: rgba(0, 0, 0, 0.6);

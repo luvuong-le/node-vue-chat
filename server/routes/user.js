@@ -5,6 +5,8 @@ const passport = require('passport');
 
 const { User } = require('../models/User');
 
+const { checkEditProfileFields } = require('../middleware/authenticate');
+
 /**
  * @description  GET /api/user/users
  * @param  {Middleware} passport.authenticate
@@ -35,21 +37,24 @@ router.get('/users', passport.authenticate('jwt', { session: false }), async (re
  * @param  {Object} request
  * @param  {Object} response
  */
-router.put('/current', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    await User.findOneAndUpdate(
-        { _id: req.user.id },
-        req.body,
-        { fields: { handle: 1, email: 1, location: 1 } },
-        (err, doc) => {
-            if (err) return res.send(500, { error: err });
+router.put(
+    '/current',
+    [passport.authenticate('jwt', { session: false }), checkEditProfileFields],
+    async (req, res) => {
+        const updateFields = {};
 
-            return res.json({
-                success: true,
-                user: doc
-            });
+        for (let key of Object.keys(req.body)) {
+            if (req.body[key] !== null) {
+                updateFields[key] = req.body[key];
+            }
         }
-    );
-});
+
+        User.findOneAndUpdate({ _id: req.user.id }, { $set: updateFields }, { new: true })
+            .select('-password')
+            .then(doc => res.json({ success: true, user: doc }))
+            .catch(err => res.json({ error: err }));
+    }
+);
 
 /**
  * @description GET api/user/current

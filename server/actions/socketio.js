@@ -22,5 +22,32 @@ module.exports = {
             'handle',
             'image'
         ]);
+    },
+    GET_ROOMS: async () => {
+        return await Room.find({})
+            .populate('user users', ['username', 'social', 'handle', 'image'])
+            .select('-password');
+    },
+    UPDATE_ROOM_USERS: async data => {
+        const room = await Room.findOne({ name: data.room.name })
+            .select('-password')
+            .populate('users', ['username']);
+        if (room) {
+            if (room.users && !room.users.find(user => user._id.toString() === data.user._id)) {
+                room.users.push(data.user._id);
+                const updatedRoom = await room.save();
+                return Room.populate(updatedRoom, {
+                    path: 'user users',
+                    select: 'username social image handle'
+                });
+            } else {
+                return Room.populate(room, {
+                    path: 'user users',
+                    select: 'username social image handle'
+                });
+            }
+        } else {
+            return;
+        }
     }
 };

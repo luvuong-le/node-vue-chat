@@ -29,7 +29,7 @@
                         <input
                             type="text"
                             class="rooms__search-input"
-                            placeholder="Search room by name | Enter 'my_rooms' for a list of your created rooms"
+                            placeholder="Search | Enter 'my_rooms' for a list of your created rooms"
                             v-model.trim="searchInput"
                         >
                     </div>
@@ -91,10 +91,10 @@
                             <form
                                 @submit="handlePrivateRoomCheck"
                                 slot="body"
-                                class="form form--nbs p-0 pt-3"
+                                class="form form--nbs pt-3"
                             >
                                 <div class="form__input-group">
-                                    <ion-icon name="pricetags" class="form__icon"></ion-icon>
+                                    <ion-icon name="key" class="form__icon"></ion-icon>
                                     <input
                                         type="password"
                                         name="password"
@@ -119,10 +119,10 @@
                             <form
                                 @submit="handleCreateRoom"
                                 slot="body"
-                                class="form form--nbs p-0 pt-3"
+                                class="form form--nbs pt-3"
                             >
                                 <div class="form__input-group">
-                                    <ion-icon name="pricetags" class="form__icon"></ion-icon>
+                                    <ion-icon name="list-box" class="form__icon"></ion-icon>
                                     <input
                                         type="text"
                                         name="room_name"
@@ -133,7 +133,7 @@
                                     <label for="room_name" class="form__label">Room Name</label>
                                 </div>
                                 <div class="form__input-group">
-                                    <ion-icon name="pricetags" class="form__icon"></ion-icon>
+                                    <ion-icon name="key" class="form__icon"></ion-icon>
                                     <input
                                         type="password"
                                         name="password"
@@ -217,12 +217,31 @@ export default {
             }
             return 0;
         },
+        checkLingeringUser(data) {
+            for (const room of data) {
+                if (room.users.some(room => room._id === this.getUserData._id)) {
+                    return true;
+                }
+            }
+            return false;
+        },
         fetchRoomData() {
             axios
                 .get('/api/room')
                 .then(res => {
-                    this.$store.dispatch('updateRoomData', res.data);
-                    this.rooms = res.data;
+                    if (this.checkLingeringUser(res.data)) {
+                        return axios.put(`/api/room/remove/users/all`, {
+                            user_id: this.getUserData._id
+                        });
+                    } else {
+                        this.$store.dispatch('updateRoomData', res.data);
+                        this.rooms = res.data;
+                    }
+                })
+                .then(res => {
+                    if (res && res.data) {
+                        this.rooms = res.data;
+                    }
                 })
                 .catch(err => {
                     console.log(err);
@@ -332,6 +351,10 @@ export default {
 
         this.getSocket.on('roomListUpdated', data => {
             this.rooms = this.rooms.filter(room => room._id !== JSON.parse(data).room._id);
+        });
+
+        this.getSocket.on('updateRooms', data => {
+            this.rooms = JSON.parse(data).room;
         });
 
         this.getSocket.on('roomNameUpdated', data => {

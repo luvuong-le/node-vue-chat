@@ -1,13 +1,11 @@
 <template>
     <ul class="navbar__nav navbar__nav--right">
-        <!-- <li class="nav__item">
-            <router-link :to="{name: 'RoomList'}" class="nav__link nav__link--rounded">Rooms</router-link>
-        </li>-->
         <li class="nav__item">
             <router-link
-                :to="{name: 'UserProfile', params: { handle: this.$store.getters.getUserData.handle }}"
+                v-if="Object.keys(this.user).length > 0"
+                :to="{name: 'UserProfile', params: { handle: this.user.handle  }}"
                 class="nav__link nav__link--rounded"
-            >{{ this.$store.getters.getUserData.handle }}</router-link>
+            >{{ this.user.handle }}</router-link>
         </li>
         <li class="nav__item">
             <button
@@ -23,11 +21,9 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'SignedInLinks',
-    props: ['logout'],
+    props: ['logout', 'user'],
     data: function() {
-        return {
-            username: null
-        };
+        return {};
     },
     computed: {
         ...mapGetters(['getUserData', 'isAuthorized'])

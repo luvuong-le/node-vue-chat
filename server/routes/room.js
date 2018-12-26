@@ -168,7 +168,7 @@ router.post('/update/users', passport.authenticate('jwt', { session: false }), a
     const room = await Room.findOne({ name: req.body.room_name }).populate('users', ['username']);
 
     if (room) {
-        if (!room.users.find(room => room._id.toString() === req.user.id)) {
+        if (!room.users.find(user => user._id.toString() === req.user.id)) {
             room.users.push(req.user.id);
             await room.save();
             return res.status(200).json(room);
@@ -188,15 +188,40 @@ router.post('/remove/users', passport.authenticate('jwt', { session: false }), a
 
     if (room) {
         if (room.users.find(room => room._id.toString() === req.user.id)) {
-            room.users = room.users.filter(room => room._id.toString() !== req.user.id);
+            room.users = room.users.filter(user => user._id.toString() !== req.user.id);
             await room.save();
-            return res.status(200).json(room);
-        } else {
-            return res.status(200).json(room);
         }
+        const returnRoom = await Room.populate(room, {
+            path: 'user users',
+            select: 'username social image handle'
+        });
+        return res.status(200).json(returnRoom);
     } else {
         return res.status(404).json({ errors: `No room with name ${req.params.room_name} found` });
     }
 });
+
+/**
+ * @description PUT /api/room/remove/users/:id/all
+ */
+router.put(
+    '/remove/users/all',
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
+        await Room.updateMany({ $pull: { users: { $in: [req.body.user_id] } } });
+
+        const rooms = await Room.find({})
+            .populate('user', ['username'])
+            .populate('users', ['username'])
+            .select('-password')
+            .exec();
+
+        if (rooms) {
+            return res.status(200).json(rooms);
+        } else {
+            return res.status(404).json({ error: 'No Rooms Found' });
+        }
+    }
+);
 
 module.exports = router;

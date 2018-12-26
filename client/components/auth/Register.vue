@@ -108,6 +108,7 @@ export default {
                         password: this.password
                     })
                     .then(res => {
+                        console.log(res.data);
                         if (res.data.errors) {
                             for (const error of res.data.errors) {
                                 const [value] = Object.values(error);
@@ -115,8 +116,8 @@ export default {
                             }
                         } else {
                             localStorage.setItem('authToken', res.data.token);
-                            localStorage.setItem('user', JSON.stringify(res.data.user));
                             this.$store.dispatch('toggleAuthState', true);
+                            this.$store.dispatch('saveUserData', true);
 
                             setAuthToken(res.data.token);
 

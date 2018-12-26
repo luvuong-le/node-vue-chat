@@ -27,7 +27,7 @@ const cors = require('cors');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const { ADD_MESSAGE, GET_MESSAGES } = require('./actions/socketio');
+const { ADD_MESSAGE, GET_MESSAGES, UPDATE_ROOM_USERS, GET_ROOMS } = require('./actions/socketio');
 
 /** Routes */
 const authRoutes = require('./routes/auth');
@@ -70,6 +70,8 @@ if (process.env.NODE_ENV !== 'production') {
     );
 }
 
+let userTypings = {};
+
 /** Socket IO Connections */
 io.on('connection', socket => {
     logger.info('[SOCKET-IO] User Connected');
@@ -83,34 +85,80 @@ io.on('connection', socket => {
     /** Join User in Room */
     socket.on('userJoined', data => {
         socket.join(data.room._id, async () => {
-            console.log('New user joining');
+            /** Get list of messages to send back to client */
+            socket.emit(
+                'updateRoomData',
+                JSON.stringify({
+                    messages: await GET_MESSAGES(data),
+                    room: await UPDATE_ROOM_USERS(data)
+                })
+            );
 
-            // Store Admin message in database
-            // ADD_MESSAGE(data);
+            /** Emit event to all clients except the sender */
+            socket.broadcast.emit(
+                'updateRooms',
+                JSON.stringify({
+                    room: await GET_ROOMS()
+                })
+            );
 
-            // Get list of messages to send back to client
-            io.to(data.room._id).emit('receivedNewUser', JSON.stringify(await GET_MESSAGES(data)));
+            /** Emit back the message */
+            socket.broadcast.to(data.room._id).emit('receivedNewMessage', JSON.stringify(data));
         });
     });
 
     /** User Exit Room */
     socket.on('exitRoom', data => {
         socket.leave(data.room._id, async () => {
-            console.log('User Exiting Room');
-
-            // Store Admin message in database
-            // ADD_MESSAGE(data);
-
-            // Send back to user
-            io.to(data.room._id).emit(
-                'receivedMessage',
+            socket.to(data.room._id).emit(
+                'updateRoomData',
                 JSON.stringify({
-                    data
+                    room: data.room
+                })
+            );
+
+            /** Update room list count */
+            socket.broadcast.emit(
+                'updateRooms',
+                JSON.stringify({
+                    room: await GET_ROOMS()
                 })
             );
 
             io.to(data.room._id).emit('receivedUserExit', data.room);
+
+            /** Send Exit Message back to room */
+            socket.broadcast.to(data.room._id).emit('receivedNewMessage', JSON.stringify(data));
         });
+    });
+
+    /** User Typing Events */
+    socket.on('userTyping', data => {
+        if (!userTypings[data.room._id]) {
+            userTypings[data.room._id] = [];
+        } else {
+            if (!userTypings[data.room._id].includes(data.user.handle)) {
+                userTypings[data.room._id].push(data.user.handle);
+            }
+        }
+
+        socket.broadcast
+            .to(data.room._id)
+            .emit('receivedUserTyping', JSON.stringify(userTypings[data.room._id]));
+    });
+
+    socket.on('removeUserTyping', data => {
+        if (userTypings[data.room._id]) {
+            if (userTypings[data.room._id].includes(data.user.handle)) {
+                userTypings[data.room._id] = userTypings[data.room._id].filter(
+                    handle => handle !== data.user.handle
+                );
+            }
+        }
+
+        socket.broadcast
+            .to(data.room._id)
+            .emit('receivedUserTyping', JSON.stringify(userTypings[data.room._id]));
     });
 
     /** New Message Event */

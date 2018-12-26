@@ -54,6 +54,8 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
                 image: createAvatar(req.body.username)
             });
 
+            console.log(newUser);
+
             newUser
                 .save()
                 .then(userData => {

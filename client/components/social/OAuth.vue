@@ -24,7 +24,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions(['toggleAuthState']),
+        ...mapActions(['saveUserData', 'toggleAuthState']),
         startAuth(e) {
             if (!this.disabled) {
                 e.preventDefault();
@@ -66,9 +66,10 @@ export default {
         this.getSocket.on(this.provider, data => {
             data = JSON.parse(data);
             localStorage.setItem('authToken', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
 
             this.$store.dispatch('toggleAuthState', true);
+            this.$store.dispatch('saveUserData', data.user);
+
             setAuthToken(data.token);
 
             this.close();

@@ -24,9 +24,15 @@ const checkRegistrationFields = async (req, res, next) => {
         .isLength({ min: 5, max: 15 })
         .withMessage('Password must be between 5 and 15 characters');
 
-    const errors = req.validationErrors();
+    let errors = req.validationErrors() || [];
 
-    if (errors) {
+    const user = await User.findOne({ username: req.body.username });
+
+    if (user) {
+        errors.push({ param: 'username', msg: 'Username already taken' });
+    }
+
+    if (errors.length > 0) {
         res.send({
             errors: createErrorObject(errors)
         });
@@ -46,6 +52,29 @@ const checkLoginFields = async (req, res, next) => {
         }
     }
 
+    if (errors.length !== 0) {
+        res.send({
+            errors: createErrorObject(errors)
+        });
+    } else {
+        next();
+    }
+};
+
+const checkEditProfileFields = async (req, res, next) => {
+    let errors = [];
+
+    if (req.body.email) {
+        if (await User.findOne({ email: req.body.email })) {
+            errors.push({ param: 'email', msg: 'Email is already taken' });
+        }
+    }
+
+    if (req.body.handle) {
+        if (await User.findOne({ handle: req.body.handle })) {
+            errors.push({ param: 'handle', msg: 'Handle is already taken' });
+        }
+    }
     if (errors.length !== 0) {
         res.send({
             errors: createErrorObject(errors)
@@ -90,6 +119,7 @@ const checkCreateRoomFields = async (req, res, next) => {
 module.exports = {
     checkLoginFields,
     checkRegistrationFields,
+    checkEditProfileFields,
     checkCreateRoomFields,
     createErrorObject
 };

@@ -1,11 +1,22 @@
 import store from '../store';
 import _ from 'lodash';
+import axios from 'axios';
 
-export const checkUserData = () => {
-    if (localStorage.getItem('authToken') && _.isEmpty(store.getters.getUserData)) {
-        const userData = localStorage.getItem('user');
+export const checkUserData = async next => {
+    if (localStorage.getItem('authToken')) {
+        if (_.isEmpty(store.getters.getUserData)) {
+            const res = await axios.get('/api/user/current');
 
-        store.dispatch('saveUserData', JSON.parse(userData));
-        store.dispatch('toggleAuthState', true);
+            if (res.data) {
+                await store.dispatch('saveUserData', res.data);
+                await store.dispatch('toggleAuthState', true);
+
+                next();
+            }
+        } else {
+            next();
+        }
+    } else {
+        next();
     }
 };

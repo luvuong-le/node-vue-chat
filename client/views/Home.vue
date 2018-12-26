@@ -11,7 +11,7 @@
                 <router-link to="/" class="btn btn--anim btn--white">Learn More</router-link>
                 <router-link to="/register" class="btn btn--anim btn--info">Register Now</router-link>
                 <div class="section__graphic">
-                    <img src="@/assets/img/Desk.svg" alt>
+                    <img src="@/assets/img/undraw_group_chat_v059.svg" alt>
                 </div>
             </div>
         </section>
@@ -41,5 +41,3 @@ export default {
     }
 };
 </script>
-
-

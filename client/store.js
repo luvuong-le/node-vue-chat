@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -9,8 +10,7 @@ export default new Vuex.Store({
         authUser: {},
         currentRoom: null,
         rooms: [],
-        socket: null,
-        newUserGreetings: []
+        socket: null
     },
     getters: {
         getUserData: state => state.authUser,
@@ -47,6 +47,12 @@ export default new Vuex.Store({
         },
         REMOVE_ACCESS_ID: (state, payload) => {
             state.currentRoom = payload;
+        },
+        RESET_STATE: state => {
+            state.authState = false;
+            state.authUser = {};
+            state.currentRoom = null;
+            state.rooms = [];
         }
     },
     actions: {
@@ -76,6 +82,12 @@ export default new Vuex.Store({
         },
         removeAccessId: (context, payload) => {
             context.commit('REMOVE_ACCESS_ID', payload);
+        },
+        deleteUserAccount: context => {
+            axios.delete('/api/user/current').then(() => {
+                context.commit('RESET_STATE');
+                localStorage.clear();
+            });
         }
     }
 });

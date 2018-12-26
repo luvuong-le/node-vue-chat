@@ -6,7 +6,8 @@
             </div>
             <div class="section__content">
                 <form @submit.prevent="handleSubmit" class="form">
-                    <div class="profile__item" v-if="this.getUserData.social.id === null">
+                    <p class="lead">Edit Profile Details</p>
+                    <div class="profile__item" v-if="user.social.id === null">
                         <img :src="user.image" alt class="profile__image">
                     </div>
                     <div class="profile__item" v-else>
@@ -47,7 +48,7 @@
                         <label for="location" class="form__label">Location</label>
                     </div>
                     <Error :errors="errors"/>
-                    <div class="form__actions">
+                    <div class="form__actions mt-3">
                         <a @click="handleBackBtn" class="btn btn--info">Back</a>
                         <button type="submit" class="btn btn--clear btn--danger">Update Account</button>
                     </div>
@@ -60,6 +61,7 @@
 <script>
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex';
+import _ from 'lodash';
 import slugify from 'slugify';
 import Error from '../error/Error.vue';
 
@@ -71,15 +73,9 @@ export default {
     data: function() {
         return {
             user: {},
-            email:
-                this.$store.getters.getUserData.email ||
-                JSON.parse(localStorage.getItem('user')).email,
-            handle:
-                this.$store.getters.getUserData.handle ||
-                JSON.parse(localStorage.getItem('user')).handle,
-            location:
-                this.$store.getters.getUserData.location ||
-                JSON.parse(localStorage.getItem('user')).location,
+            email: '',
+            handle: '',
+            location: '',
             errors: []
         };
     },
@@ -92,32 +88,71 @@ export default {
         handleBackBtn() {
             this.$router.go(-1);
         },
-
+        checkFields() {
+            if (this.handle === this.getUserData.handle) {
+                return true;
+            }
+        },
         handleSubmit() {
             const updatedUserDetails = {
-                handle: slugify(this.handle.toLowerCase()),
-                email: this.email,
-                location: this.location
+                handle:
+                    this.handle === this.getUserData.handle
+                        ? null
+                        : slugify(this.handle.toLowerCase()),
+                email: this.email === this.getUserData.email ? null : this.email,
+                location: this.location === this.getUserData.location ? null : this.location
             };
 
             if (localStorage.getItem('authToken')) {
                 axios
                     .put(`/api/user/current`, updatedUserDetails)
-                    .then(res => {
-                        this.$store.dispatch('saveUserData', res.data.user);
-                        this.user = res.data.user;
-                        localStorage.setItem('user', JSON.stringify(res.data.user));
-                        this.$router.replace({
-                            name: 'UserProfile',
-                            params: { handle: updatedUserDetails.handle }
-                        });
+                    .then(async res => {
+                        if (res.data.errors) {
+                            for (const error of res.data.errors) {
+                                const [value] = Object.values(error);
+                                this.errors.push(value);
+                            }
+                        } else {
+                            await this.$store.dispatch('saveUserData', res.data.user);
+                            this.user = res.data.user;
+                            this.$router.push({
+                                name: 'UserProfile',
+                                params: {
+                                    handle:
+                                        updatedUserDetails.handle === null
+                                            ? this.getUserData.handle
+                                            : updatedUserDetails.handle
+                                }
+                            });
+                        }
                     })
-                    .catch(err => err);
+                    .catch(err => console.log(err));
+
+                setTimeout(() => {
+                    this.errors = [];
+                }, 1500);
             }
         }
     },
     created() {
-        this.user = this.$store.getters.getUserData;
+        if (localStorage.getItem('authToken') && _.isEmpty(this.getUserData)) {
+            axios
+                .get(`/api/user/current`)
+                .then(res => {
+                    this.$store.dispatch('saveUserData', res.data);
+                    this.$store.dispatch('toggleAuthState', true);
+                    this.user = res.data;
+                })
+                .catch(err => err);
+        } else {
+            this.user = this.getUserData;
+        }
+        /** Assign model values */
+        for (let key of Object.keys(this.$data)) {
+            if (this.getUserData[key]) {
+                this.$data[key] = this.getUserData[key];
+            }
+        }
     },
     mounted() {}
 };

@@ -30,18 +30,21 @@
                                         :key="i"
                                     >
                                         <div class="chat__user-item">
-                                            <img
-                                                v-if="user.social.id === null"
-                                                :src="user.image"
-                                                class="chat__user-avatar"
-                                                alt
-                                            >
-                                            <img
-                                                v-else
-                                                :src="user.social.image"
-                                                class="chat__user-avatar"
-                                                alt
-                                            >
+                                            <div class="chat__user-image">
+                                                <img
+                                                    v-if="user.social.id === null"
+                                                    :src="user.image"
+                                                    class="chat__user-avatar"
+                                                    alt
+                                                >
+                                                <img
+                                                    v-else
+                                                    :src="user.social.image"
+                                                    class="chat__user-avatar"
+                                                    alt
+                                                >
+                                            </div>
+
                                             <div class="chat__user-details">
                                                 <span>{{ user.handle }}</span>
                                             </div>
@@ -68,6 +71,11 @@
                             </div>
                         </div>
                         <MessageList :messages="messages"/>
+                        <transition name="slideDown">
+                            <div class="chat__utyping" v-show="usersTyping.length > 0">
+                                <span>{{ getUsersTyping }}</span>
+                            </div>
+                        </transition>
                         <ChatInput/>
                     </div>
                 </div>
@@ -77,7 +85,7 @@
                     <h2 class="text-upper">Edit Room: {{ this.getCurrentRoom.name }}</h2>
                 </template>
                 <template slot="body">
-                    <form @submit="handleEditRoom" slot="body" class="form form--nbs p-0 pt-3">
+                    <form @submit="handleEditRoom" slot="body" class="form form--nbs pt-3">
                         <div class="form__input-group">
                             <ion-icon name="pricetags" class="form__icon"></ion-icon>
                             <input
@@ -151,23 +159,30 @@ export default {
     },
     data: function() {
         return {
-            room: null,
-            users: null,
-            messages: null,
+            room: [],
+            users: [],
+            usersTyping: [],
+            messages: [],
             newRoomName: '',
             sidebarVisible: window.innerWidth < 768 ? false : true,
-            searchInput: ''
+            searchInput: '',
+            roomLeft: false
         };
     },
     computed: {
         ...mapGetters(['getUserData', 'getCurrentRoom', 'getSocket']),
         filteredUsers() {
-            return this.getCurrentRoom.users
+            return this.users
                 .slice()
                 .sort(this.sortAlphabetical)
                 .filter(user =>
                     user.username.toLowerCase().includes(this.searchInput.toLowerCase())
                 );
+        },
+        getUsersTyping() {
+            if (this.usersTyping.length > 0) {
+                return `${this.usersTyping.join(', ')} is typing...`;
+            }
         }
     },
     methods: {
@@ -188,7 +203,7 @@ export default {
             }
             return 0;
         },
-        leaveRoom(e) {
+        leaveRoom(e, newPage) {
             if (e) {
                 e.preventDefault();
             }
@@ -203,7 +218,10 @@ export default {
                         admin: true,
                         content: `${this.getUserData.username} left ${this.getCurrentRoom.name}`
                     });
-                    this.$router.push({ name: 'RoomList' });
+                    this.roomLeft = true;
+                    if (!newPage) {
+                        this.$router.push({ name: 'RoomList' });
+                    }
                 });
         },
         openEditRoom() {
@@ -250,6 +268,16 @@ export default {
                 this.users = res.data.users;
                 this.$store.dispatch('saveCurrentRoom', res.data);
 
+                /** Check for private access and access Id */
+                if (!res.data.access) {
+                    if (!res.data.accessIds.includes(this.getUserData._id)) {
+                        this.$router.push({
+                            name: 'RoomList',
+                            params: { message: 'You do not have access to this room' }
+                        });
+                    }
+                }
+
                 /** Socket IO: User join event, get latest messages from room */
                 this.getSocket.emit('userJoined', {
                     room: this.getCurrentRoom,
@@ -259,8 +287,17 @@ export default {
                 });
 
                 /** Socket IO: Received New User Event */
-                this.getSocket.on('receivedNewUser', data => {
-                    this.messages = JSON.parse(data);
+                this.getSocket.on('updateRoomData', data => {
+                    data = JSON.parse(data);
+                    if (data.messages) {
+                        this.messages = data.messages;
+                    }
+
+                    if (data.room) {
+                        this.room = data.room;
+                        this.users = data.room.users;
+                        this.$store.dispatch('saveCurrentRoom', data.room);
+                    }
                 });
 
                 /** Socket IO: User Exit Event - Check other tabs of the same room and redirect */
@@ -271,6 +308,13 @@ export default {
                 /** Socket IO: New Messaage Event - Append the new message to the messages array */
                 this.getSocket.on('receivedNewMessage', message => {
                     this.messages.push(JSON.parse(message));
+                });
+
+                /** Socket IO: User Typing Event  */
+                this.getSocket.on('receivedUserTyping', data => {
+                    this.usersTyping = JSON.parse(data).filter(
+                        user => user !== this.getUserData.handle
+                    );
                 });
 
                 /** Socket IO: Room Deleted Event - Redirect all users */
@@ -290,9 +334,9 @@ export default {
             .catch(err => console.log(err));
     },
     beforeDestroy() {
-        // if (this.getCurrentRoom) {
-        //     this.leaveRoom();
-        // }
+        if (this.getCurrentRoom && !this.roomLeft) {
+            this.leaveRoom(null, true);
+        }
         this.getSocket.removeListener('userJoined');
     },
     mounted() {}
