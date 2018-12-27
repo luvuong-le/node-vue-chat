@@ -4,7 +4,6 @@ module.exports = {
             name: 'astro-chat-backend',
             cwd: './server/',
             script: 'server.js',
-            watch: true,
             ignore_watch: ['.git', './node_modules/', './logs/*'],
             env: {
                 NODE_ENV: 'development'

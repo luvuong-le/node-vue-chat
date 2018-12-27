@@ -1,8 +1,11 @@
 # 🌠 Astro Chat 🌠
 
 [![Build Status](https://travis-ci.org/luvuong-le/astro-chat.svg?branch=master)](https://travis-ci.org/luvuong-le/astro-chat)
+
 [![devDependencies Status](https://david-dm.org/luvuong-le/astro-chat/dev-status.svg)](https://david-dm.org/luvuong-le/astro-chat?type=dev)
+
 [![dependencies Status](https://david-dm.org/luvuong-le/astro-chat/status.svg)](https://david-dm.org/luvuong-le/astro-chat)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Information
