@@ -1,5 +1,5 @@
+const passport = require('passport');
 const { User } = require('../models/User');
-const { Room } = require('../models/Room');
 
 const createErrorObject = errors => {
     const errorObject = [];
@@ -116,10 +116,19 @@ const checkCreateRoomFields = async (req, res, next) => {
     }
 };
 
+const customSocialAuthenticate = socialAuth => {
+    return (req, res, next) => {
+        passport.authenticate(socialAuth, {
+            state: JSON.stringify({ _socket: req.query.socketId })
+        })(req, res, next);
+    };
+};
+
 module.exports = {
     checkLoginFields,
     checkRegistrationFields,
     checkEditProfileFields,
     checkCreateRoomFields,
+    customSocialAuthenticate,
     createErrorObject
 };

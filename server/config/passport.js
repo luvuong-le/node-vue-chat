@@ -13,13 +13,13 @@ let opts = {
 };
 
 module.exports = function(passport) {
-    passport.serializeUser((user, done) => done(null, user.id));
+    passport.serializeUser((user, done) => done(null, { id: user.id, _socket: user._socket }));
 
-    passport.deserializeUser((id, done) => {
-        User.findById(id)
+    passport.deserializeUser((user, done) => {
+        User.findById(user.id)
             .select('-password -googleId -facebookId')
             .then(user => {
-                done(null, user);
+                done(null, { details: user, _socket: user._socket });
             });
     });
 
@@ -39,7 +39,13 @@ module.exports = function(passport) {
 
     if (process.env.NODE_ENV !== 'test') {
         passport.use(
-            new GoogleStrategy(GOOGLE_CONFIG, function(accessToken, refreshToken, profile, done) {
+            new GoogleStrategy(GOOGLE_CONFIG, function(
+                req,
+                accessToken,
+                refreshToken,
+                profile,
+                done
+            ) {
                 User.findOne({ username: profile.displayName })
                     .then(user => {
                         if (user) {
@@ -48,7 +54,10 @@ module.exports = function(passport) {
                             user.social.image = profile.photos[0].value.replace('?sz=50', '');
 
                             user.save().then(user => {
-                                return done(null, user);
+                                return done(null, {
+                                    details: user,
+                                    _socket: JSON.parse(req.query.state)._socket
+                                });
                             });
                         } else {
                             new User({
@@ -62,7 +71,10 @@ module.exports = function(passport) {
                             })
                                 .save()
                                 .then(user => {
-                                    return done(null, user);
+                                    return done(null, {
+                                        details: user,
+                                        _socket: JSON.parse(req.query.state)._socket
+                                    });
                                 });
                         }
                     })
@@ -72,6 +84,7 @@ module.exports = function(passport) {
 
         passport.use(
             new FacebookStrategy(FACEBOOK_CONFIG, function(
+                req,
                 accessToken,
                 refreshToken,
                 profile,
@@ -85,7 +98,10 @@ module.exports = function(passport) {
                             user.social.email = profile.emails[0].value;
 
                             user.save().then(user => {
-                                return done(null, user);
+                                return done(null, {
+                                    details: user,
+                                    _socket: JSON.parse(req.query.state)._socket
+                                });
                             });
                         } else {
                             new User({
@@ -99,7 +115,10 @@ module.exports = function(passport) {
                             })
                                 .save()
                                 .then(user => {
-                                    return done(null, user);
+                                    return done(null, {
+                                        details: user,
+                                        _socket: JSON.parse(req.query.state)._socket
+                                    });
                                 });
                         }
                     })

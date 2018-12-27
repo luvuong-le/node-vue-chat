@@ -26,8 +26,8 @@
                                 <transition-group name="slideDown">
                                     <li
                                         class="chat__user"
-                                        v-for="(user, i) in this.filteredUsers"
-                                        :key="i"
+                                        v-for="user in this.filteredUsers"
+                                        :key="user._id"
                                     >
                                         <div class="chat__user-item">
                                             <div class="chat__user-image">
@@ -102,6 +102,7 @@
 
                         <button type="submit" class="btn btn--clear btn--info">Update Room Name</button>
                     </form>
+                    <Error :errors="errors"/>
                 </template>
             </Modal>
             <Modal name="roomDetails" ref="roomDetails" v-if="this.getCurrentRoom && messages">
@@ -143,10 +144,11 @@
 
 <script>
 import axios from 'axios';
-import MessageList from '../chat/MessageList.vue';
-import ChatInput from '../chat/ChatInput.vue';
-import Sidebar from '../layout/Sidebar.vue';
-import Modal from '../layout/Modal.vue';
+import MessageList from '@/components/chat/MessageList.vue';
+import ChatInput from '@/components/chat/ChatInput.vue';
+import Sidebar from '@/components/layout/Sidebar.vue';
+import Modal from '@/components/layout/Modal.vue';
+import Error from '@/components/error/Error.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -155,6 +157,7 @@ export default {
         MessageList,
         ChatInput,
         Sidebar,
+        Error,
         Modal
     },
     data: function() {
@@ -166,6 +169,7 @@ export default {
             newRoomName: '',
             sidebarVisible: window.innerWidth < 768 ? false : true,
             searchInput: '',
+            errors: [],
             roomLeft: false
         };
     },
@@ -235,20 +239,36 @@ export default {
                     new_room_name: this.newRoomName
                 })
                 .then(res => {
-                    this.$refs.editRoom.close();
-                    this.getSocket.emit('roomUpdateEvent', {
-                        oldRoomName: this.getCurrentRoom.name,
-                        room: res.data
-                    });
-                    this.getSocket.emit('newMessage', {
-                        room: this.getCurrentRoom,
-                        user: this.getUserData,
-                        admin: true,
-                        content: `${this.getUserData.username} updated room ${
-                            this.getCurrentRoom.name
-                        } to ${this.newRoomName}`
-                    });
-                    this.newRoomName = '';
+                    console.log(res.data);
+                    if (res.data.errors) {
+                        for (const error of res.data.errors) {
+                            const [key] = Object.keys(error);
+                            const [value] = Object.values(error);
+                            this.errors.push({
+                                key,
+                                value
+                            });
+                        }
+                    } else {
+                        this.$refs.editRoom.close();
+                        this.getSocket.emit('roomUpdateEvent', {
+                            oldRoomName: this.getCurrentRoom.name,
+                            room: res.data
+                        });
+                        this.getSocket.emit('newMessage', {
+                            room: this.getCurrentRoom,
+                            user: this.getUserData,
+                            admin: true,
+                            content: `${this.getUserData.username} updated room ${
+                                this.getCurrentRoom.name
+                            } to ${this.newRoomName}`
+                        });
+                        this.newRoomName = '';
+                    }
+
+                    setTimeout(() => {
+                        this.errors = [];
+                    }, 1500);
                 })
                 .catch(err => console.log(err));
         },

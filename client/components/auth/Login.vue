@@ -94,8 +94,12 @@ export default {
                     .then(res => {
                         if (res.data.errors) {
                             for (const error of res.data.errors) {
+                                const [key] = Object.keys(error);
                                 const [value] = Object.values(error);
-                                this.errors.push(value);
+                                this.errors.push({
+                                    key,
+                                    value
+                                });
                             }
                         } else {
                             localStorage.setItem('authToken', res.data.token);

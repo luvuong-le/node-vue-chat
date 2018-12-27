@@ -4,7 +4,6 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/User');
-const { GOOGLE_CONFIG, FACEBOOK_CONFIG } = require('../config/config');
 const { createAvatar } = require('../actions/tinygraph');
 const socialAuthActions = require('../actions/socialAuthActions');
 
@@ -12,17 +11,9 @@ const socialAuthActions = require('../actions/socialAuthActions');
 const {
     checkRegistrationFields,
     checkLoginFields,
-    createErrorObject
+    createErrorObject,
+    customSocialAuthenticate
 } = require('../middleware/authenticate');
-
-const addSocketIdtoSession = (req, res, next) => {
-    req.session.socketId = req.query.socketId;
-    next();
-};
-
-/** Social Passport Auth */
-const googleAuth = passport.authenticate('google', GOOGLE_CONFIG.options);
-const facebookAuth = passport.authenticate('facebook');
 
 /**
  * @description  POST /register
@@ -53,8 +44,6 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
                 password: req.body.password,
                 image: createAvatar(req.body.username)
             });
-
-            console.log(newUser);
 
             newUser
                 .save()
@@ -121,8 +110,8 @@ router.post('/logout', async (req, res) => {
 });
 
 /** Social Auth Routes */
-router.get('/google', addSocketIdtoSession, googleAuth);
-router.get('/facebook', addSocketIdtoSession, facebookAuth);
+router.get('/google', customSocialAuthenticate('google'));
+router.get('/facebook', customSocialAuthenticate('facebook'));
 
 /** Social Auth Callbacks */
 router.get(
@@ -130,6 +119,6 @@ router.get(
     passport.authenticate('google', { failureRedirect: '/api/auth/google' }),
     socialAuthActions.google
 );
-router.get('/facebook/redirect', facebookAuth, socialAuthActions.facebook);
+router.get('/facebook/redirect', passport.authenticate('facebook'), socialAuthActions.facebook);
 
 module.exports = router;

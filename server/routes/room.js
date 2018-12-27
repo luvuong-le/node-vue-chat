@@ -146,6 +146,19 @@ router.delete('/:room_name', passport.authenticate('jwt', { session: false }), a
  * @description PUT /api/room/update/name
  */
 router.post('/update/name', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.check('new_room_name')
+        .isString()
+        .isLength({ min: 3, max: 20 })
+        .withMessage('New Room Name must be between 3 and 20 characters');
+
+    let errors = req.validationErrors();
+
+    if (errors.length > 0) {
+        return res.send({
+            errors: createErrorObject(errors)
+        });
+    }
+
     const room = await Room.findOneAndUpdate(
         { name: req.body.room_name },
         { name: req.body.new_room_name },

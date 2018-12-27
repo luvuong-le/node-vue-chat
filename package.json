@@ -5,15 +5,15 @@
     "main": "ecosystem.config.js",
     "scripts": {
         "seed:data": "npm run seed --prefix server",
-        "server": "pm2 start ecosystem.config.js",
-        "server:dev": "pm2 start ecosystem.config.js && pm2 logs",
+        "server": "pm2 start ecosystem.config.js --env production",
+        "server:dev": "pm2 start ecosystem.config.js",
         "server:test:watch": "npm run test:watch --prefix server",
         "server:test:ci": "npm run test:ci --prefix server",
         "test": "npm run test --prefix client && npm run server:test:ci",
-        "dev": "npm run server && npm run dev --prefix client",
+        "dev": "npm run server:dev && npm run dev --prefix client",
         "build": "npm run build --prefix client",
         "start": "npm run server",
-        "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+        "heroku-postbuild": "npm install --prefix client && npm install --prefix server && npm run build --prefix client"
     },
     "repository": {
         "type": "git",

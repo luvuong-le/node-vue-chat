@@ -12,7 +12,7 @@
                 leave-active-class="animated fadeOut"
                 mode="out-in"
             >
-                <span v-for="(error, index) in errors" v-bind:key="index">{{ error }}</span>
+                <span v-for="(error) in errors" :key="error.key">{{ error.value }}</span>
             </transition-group>
         </div>
         <div v-else v-show="this.errorMessage" class="mb-6 form__error">

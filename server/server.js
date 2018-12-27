@@ -20,7 +20,6 @@ require('./config/passport')(passport);
 
 /** Express */
 const express = require('express');
-const session = require('express-session');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
@@ -48,13 +47,6 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(expressValidator());
 app.use(cors());
-app.use(
-    session({
-        secret: process.env.EXPRESS_SESSION_KEY,
-        resave: true,
-        saveUninitialized: true
-    })
-);
 app.set('io', io);
 
 /** Routes Definitions */

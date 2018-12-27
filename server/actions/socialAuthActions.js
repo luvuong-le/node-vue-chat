@@ -3,29 +3,29 @@ const jwt = require('jsonwebtoken');
 module.exports = {
     google: (req, res) => {
         const io = req.app.get('io');
-        const token = jwt.sign(req.user.toObject(), process.env.JWT_SECRET, {
+        const token = jwt.sign(req.user.details.toObject(), process.env.JWT_SECRET, {
             expiresIn: 86400
         });
-        io.to(req.session.socketId).emit(
+        io.to(req.user._socket).emit(
             'google',
             JSON.stringify({
                 auth: true,
                 token: `Bearer ${token}`,
-                user: req.user
+                user: req.user.details
             })
         );
     },
     facebook: (req, res) => {
         const io = req.app.get('io');
-        const token = jwt.sign(req.user.toObject(), process.env.JWT_SECRET, {
+        const token = jwt.sign(req.user.details.toObject(), process.env.JWT_SECRET, {
             expiresIn: 86400
         });
-        io.to(req.session.socketId).emit(
+        io.to(req.user._socket).emit(
             'facebook',
             JSON.stringify({
                 auth: true,
                 token: `Bearer ${token}`,
-                user: req.user
+                user: req.user.details
             })
         );
     }

@@ -37,8 +37,8 @@
                         <ul class="rooms__list">
                             <transition-group name="slideUp">
                                 <li
-                                    v-for="(room, index) in filteredRooms"
-                                    :key="index"
+                                    v-for="room in filteredRooms"
+                                    :key="room._id"
                                     class="rooms__list-item"
                                 >
                                     <a
@@ -164,7 +164,7 @@
 import axios from 'axios';
 import Modal from '@/components/layout/Modal';
 import { mapActions, mapGetters } from 'vuex';
-import Error from '../error/Error.vue';
+import Error from '@/components/error/Error.vue';
 
 export default {
     name: 'RoomList',

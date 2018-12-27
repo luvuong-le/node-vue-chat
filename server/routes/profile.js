@@ -6,7 +6,7 @@ const passport = require('passport');
 const { User } = require('../models/User');
 
 /**
- * @description GET/profile/:handle
+ * @description GET api/profile/:handle
  * @param  {String} id
  * @param  {Middleware} passport.authenticate
  * @param  {false} session
