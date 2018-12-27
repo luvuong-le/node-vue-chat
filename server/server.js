@@ -37,9 +37,6 @@ const profileRoutes = require('./routes/profile');
 const roomRoutes = require('./routes/room');
 const messageRoutes = require('./routes/messages');
 
-/** Serve Static Files */
-app.use(express.static(path.join(__dirname, '../public')));
-
 /** Middleware */
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -186,7 +183,7 @@ io.on('connection', socket => {
 
 /** Serve static assets if production */
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('../client/dist'));
+    app.use(express.static(path.resolve(__dirname, '../client', 'dist')));
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
     });
