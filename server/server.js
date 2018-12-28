@@ -24,6 +24,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
+const helmet = require('helmet');
+const enforce = require('express-sslify');
 
 /** Socket IO */
 const app = express();
@@ -50,6 +52,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(expressValidator());
+app.use(helmet());
+/** Trust Proto Header for heroku load balancer */
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 app.use(cors());
 app.set('io', io);
 
