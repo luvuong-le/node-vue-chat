@@ -47,14 +47,17 @@ app.use(
     })
 );
 app.use(morgan('dev'));
+app.use(helmet());
+
+if (process.env.NODE_ENV === 'production') {
+    /** Trust Proto Header for heroku load balancer */
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(expressValidator());
-app.use(helmet());
-/** Trust Proto Header for heroku load balancer */
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
 app.use(cors());
 app.set('io', io);
 
