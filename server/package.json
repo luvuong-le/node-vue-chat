@@ -9,6 +9,7 @@
         "test:watch": "jest --coverage --config ./jest.config.js --notify --watchAll",
         "test:local": "jest --coverage --config ./jest.config.js --notify",
         "test:ci": "jest --coverage --config ./jest.config.js --forceExit",
+        "dev": "nodemon server.js",
         "start": "node server.js"
     },
     "author": "Lu-Vuong <lu-vuongle@hotmail.com>",
@@ -35,6 +36,7 @@
         "eslint-plugin-prettier": "^3.0.0",
         "jest": "^23.6.0",
         "morgan": "^1.9.1",
+        "nodemon": "^1.18.9",
         "prettier": "^1.15.3",
         "supertest": "^3.3.0",
         "winston": "^3.1.0"

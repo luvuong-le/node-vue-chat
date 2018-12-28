@@ -32,7 +32,6 @@
         "babel-core": "7.0.0-bridge.0",
         "babel-jest": "^23.0.1",
         "node-sass": "^4.9.0",
-        "pm2": "^3.2.2",
         "sass-loader": "^7.0.1",
         "vue-template-compiler": "^2.5.17"
     }

@@ -8,6 +8,7 @@ require('./db/mongoose');
 
 /** Built In Node Dependencies */
 const path = require('path');
+const fs = require('fs');
 
 /** Logging Dependencies */
 const morgan = require('morgan');
@@ -38,7 +39,13 @@ const roomRoutes = require('./routes/room');
 const messageRoutes = require('./routes/messages');
 
 /** Middleware */
-app.use(morgan('combined'));
+app.use(
+    morgan('combined', {
+        stream: fs.createWriteStream('logs/access.log', { flags: 'a' })
+    })
+);
+app.use(morgan('dev'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());

@@ -2,17 +2,15 @@
     "name": "astro-chat-app",
     "version": "1.0.0",
     "description": "Astro Chat Application",
-    "main": "ecosystem.config.js",
     "scripts": {
         "seed:data": "npm run seed --prefix server",
-        "server": "pm2 start ecosystem.config.js --env production",
-        "server:dev": "pm2 start ecosystem.config.js --watch",
         "server:test:watch": "npm run test:watch --prefix server",
         "server:test:ci": "npm run test:ci --prefix server",
         "test": "npm run test --prefix client && npm run server:test:ci",
-        "dev": "npm run server:dev && npm run dev --prefix client",
+        "setup": "npm install && npm install --prefix client && npm install --prefix server",
+        "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
         "build": "npm run build --prefix client",
-        "start": "npm run server",
+        "start": "npm run start --prefix server",
         "heroku-postbuild": "npm install --prefix client && npm install --prefix server && npm run build --prefix client"
     },
     "repository": {
@@ -25,8 +23,7 @@
         "url": "https://github.com/luvuong-le/astro-chat/issues"
     },
     "homepage": "https://github.com/luvuong-le/astro-chat#readme",
-    "dependencies": {
-        "pm2": "^3.2.2"
-    },
-    "devDependencies": {}
+    "devDependencies": {
+        "concurrently": "^4.1.0"
+    }
 }
