@@ -38,9 +38,7 @@ export default {
                 height = 600;
             const left = window.innerWidth / 2 - width / 2;
             const top = window.innerHeight / 2 - height / 2;
-            const url = `${process.env.VUE_APP_SOCIAL_API_URL}/${this.provider}?socketId=${
-                this.getSocket.id
-            }`;
+            const url = `/api/auth/${this.provider}?socketId=${this.getSocket.id}`;
 
             return window.open(
                 url,

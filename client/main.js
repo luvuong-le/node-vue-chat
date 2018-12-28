@@ -11,8 +11,15 @@ Vue.config.productionTip = false;
 Vue.config.ignoredElements = ['ion-icons', /^ion-/];
 Vue.prototype.moment = moment;
 
+let socket = null;
+
 /** Socket IO Client - Store in Vuex State for use in components */
-const socket = io('http://localhost:5000');
+if (process.env.NODE_ENV === 'development') {
+    socket = io('http://localhost:5000');
+} else {
+    socket = io('/');
+}
+
 store.dispatch('assignSocket', socket);
 
 /** Check for auth token on refresh and set authorization header for incoming requests */
