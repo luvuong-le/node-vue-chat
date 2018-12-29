@@ -26,21 +26,27 @@ export default {
         ...mapGetters(['getUserData', 'getCurrentRoom', 'getSocket'])
     },
     methods: {
+        sendUserTyping() {
+            this.getSocket.emit('userTyping', {
+                room: this.getCurrentRoom,
+                user: this.getUserData
+            });
+        },
+        sendUserNotTyping() {
+            this.getSocket.emit('removeUserTyping', {
+                room: this.getCurrentRoom,
+                user: this.getUserData
+            });
+        },
         triggerMessageSend(e) {
             e.preventDefault();
             if (e.keyCode === 13 && !e.shiftKey) {
                 this.sendMessage();
             } else {
                 if (this.content !== '') {
-                    this.getSocket.emit('userTyping', {
-                        room: this.getCurrentRoom,
-                        user: this.getUserData
-                    });
+                    this.sendUserTyping();
                 } else {
-                    this.getSocket.emit('removeUserTyping', {
-                        room: this.getCurrentRoom,
-                        user: this.getUserData
-                    });
+                    this.sendUserNotTyping();
                 }
             }
         },
@@ -51,6 +57,7 @@ export default {
                 content: this.content
             });
             this.content = '';
+            this.sendUserNotTyping();
         }
     },
     mounted() {}

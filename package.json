@@ -4,6 +4,7 @@
     "description": "Astro Chat Application",
     "scripts": {
         "seed:data": "npm run seed --prefix server",
+        "client:test": "npm run test --prefix client",
         "server:test:watch": "npm run test:watch --prefix server",
         "server:test:ci": "npm run test:ci --prefix server",
         "test": "npm run test --prefix client && npm run server:test:ci",

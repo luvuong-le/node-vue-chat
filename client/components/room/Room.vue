@@ -26,7 +26,8 @@
                                 <transition-group name="slideDown">
                                     <li
                                         class="chat__user"
-                                        v-for="user in this.filteredUsers"
+                                        v-if="filteredUsers"
+                                        v-for="user in filteredUsers"
                                         :key="user._id"
                                     >
                                         <div class="chat__user-item">
@@ -99,10 +100,9 @@
                             >
                             <label for="roomName" class="form__label">New Room name</label>
                         </div>
-
+                        <Error :errors="errors"/>
                         <button type="submit" class="btn btn--clear btn--info">Update Room Name</button>
                     </form>
-                    <Error :errors="errors"/>
                 </template>
             </Modal>
             <Modal name="roomDetails" ref="roomDetails" v-if="this.getCurrentRoom && messages">
@@ -112,7 +112,7 @@
                 <template slot="body">
                     <div class="infobox">
                         <div class="infobox__item">
-                            <ion-icon name="contact" class="icon icon-lg"></ion-icon>
+                            <ion-icon name="planet" class="icon icon-lg"></ion-icon>
                         </div>
                         <div class="infobox__item">
                             <span class="infobox__item--left">Online Users</span>
@@ -239,7 +239,6 @@ export default {
                     new_room_name: this.newRoomName
                 })
                 .then(res => {
-                    console.log(res.data);
                     if (res.data.errors) {
                         for (const error of res.data.errors) {
                             const [key] = Object.keys(error);
@@ -318,6 +317,11 @@ export default {
                         this.users = data.room.users;
                         this.$store.dispatch('saveCurrentRoom', data.room);
                     }
+                });
+
+                /** Socket IO: User Exit Event - Update User List */
+                this.getSocket.on('updateUserList', data => {
+                    this.users = JSON.parse(data).users;
                 });
 
                 /** Socket IO: User Exit Event - Check other tabs of the same room and redirect */

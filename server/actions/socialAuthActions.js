@@ -4,7 +4,7 @@ module.exports = {
     google: (req, res) => {
         const io = req.app.get('io');
         const token = jwt.sign(req.user.details.toObject(), process.env.JWT_SECRET, {
-            expiresIn: 86400
+            expiresIn: 18000
         });
         io.to(req.user._socket).emit(
             'google',
@@ -18,7 +18,7 @@ module.exports = {
     facebook: (req, res) => {
         const io = req.app.get('io');
         const token = jwt.sign(req.user.details.toObject(), process.env.JWT_SECRET, {
-            expiresIn: 86400
+            expiresIn: 18000
         });
         io.to(req.user._socket).emit(
             'facebook',

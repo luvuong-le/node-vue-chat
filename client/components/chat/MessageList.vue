@@ -1,6 +1,6 @@
 <template>
     <div class="chat__c-messagelist">
-        <ul class="chat__messages" ref="messages">
+        <ul class="chat__messages" ref="messages" v-if="messages">
             <transition-group name="slideDown">
                 <li class="chat__message" v-for="message in messages" :key="message._id">
                     <div

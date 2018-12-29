@@ -31,7 +31,13 @@ const enforce = require('express-sslify');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const { ADD_MESSAGE, GET_MESSAGES, UPDATE_ROOM_USERS, GET_ROOMS } = require('./actions/socketio');
+const {
+    ADD_MESSAGE,
+    GET_MESSAGES,
+    UPDATE_ROOM_USERS,
+    GET_ROOMS,
+    GET_ROOM_USERS
+} = require('./actions/socketio');
 
 /** Routes */
 const authRoutes = require('./routes/auth');
@@ -81,8 +87,6 @@ let userTypings = {};
 
 /** Socket IO Connections */
 io.on('connection', socket => {
-    logger.info('[SOCKET-IO] User Connected');
-
     /** Socket Events */
     socket.on('disconnect', () => {
         logger.info('User Disconnected');
@@ -101,7 +105,12 @@ io.on('connection', socket => {
                 })
             );
 
-            /** Emit event to all clients except the sender */
+            /** Get Room to update user list for all other clients */
+            socket.broadcast
+                .to(data.room._id)
+                .emit('updateUserList', JSON.stringify(await GET_ROOM_USERS(data)));
+
+            /** Emit event to all clients in the roomlist view except the sender */
             socket.broadcast.emit(
                 'updateRooms',
                 JSON.stringify({
@@ -110,7 +119,9 @@ io.on('connection', socket => {
             );
 
             /** Emit back the message */
-            socket.broadcast.to(data.room._id).emit('receivedNewMessage', JSON.stringify(data));
+            socket.broadcast
+                .to(data.room._id)
+                .emit('receivedNewMessage', JSON.stringify(await ADD_MESSAGE(data)));
         });
     });
 
@@ -135,7 +146,9 @@ io.on('connection', socket => {
             io.to(data.room._id).emit('receivedUserExit', data.room);
 
             /** Send Exit Message back to room */
-            socket.broadcast.to(data.room._id).emit('receivedNewMessage', JSON.stringify(data));
+            socket.broadcast
+                .to(data.room._id)
+                .emit('receivedNewMessage', JSON.stringify(await ADD_MESSAGE(data)));
         });
     });
 

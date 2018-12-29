@@ -51,7 +51,7 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
                     const user = _.omit(userData.toObject(), ['password']);
 
                     const token = jwt.sign(user, process.env.JWT_SECRET, {
-                        expiresIn: 86400
+                        expiresIn: 18000
                     });
 
                     res.status(200).send({
@@ -86,7 +86,7 @@ router.post('/login', checkLoginFields, async (req, res) => {
         });
     }
 
-    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, { expiresIn: 86400 });
+    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, { expiresIn: 18000 });
 
     res.status(200).send({ auth: true, token: `Bearer ${token}`, user });
 });

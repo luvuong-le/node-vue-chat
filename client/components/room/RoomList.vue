@@ -87,7 +87,6 @@
                             >Enter {{ this.privateRoomName || 'Private Room' }}</h2>
                         </template>
                         <template slot="body">
-                            <Error :errors="errors"/>
                             <form
                                 @submit="handlePrivateRoomCheck"
                                 slot="body"
@@ -104,7 +103,7 @@
                                     >
                                     <label for="password" class="form__label">Password</label>
                                 </div>
-
+                                <Error :errors="errors"/>
                                 <button type="submit" class="btn btn--clear btn--info">Enter Room</button>
                             </form>
                         </template>
@@ -115,7 +114,6 @@
                             <h2 class="text-upper">Create Room</h2>
                         </template>
                         <template slot="body">
-                            <Error :errors="errors"/>
                             <form
                                 @submit="handleCreateRoom"
                                 slot="body"
@@ -145,7 +143,7 @@
                                     >
                                     <label for="password" class="form__label">Password (Optional)</label>
                                 </div>
-
+                                <Error :errors="errors"/>
                                 <button type="submit" class="btn btn--clear btn--danger">Create Room</button>
                             </form>
                         </template>
@@ -327,8 +325,12 @@ export default {
                 .then(res => {
                     if (res.data.errors) {
                         for (const error of res.data.errors) {
+                            const [key] = Object.keys(error);
                             const [value] = Object.values(error);
-                            this.errors.push(value);
+                            this.errors.push({
+                                key,
+                                value
+                            });
                         }
                         this.privateRoomPassword = null;
                     } else {

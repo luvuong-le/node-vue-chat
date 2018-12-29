@@ -28,6 +28,11 @@ module.exports = {
             .populate('user users', ['username', 'social', 'handle', 'image'])
             .select('-password');
     },
+    GET_ROOM_USERS: async data => {
+        return await Room.findById(data.room._id)
+            .populate('user users', ['username', 'social', 'handle', 'image'])
+            .select('-password');
+    },
     UPDATE_ROOM_USERS: async data => {
         const room = await Room.findOne({ name: data.room.name })
             .select('-password')
