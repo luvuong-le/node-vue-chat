@@ -47,10 +47,11 @@ app.use(
     })
 );
 app.use(morgan('dev'));
-app.use(helmet());
 
 if (process.env.NODE_ENV === 'production') {
-    /** Trust Proto Header for heroku load balancer */
+    /** Trust Proto Header for heroku */
+    app.enable('trust proxy');
+    app.use(helmet());
     app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 

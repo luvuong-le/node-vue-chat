@@ -114,11 +114,7 @@ router.get('/google', customSocialAuthenticate('google'));
 router.get('/facebook', customSocialAuthenticate('facebook'));
 
 /** Social Auth Callbacks */
-router.get(
-    '/google/redirect',
-    passport.authenticate('google', { failureRedirect: '/api/auth/google' }),
-    socialAuthActions.google
-);
+router.get('/google/redirect', passport.authenticate('google'), socialAuthActions.google);
 router.get('/facebook/redirect', passport.authenticate('facebook'), socialAuthActions.facebook);
 
 module.exports = router;
