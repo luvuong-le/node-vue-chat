@@ -1,6 +1,6 @@
 <template>
     <div class="page notfound">
-        <section class="section section--notfound">
+        <section class="section mt-6 section--notfound">
             <div class="section__heading">
                 <span class="section__title">Oops! Page Not Found</span>
             </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="page profile">
-        <div class="section profile__content">
+        <section class="section section--profile mt-6 profile__content">
             <div class="section__heading mt-6 mb-3">
                 <span class="section__title">Dashboard</span>
             </div>
@@ -68,7 +68,7 @@
                     </template>
                 </Modal>
             </div>
-        </div>
+        </section>
     </div>
 </template>
 

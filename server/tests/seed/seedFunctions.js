@@ -3,17 +3,11 @@ const { mongoose, connect } = require('../../db/mongoose');
 const { User } = require('../../models/User');
 const { Room } = require('../../models/Room');
 const { Message } = require('../../models/Message');
-const { createAvatar } = require('../../actions/tinygraph');
+const gravatar = require('gravatar');
 const { userSeedData, roomSeedData, messageSeedData } = require('./seedData');
 const slugify = require('slugify');
 
 const populateData = async () => {
-    //   User.remove({}).then(() => {
-    //     let userOne = new User(users[0]).save();
-    //     let userTwo = new User(users[1]).save();
-    //     return Promise.all([userOne, userTwo]).then(() => done());
-    //   });
-
     if (mongoose.connection.readyState === 0) {
         connect();
     }
@@ -31,7 +25,7 @@ const populateData = async () => {
             username: user.username,
             email: user.email,
             password: user.password,
-            image: createAvatar(user.username)
+            image: gravatar.url(user.email, { s: '220', r: 'pg', d: 'identicon' })
         }).save();
         userId = userData._id;
     }

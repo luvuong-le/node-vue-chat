@@ -4,7 +4,7 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/User');
-const { createAvatar } = require('../actions/tinygraph');
+const gravatar = require('gravatar');
 const socialAuthActions = require('../actions/socialAuthActions');
 
 /** Middleware */
@@ -37,12 +37,19 @@ router.post('/register', [checkRegistrationFields], (req, res) => {
                 errors: createErrorObject(errors)
             }).end();
         } else {
+            /** Assign Gravatar */
+            const avatar = gravatar.url(req.body.email, {
+                s: '220',
+                r: 'pg',
+                d: 'identicon'
+            });
+
             const newUser = new User({
                 handle: req.body.handle,
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
-                image: createAvatar(req.body.username)
+                image: avatar
             });
 
             newUser

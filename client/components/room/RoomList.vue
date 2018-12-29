@@ -1,6 +1,6 @@
 <template>
     <div class="page roomList">
-        <section class="section section--mmt">
+        <section class="section section--mmt mb-3">
             <div class="section__heading mt-6">
                 <span class="section__title">Room List</span>
             </div>
@@ -35,7 +35,7 @@
                     </div>
                     <transition name="slideDown">
                         <ul class="rooms__list">
-                            <transition-group name="slideUp">
+                            <transition-group name="slideUp" v-if="filteredRooms.length > 0">
                                 <li
                                     v-for="room in filteredRooms"
                                     :key="room._id"
@@ -77,6 +77,7 @@
                                     </a>
                                 </li>
                             </transition-group>
+                            <span v-else>No Rooms</span>
                         </ul>
                     </transition>
                     <!-- Private Room Enter Modal -->
