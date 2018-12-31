@@ -5,6 +5,7 @@
                 <span class="section__title">Room List</span>
             </div>
             <div class="section__content">
+                <Error :errorMessage="errorMessage"/>
                 <p class="section__lead">Enter a room and start chatting!</p>
                 <div class="rooms" v-if="rooms">
                     <div class="rooms__header">
@@ -167,6 +168,7 @@ import Error from '@/components/error/Error.vue';
 
 export default {
     name: 'RoomList',
+    props: ['message'],
     components: {
         Modal: Modal,
         Error
@@ -179,6 +181,7 @@ export default {
             password: null,
             privateRoomPassword: null,
             searchInput: '',
+            errorMessage: this.message,
             errors: []
         };
     },
@@ -292,7 +295,6 @@ export default {
             axios
                 .delete(`/api/room/${e.target.name}`)
                 .then(res => {
-                    // this.rooms = this.rooms.filter(room => room._id !== res.data._id);
                     this.$store.dispatch('deleteRoom', res.data);
                     this.getSocket.emit('roomDeleted', {
                         room: res.data,
@@ -372,6 +374,11 @@ export default {
     },
     mounted() {
         this.fetchRoomData();
+        if (this.errorMessage) {
+            setTimeout(() => {
+                this.errorMessage = '';
+            }, 1500);
+        }
     }
 };
 </script>

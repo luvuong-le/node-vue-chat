@@ -71,6 +71,7 @@ const router = new Router({
             path: '/rooms',
             name: 'RoomList',
             component: RoomList,
+            props: true,
             meta: {
                 requiresAuth: true,
                 transitionName: 'router-anim',

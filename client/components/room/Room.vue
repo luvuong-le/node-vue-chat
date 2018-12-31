@@ -216,12 +216,14 @@ export default {
                     room_name: this.getCurrentRoom.name
                 })
                 .then(res => {
-                    this.getSocket.emit('exitRoom', {
-                        room: res.data,
-                        user: this.getUserData,
-                        admin: true,
-                        content: `${this.getUserData.username} left ${this.getCurrentRoom.name}`
-                    });
+                    if (this.room.access || this.room.accessIds.includes(this.getUserData._id)) {
+                        this.getSocket.emit('exitRoom', {
+                            room: res.data,
+                            user: this.getUserData,
+                            admin: true,
+                            content: `${this.getUserData.username} left ${this.getCurrentRoom.name}`
+                        });
+                    }
                     this.roomLeft = true;
                     if (!newPage) {
                         this.$router.push({ name: 'RoomList' });
@@ -289,8 +291,11 @@ export default {
 
                 /** Check for private access and access Id */
                 if (!res.data.access) {
-                    if (!res.data.accessIds.includes(this.getUserData._id)) {
-                        this.$router.push({
+                    if (
+                        !res.data.accessIds.includes(this.getUserData._id) &&
+                        this.getUserData._id !== res.data.user._id
+                    ) {
+                        return this.$router.push({
                             name: 'RoomList',
                             params: { message: 'You do not have access to this room' }
                         });

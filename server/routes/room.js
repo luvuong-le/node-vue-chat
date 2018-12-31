@@ -62,6 +62,10 @@ router.post(
                 password: req.body.password
             });
 
+            if (newRoom.access === false) {
+                newRoom.accessIds.push(req.user.id);
+            }
+
             newRoom
                 .save()
                 .then(room => {
