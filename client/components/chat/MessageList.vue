@@ -2,7 +2,12 @@
     <div class="chat__c-messagelist">
         <ul class="chat__messages" ref="messages" v-if="messages">
             <transition-group name="slideDown">
-                <li class="chat__message" v-for="message in messages" :key="message._id">
+                <li
+                    class="chat__message"
+                    v-for="message in messages"
+                    :key="message._id"
+                    v-if="message._id"
+                >
                     <div
                         class="chat__message-item u-flex-right"
                         v-if="!message.admin && message.user._id === user._id"

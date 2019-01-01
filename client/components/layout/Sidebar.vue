@@ -58,7 +58,9 @@ export default {
 
     &__body {
         height: auto;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-bottom: 20px;
     }
 
     &__footer {
