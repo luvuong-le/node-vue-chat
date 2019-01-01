@@ -97,9 +97,8 @@ export default {
             this.$refs.deleteUser.open();
         },
         handleDelete() {
-            this.$store.dispatch('deleteUserAccount');
             this.$refs.deleteUser.close();
-            this.$router.push({ name: 'Login' });
+            this.$store.dispatch('deleteUserAccount');
         }
     },
     created() {
@@ -115,8 +114,7 @@ export default {
         } else {
             this.user = this.getUserData;
         }
-    },
-    mounted() {}
+    }
 };
 </script>
 

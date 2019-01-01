@@ -25,6 +25,8 @@ store.dispatch('assignSocket', socket);
 /** Check for auth token on refresh and set authorization header for incoming requests */
 if (localStorage.authToken) {
     setAuthToken(localStorage.authToken);
+} else {
+    setAuthToken(null);
 }
 
 /** Axios Request Intercept */

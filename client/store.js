@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import router from './router';
 
 Vue.use(Vuex);
 
@@ -87,6 +88,7 @@ export default new Vuex.Store({
             axios.delete('/api/user/current').then(() => {
                 context.commit('RESET_STATE');
                 localStorage.clear();
+                router.push({ name: 'Login' });
             });
         }
     }
