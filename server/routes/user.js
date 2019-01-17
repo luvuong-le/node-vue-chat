@@ -77,6 +77,7 @@ router.get('/current', passport.authenticate('jwt', { session: false }), (req, r
  * @param  {Object} response
  */
 router.delete('/current', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    /** Delete the user */
     await User.findOneAndDelete({ _id: req.user.id });
 
     res.json({ success: true });

@@ -59,12 +59,12 @@
                                                 </p>
                                                 <p>
                                                     <strong>Room Admin:</strong>
-                                                    {{ room.user.username }}
+                                                    {{ room.user ? room.user.username : 'Unknown User' }}
                                                 </p>
                                             </div>
                                             <div class="rooms__item-actions">
                                                 <div
-                                                    v-show="getUserData._id === room.user._id"
+                                                    v-show="room.user && getUserData._id === room.user._id"
                                                     class="rooms__item-action"
                                                 >
                                                     <a

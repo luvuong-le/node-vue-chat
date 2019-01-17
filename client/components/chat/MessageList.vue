@@ -2,15 +2,11 @@
     <div class="chat__c-messagelist">
         <ul class="chat__messages" ref="messages" v-if="messages">
             <transition-group name="slideDown">
-                <li
-                    class="chat__message"
-                    v-for="message in messages"
-                    :key="message._id"
-                    v-if="message._id"
-                >
+                <li class="chat__message" v-for="message in messages" :key="message._id">
+                    <!-- Message belongs to the user -->
                     <div
                         class="chat__message-item u-flex-right"
-                        v-if="!message.admin && message.user._id === user._id"
+                        v-if="!message.admin && message.user && message.user._id === user._id"
                     >
                         <div class="chat__message-body">
                             <div class="chat__message-content chat__message-content--right">
@@ -29,6 +25,7 @@
                         >
                         <img v-else :src="message.user.social.image" class="chat__user-avatar" alt>
                     </div>
+                    <!-- Message belongs to the admin -->
                     <div class="chat__message-item u-flex-center" v-else-if="message.admin">
                         <img
                             src="https://img.icons8.com/dusk/64/000000/businessman.png"
@@ -46,6 +43,25 @@
                         </div>
                     </div>
 
+                    <!-- Message has been deleted -->
+                    <div class="chat__message-item u-flex-center" v-else-if="!message.user">
+                        <img
+                            src="https://img.icons8.com/dusk/64/000000/businessman.png"
+                            class="chat__user-avatar"
+                            alt
+                        >
+                        <div class="chat__message-body">
+                            <div class="chat__message-content">
+                                <span>{{ message.content }}</span>
+                            </div>
+                            <div class="chat__message-details">
+                                <span>Unknown User</span>
+                                <span>{{ moment(message.created_at).fromNow() }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message belongs to another user -->
                     <div class="chat__message-item" v-else>
                         <img
                             v-if="!message.user.social.id"

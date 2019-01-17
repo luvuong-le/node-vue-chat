@@ -22,11 +22,10 @@
                                 placeholder="Search user by name"
                                 v-model.trim="searchInput"
                             >
-                            <ul class="chat__userlist" v-if="this.getCurrentRoom">
+                            <ul class="chat__userlist" v-if="this.getCurrentRoom && filteredUsers">
                                 <transition-group name="slideDown">
                                     <li
                                         class="chat__user"
-                                        v-if="filteredUsers"
                                         v-for="user in filteredUsers"
                                         :key="user._id"
                                     >
@@ -126,7 +125,9 @@
                         </div>
                         <div class="infobox__item">
                             <span class="infobox__item--left">Room Admin</span>
-                            <span class="infobox__item--right">{{ this.getCurrentRoom.user.handle }}</span>
+                            <span
+                                class="infobox__item--right"
+                            >{{ this.getCurrentRoom.user ? this.getCurrentRoom.user.handle : 'Unknown User' }}</span>
                         </div>
                         <div class="infobox__item">
                             <span class="infobox__item--left">Created</span>
