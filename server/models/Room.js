@@ -14,8 +14,8 @@ const RoomSchema = new Schema(
         },
         user: {
             type: Schema.Types.ObjectId,
-            required: true,
-            ref: 'User'
+            ref: 'User',
+            default: null
         },
         password: {
             type: String,
@@ -29,15 +29,20 @@ const RoomSchema = new Schema(
             type: Array,
             default: []
         },
-        users: {
-            type: [
-                {
+        users: [
+            {
+                _id: false,
+                lookup: {
                     type: Schema.Types.ObjectId,
+                    required: true,
                     ref: 'User'
+                },
+                socketId: {
+                    type: String,
+                    required: true
                 }
-            ],
-            default: []
-        }
+            }
+        ]
     },
     {
         timestamps: {

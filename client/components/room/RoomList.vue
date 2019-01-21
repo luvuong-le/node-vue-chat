@@ -253,12 +253,7 @@ export default {
             this.$refs.createRoom.open();
         },
         enterRoom(room) {
-            axios
-                .post('/api/room/update/users', { room_name: room.name })
-                .then(() => {
-                    this.$router.push({ name: 'Room', params: { id: room._id } });
-                })
-                .catch(err => console.log(err));
+            this.$router.push({ name: 'Room', params: { id: room._id } });
         },
         handleCreateRoom(e) {
             e.preventDefault();

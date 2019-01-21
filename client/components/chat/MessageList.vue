@@ -28,7 +28,7 @@
                     <!-- Message belongs to the admin -->
                     <div class="chat__message-item u-flex-center" v-else-if="message.admin">
                         <img
-                            src="https://img.icons8.com/dusk/64/000000/businessman.png"
+                            src="@/assets/img/icons8-businessman.svg"
                             class="chat__user-avatar"
                             alt
                         >
@@ -44,14 +44,11 @@
                     </div>
 
                     <!-- Message has been deleted -->
-                    <div class="chat__message-item u-flex-center" v-else-if="!message.user">
-                        <img
-                            src="https://img.icons8.com/dusk/64/000000/businessman.png"
-                            class="chat__user-avatar"
-                            alt
-                        >
+                    <div class="chat__message-item" v-else-if="!message.user">
+                        <img src="@/assets/img/icons8-account-64.png" class="chat__user-avatar" alt>
+
                         <div class="chat__message-body">
-                            <div class="chat__message-content">
+                            <div class="chat__message-content chat__message-content--left">
                                 <span>{{ message.content }}</span>
                             </div>
                             <div class="chat__message-details">

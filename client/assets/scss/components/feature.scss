@@ -1,0 +1,16 @@
+.features {
+    margin: 1rem 0;
+    &__item {
+        padding: 1.5rem 0;
+        width: 70%;
+        margin: 0.8rem auto;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.9);
+
+        & > span {
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+    }
+}

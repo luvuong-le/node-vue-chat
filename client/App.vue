@@ -10,7 +10,7 @@
         >
             <router-view/>
         </transition>
-        <Footer v-if="['Home', 'Login', 'Register'].includes($route.name)"/>
+        <Footer v-if="['Home', 'Login', 'Register', 'About'].includes($route.name)"/>
     </div>
 </template>
 

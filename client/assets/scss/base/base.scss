@@ -119,6 +119,18 @@ li .nav__link.router-link-exact-active {
         border-radius: 5px;
     }
 
+    &--coral {
+        color: #fff;
+        background: lightcoral;
+        border-radius: 5px;
+    }
+
+    &--purple {
+        color: #fff;
+        background: #9070b4;
+        border-radius: 5px;
+    }
+
     &--success {
         color: #fff;
         background: lightgreen;

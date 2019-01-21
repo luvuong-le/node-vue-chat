@@ -17,10 +17,7 @@
                     <router-link to="/" class="nav__link">Home</router-link>
                 </li>
                 <li class="nav__item">
-                    <router-link to="#" class="nav__link">About</router-link>
-                </li>
-                <li class="nav__item">
-                    <router-link to="#" class="nav__link">Support</router-link>
+                    <router-link to="/about" class="nav__link">About</router-link>
                 </li>
             </ul>
             <ul class="navbar__nav navbar__nav--right" v-if="!isAuthorized">
@@ -49,10 +46,7 @@
                     <router-link to="/" class="nav__link">Home</router-link>
                 </li>
                 <li @click="this.closeSideNav" class="snav__item">
-                    <router-link to="#" class="nav__link">About</router-link>
-                </li>
-                <li @click="this.closeSideNav" class="snav__item">
-                    <router-link to="#" class="nav__link">Support</router-link>
+                    <router-link to="/about" class="nav__link">About</router-link>
                 </li>
                 <li @click="this.closeSideNav" class="snav__item">
                     <router-link to="/login" class="nav__link nav__link--rounded">Login</router-link>

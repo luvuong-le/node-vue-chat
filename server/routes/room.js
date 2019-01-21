@@ -12,7 +12,7 @@ const { createErrorObject, checkCreateRoomFields } = require('../middleware/auth
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const rooms = await Room.find({})
         .populate('user', ['username'])
-        .populate('users', ['username'])
+        .populate('users.lookup', ['username'])
         .select('-password')
         .exec();
 
@@ -29,7 +29,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
 router.get('/:room_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const room = await Room.findById(req.params.room_id)
         .populate('user', ['username', 'social', 'image', 'handle'])
-        .populate('users', ['username', 'social', 'image', 'handle'])
+        .populate('users.lookup', ['username', 'social', 'image', 'handle'])
         .exec();
 
     if (room) {
@@ -169,29 +169,10 @@ router.post('/update/name', passport.authenticate('jwt', { session: false }), as
         { fields: { password: 0 }, new: true }
     )
         .populate('user', ['username'])
-        .populate('users', ['username']);
+        .populate('users.lookup', ['username']);
 
     if (room) {
         return res.status(200).json(room);
-    } else {
-        return res.status(404).json({ errors: `No room with name ${req.params.room_name} found` });
-    }
-});
-
-/**
- * @description PUT /api/room/update/users
- */
-router.post('/update/users', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const room = await Room.findOne({ name: req.body.room_name }).populate('users', ['username']);
-
-    if (room) {
-        if (!room.users.find(user => user._id.toString() === req.user.id)) {
-            room.users.push(req.user.id);
-            await room.save();
-            return res.status(200).json(room);
-        } else {
-            return res.status(200).json(room);
-        }
     } else {
         return res.status(404).json({ errors: `No room with name ${req.params.room_name} found` });
     }
@@ -204,12 +185,12 @@ router.post('/remove/users', passport.authenticate('jwt', { session: false }), a
     const room = await Room.findOne({ name: req.body.room_name });
 
     if (room) {
-        if (room.users.find(room => room._id.toString() === req.user.id)) {
-            room.users = room.users.filter(user => user._id.toString() !== req.user.id);
+        if (room.users.find(user => user.lookup.toString() === req.user.id)) {
+            room.users = room.users.filter(user => user.lookup.toString() !== req.user.id);
             await room.save();
         }
         const returnRoom = await Room.populate(room, {
-            path: 'user users',
+            path: 'user users.lookup',
             select: 'username social image handle'
         });
         return res.status(200).json(returnRoom);
@@ -229,7 +210,7 @@ router.put(
 
         const rooms = await Room.find({})
             .populate('user', ['username'])
-            .populate('users', ['username'])
+            .populate('users.lookup', ['username'])
             .select('-password')
             .exec();
 

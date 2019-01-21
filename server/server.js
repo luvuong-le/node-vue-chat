@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 /** Connect to MongoDB */
+const mongoose = require('mongoose');
 require('./db/mongoose');
 
 /** Built In Node Dependencies */
@@ -33,11 +34,14 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const {
     ADD_MESSAGE,
-    GET_MESSAGES,
     UPDATE_ROOM_USERS,
     GET_ROOMS,
-    GET_ROOM_USERS
+    GET_ROOM_USERS,
+    FILTER_ROOM_USERS,
+    CREATE_MESSAGE_CONTENT
 } = require('./actions/socketio');
+
+const { JOIN_ROOM } = require('./helpers/socketEvents');
 
 /** Routes */
 const authRoutes = require('./routes/auth');
@@ -87,30 +91,30 @@ let userTypings = {};
 
 /** Socket IO Connections */
 io.on('connection', socket => {
-    /** Socket Events */
-    socket.on('disconnect', () => {
-        logger.info('User Disconnected');
-        io.emit('User Disconnected');
-    });
+    let currentRoomId = null;
 
-    /** Join User in Room */
-    socket.on('userJoined', data => {
-        socket.join(data.room._id, async () => {
-            /** Get list of messages to send back to client */
-            socket.emit(
-                'updateRoomData',
-                JSON.stringify({
-                    messages: await GET_MESSAGES(data),
-                    room: await UPDATE_ROOM_USERS(data)
-                })
+    /** Socket Events */
+    socket.on('disconnect', async () => {
+        logger.info('User Disconnected');
+
+        if (currentRoomId) {
+            /** Filter through users and remove user from user list in that room */
+            const roomState = await FILTER_ROOM_USERS({
+                roomId: currentRoomId,
+                socketId: socket.id
+            });
+
+            socket.broadcast.to(currentRoomId).emit(
+                'updateUserList',
+                JSON.stringify(
+                    await GET_ROOM_USERS({
+                        room: {
+                            _id: mongoose.Types.ObjectId(currentRoomId)
+                        }
+                    })
+                )
             );
 
-            /** Get Room to update user list for all other clients */
-            socket.broadcast
-                .to(data.room._id)
-                .emit('updateUserList', JSON.stringify(await GET_ROOM_USERS(data)));
-
-            /** Emit event to all clients in the roomlist view except the sender */
             socket.broadcast.emit(
                 'updateRooms',
                 JSON.stringify({
@@ -118,15 +122,30 @@ io.on('connection', socket => {
                 })
             );
 
-            /** Emit back the message */
-            socket.broadcast
-                .to(data.room._id)
-                .emit('receivedNewMessage', JSON.stringify(await ADD_MESSAGE(data)));
-        });
+            socket.broadcast.to(currentRoomId).emit(
+                'receivedNewMessage',
+                JSON.stringify(
+                    await ADD_MESSAGE({
+                        room: { _id: roomState.previous._id },
+                        user: null,
+                        content: CREATE_MESSAGE_CONTENT(roomState, socket.id),
+                        admin: true
+                    })
+                )
+            );
+        }
+    });
+
+    /** Join User in Room */
+    socket.on('userJoined', data => {
+        currentRoomId = data.room._id;
+        data.socketId = socket.id;
+        JOIN_ROOM(socket, data);
     });
 
     /** User Exit Room */
     socket.on('exitRoom', data => {
+        currentRoomId = null;
         socket.leave(data.room._id, async () => {
             socket.to(data.room._id).emit(
                 'updateRoomData',
@@ -183,8 +202,6 @@ io.on('connection', socket => {
 
     /** New Message Event */
     socket.on('newMessage', async data => {
-        console.log('Sending new message', data.content);
-
         const newMessage = await ADD_MESSAGE(data);
 
         // Emit data back to the client for display
@@ -207,6 +224,18 @@ io.on('connection', socket => {
     socket.on('roomUpdateEvent', async data => {
         io.in(data.room._id).emit('roomUpdated', JSON.stringify(data));
         io.emit('roomNameUpdated', JSON.stringify(data));
+    });
+
+    /** Reconnected: Update Reconnected User in Room */
+    socket.on('reconnectUser', data => {
+        currentRoomId = data.room._id;
+        data.socketId = socket.id;
+        if (socket.request.headers.referer.split('/').includes('room')) {
+            socket.join(currentRoomId, async () => {
+                socket.emit('reconnected');
+                await UPDATE_ROOM_USERS(data);
+            });
+        }
     });
 });
 

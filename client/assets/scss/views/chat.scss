@@ -173,14 +173,15 @@
     }
 
     &__utyping {
-        width: 100%;
         border-radius: 5px;
         padding: 0.5rem 0 0.5rem 1rem;
+        margin: 10px 1rem;
         text-align: left;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
         transition: all 0.5s ease;
+        background: #101114;
 
         & > span {
             font-family: 'Work Sans';

@@ -27,26 +27,26 @@
                                     <li
                                         class="chat__user"
                                         v-for="user in filteredUsers"
-                                        :key="user._id"
+                                        :key="user.lookup._id"
                                     >
                                         <div class="chat__user-item">
                                             <div class="chat__user-image">
                                                 <img
-                                                    v-if="user.social.id === null"
-                                                    :src="user.image"
+                                                    v-if="user.lookup.social.id === null"
+                                                    :src="user.lookup.image"
                                                     class="chat__user-avatar"
                                                     alt
                                                 >
                                                 <img
                                                     v-else
-                                                    :src="user.social.image"
+                                                    :src="user.lookup.social.image"
                                                     class="chat__user-avatar"
                                                     alt
                                                 >
                                             </div>
 
                                             <div class="chat__user-details">
-                                                <span>{{ user.handle }}</span>
+                                                <span>{{ user.lookup.handle }}</span>
                                             </div>
                                         </div>
                                     </li>
@@ -181,7 +181,7 @@ export default {
                 .slice()
                 .sort(this.sortAlphabetical)
                 .filter(user =>
-                    user.username.toLowerCase().includes(this.searchInput.toLowerCase())
+                    user.lookup.username.toLowerCase().includes(this.searchInput.toLowerCase())
                 );
         },
         getUsersTyping() {
@@ -193,17 +193,20 @@ export default {
     methods: {
         ...mapActions(['saveCurrentRoom']),
         checkUserTabs(room) {
-            if (room && room.users.findIndex(user => user._id === this.getUserData._id) === -1) {
+            if (
+                room &&
+                room.users.findIndex(user => user.lookup._id === this.getUserData._id) === -1
+            ) {
                 this.$router.push({ name: 'RoomList' });
             }
         },
         sortAlphabetical(a, b) {
-            let roomA = a.username.toUpperCase();
-            let roomB = b.username.toUpperCase();
-            if (roomA < roomB) {
+            let userA = a.lookup.username.toUpperCase();
+            let userB = b.lookup.username.toUpperCase();
+            if (userA < userB) {
                 return -1;
             }
-            if (roomA > roomB) {
+            if (userA > userB) {
                 return 1;
             }
             return 0;
@@ -220,9 +223,9 @@ export default {
                     if (this.room.access || this.room.accessIds.includes(this.getUserData._id)) {
                         this.getSocket.emit('exitRoom', {
                             room: res.data,
-                            user: this.getUserData,
+                            user: null,
                             admin: true,
-                            content: `${this.getUserData.username} left ${this.getCurrentRoom.name}`
+                            content: `${this.getUserData.handle} left ${this.getCurrentRoom.name}`
                         });
                     }
                     this.roomLeft = true;
@@ -294,7 +297,7 @@ export default {
                 if (!res.data.access) {
                     if (
                         !res.data.accessIds.includes(this.getUserData._id) &&
-                        this.getUserData._id !== res.data.user._id
+                        this.getUserData._id !== res.data.user.lookup._id
                     ) {
                         return this.$router.push({
                             name: 'RoomList',
@@ -302,12 +305,11 @@ export default {
                         });
                     }
                 }
-
                 /** Socket IO: User join event, get latest messages from room */
                 this.getSocket.emit('userJoined', {
                     room: this.getCurrentRoom,
                     user: this.getUserData,
-                    content: `${this.getUserData.username} joined ${this.getCurrentRoom.name}`,
+                    content: `${this.getUserData.handle} joined ${this.getCurrentRoom.name}`,
                     admin: true
                 });
 
@@ -323,6 +325,23 @@ export default {
                         this.users = data.room.users;
                         this.$store.dispatch('saveCurrentRoom', data.room);
                     }
+                });
+
+                /** Socket IO: Reconnect User Event */
+                this.getSocket.on('reconnect', () => {
+                    this.usersTyping = [];
+                    this.getSocket.emit('reconnectUser', {
+                        room: this.getCurrentRoom,
+                        user: this.getUserData
+                    });
+                });
+
+                this.getSocket.on('reconnected', () => {
+                    console.warn('Reconnected');
+                });
+
+                this.getSocket.on('disconnect', () => {
+                    console.warn('Disconnected');
                 });
 
                 /** Socket IO: User Exit Event - Update User List */
@@ -361,7 +380,14 @@ export default {
                     this.$store.dispatch('saveCurrentRoom', JSON.parse(data).room);
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                if (err.response.status === 404) {
+                    this.$router.push({
+                        name: 'RoomList',
+                        params: { message: 'This room does not exist or has been deleted' }
+                    });
+                }
+            });
     },
     beforeDestroy() {
         if (this.getCurrentRoom && !this.roomLeft) {
