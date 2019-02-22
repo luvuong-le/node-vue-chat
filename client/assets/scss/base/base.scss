@@ -188,7 +188,7 @@ li .nav__link.router-link-exact-active {
 }
 
 .page {
-    height: 100%;
+    min-height: 85vh;
     width: 100%;
     background: transparent;
     color: #fff;
