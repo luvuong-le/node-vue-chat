@@ -7,6 +7,10 @@
         border-radius: 5px;
         background: rgba(255, 255, 255, 0.9);
 
+        @include respond(phone) {
+            width: 90%;
+        }
+
         & > span {
             color: #000;
             font-size: 1.1rem;

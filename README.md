@@ -73,13 +73,13 @@ $ cd astro-chat
 
 2. Install dependencies for root, client and server
 
-    i. You may npm install in each directory or run the npm command below in the root directory for convenience
+> You will need to npm install in each directory in order to install the node module needed for each part of the project
 
-```bash
-$ npm run setup
-```
+> Directories Include: Root, Server & Client
 
-3. Add .env file to server folder and fill out details according to the .env.example. See [configuration details]() for social auth and database setup
+
+
+3. Add .env file to server folder and fill out details according to the .env.example. See [configuration details](#configuration-setup) for social auth and database setup
 
 4. Start the application
 
@@ -172,6 +172,24 @@ $ npm run server:test:watch
 ## Configuration Setup
 
 These configuration setups are necessary for the app to function correctly as intended. These configuration setups will be required to be added as environment variables for the server to make use of.
+
+### Local Environment Variables (.env file)
+For development you will need a .env file for environmental variables. This includes:
+
+```bash
+DATABASE_URL=DATABASE_URL
+
+EXPRESS_SESSION_KEY=EXPRESS_SESSION_KEY
+JWT_SECRET=JWT_SECRET
+
+GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET
+
+FACEBOOK_CLIENT_ID=FACEBOOK_CLIENT_ID
+FACEBOOK_CLIENT_SECRET=FACEBOOK_CLIENT_SECRET
+
+PORT=PORT
+```
 
 ### MongoDB & Mongo Atlas
 
