@@ -27,6 +27,7 @@ const expressValidator = require('express-validator');
 const cors = require('cors');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
+const compression = require('compression');
 
 /** Socket IO */
 const app = express();
@@ -64,6 +65,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
     app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
+
+app.use(compression());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

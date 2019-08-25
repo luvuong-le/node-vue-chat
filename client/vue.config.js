@@ -7,6 +7,11 @@ module.exports = {
         },
         entry: {
             app: './main.js'
+        },
+        optimization: {
+            splitChunks: {
+                chunks: 'all'
+            }
         }
     },
     css: {

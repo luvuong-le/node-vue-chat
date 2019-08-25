@@ -5,7 +5,7 @@
                 <span class="section__title">Sign In</span>
             </div>
             <div class="section__content">
-                <Error :errorMessage="errorMessage"/>
+                <Error :errorMessage="errorMessage" />
                 <p class="section__lead">Welcome Back!</p>
                 <div class="social">
                     <OAuth
@@ -13,13 +13,13 @@
                         icon="logo-facebook"
                         classes="social__item--facebook"
                     />
-                    <OAuth provider="google" icon="logo-googleplus" classes="social__item--google"/>
+                    <OAuth provider="google" icon="logo-googleplus" classes="social__item--google" />
                 </div>
                 <form @submit.prevent="handleSubmit" class="form">
                     <span class="form__lead">
                         <ion-icon name="rocket" class="icon"></ion-icon>We are excited to see you again!
                     </span>
-                    <br>
+                    <br />
                     <div class="form__input-group">
                         <ion-icon name="person" class="form__icon"></ion-icon>
                         <input
@@ -29,7 +29,7 @@
                             placeholder="Enter Email"
                             required
                             v-model.trim="email"
-                        >
+                        />
                         <label for="email" class="form__label">Email</label>
                     </div>
                     <div class="form__input-group">
@@ -43,14 +43,14 @@
                             title="Password must be between 5 and 15 characters"
                             required
                             v-model.trim="password"
-                        >
+                        />
                         <label for="password" class="form__label">Password</label>
                     </div>
                     <div class="form__info-group">
                         <span>Don't have an account?</span>
                         <router-link to="/register" class="form__link btn btn--rounded">Register</router-link>
                     </div>
-                    <Error :errors="errors"/>
+                    <Error :errors="errors" />
                     <button type="submit" class="form__submit">Login</button>
                 </form>
             </div>

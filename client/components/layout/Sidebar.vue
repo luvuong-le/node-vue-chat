@@ -1,4 +1,4 @@
-<template>
+<template functional>
     <transition name="slideLeft" mode="out-in">
         <div v-show="visible" class="sidebar">
             <div class="sidebar__header">

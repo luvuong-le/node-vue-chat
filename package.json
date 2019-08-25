@@ -1,6 +1,6 @@
 {
     "name": "astro-chat-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Astro Chat Application",
     "scripts": {
         "seed:data": "npm run seed --prefix server",

@@ -1,16 +1,6 @@
 import _ from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-import About from './views/About.vue';
-import Login from '@/components/auth/Login.vue';
-import Register from '@/components/auth/Register.vue';
-import Profile from '@/components/profile/Profile.vue';
-import UserProfile from '@/components/user/UserProfile.vue';
-import EditUserProfile from '@/components/user/EditUserProfile.vue';
-import RoomList from '@/components/room/RoomList.vue';
-import Room from '@/components/room/Room.vue';
-import NotFound from '@/components/error/NotFound.vue';
 import { checkUserData } from './helpers/user';
 import store from './store';
 
@@ -23,7 +13,7 @@ const router = new Router({
         {
             path: '/',
             name: 'Home',
-            component: Home,
+            component: () => import('@/views/Home.vue'),
             meta: {
                 requiresAuth: false
             }
@@ -31,7 +21,7 @@ const router = new Router({
         {
             path: '/about',
             name: 'About',
-            component: About,
+            component: () => import('@/views/About.vue'),
             meta: {
                 requiresAuth: false
             }
@@ -39,7 +29,7 @@ const router = new Router({
         {
             path: '/login',
             name: 'Login',
-            component: Login,
+            component: () => import('@/components/auth/Login.vue'),
             props: true,
             meta: {
                 requiresAuth: false
@@ -48,16 +38,26 @@ const router = new Router({
         {
             path: '/register',
             name: 'Register',
-            component: Register,
+            component: () => import('@/components/auth/Register.vue'),
             props: true,
             meta: {
                 requiresAuth: false
             }
         },
         {
+            path: '/profile/:handle',
+            name: 'Profile',
+            component: () => import('@/components/profile/Profile.vue'),
+            meta: {
+                requiresAuth: true,
+                transitionName: 'router-anim',
+                enterActive: 'animated fadeIn'
+            }
+        },
+        {
             path: '/user/:handle',
             name: 'UserProfile',
-            component: UserProfile,
+            component: () => import('@/components/user/UserProfile.vue'),
             props: true,
             meta: {
                 requiresAuth: true,
@@ -68,7 +68,7 @@ const router = new Router({
         {
             path: '/user/:handle/edit',
             name: 'EditUserProfile',
-            component: EditUserProfile,
+            component: () => import('@/components/user/EditUserProfile.vue'),
             props: true,
             meta: {
                 requiresAuth: true,
@@ -79,7 +79,7 @@ const router = new Router({
         {
             path: '/rooms',
             name: 'RoomList',
-            component: RoomList,
+            component: () => import('@/components/room/RoomList.vue'),
             props: true,
             meta: {
                 requiresAuth: true,
@@ -90,17 +90,7 @@ const router = new Router({
         {
             path: '/room/:id',
             name: 'Room',
-            component: Room,
-            meta: {
-                requiresAuth: true,
-                transitionName: 'router-anim',
-                enterActive: 'animated fadeIn'
-            }
-        },
-        {
-            path: '/profile/:handle',
-            name: 'Profile',
-            component: Profile,
+            component: () => import('@/components/room/Room.vue'),
             meta: {
                 requiresAuth: true,
                 transitionName: 'router-anim',
@@ -109,7 +99,7 @@ const router = new Router({
         },
         {
             path: '*',
-            component: NotFound
+            component: () => import('@/components/error/NotFound.vue')
         }
     ]
 });

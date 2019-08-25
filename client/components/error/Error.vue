@@ -32,16 +32,10 @@
 <script>
 export default {
     name: 'Error',
-    props: ['errors', 'errorMessage'],
-    data: function() {
-        return {};
-    },
-    mounted() {}
+    props: ['errors', 'errorMessage']
 };
 </script>
 
 
 <style lang="scss" scoped>
-.error {
-}
 </style>

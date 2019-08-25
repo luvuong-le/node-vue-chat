@@ -1,4 +1,4 @@
-<template>
+<template functional>
     <footer class="footer section__footer">
         <div class="footer__content">
             <div class="footer__left">

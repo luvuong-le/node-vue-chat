@@ -45,10 +45,10 @@ const checkLoginFields = async (req, res, next) => {
     let errors = [];
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-        errors.push({ param: 'email', msg: 'No User Found with that email' });
+        errors.push({ param: 'email', msg: 'Invalid Details Entered' });
     } else {
         if (req.body.password !== null && !(await user.isValidPassword(req.body.password))) {
-            errors.push({ param: 'password', msg: 'Incorrect Password' });
+            errors.push({ param: 'password', msg: 'Invalid Details Entered' });
         }
     }
 

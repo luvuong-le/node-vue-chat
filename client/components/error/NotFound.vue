@@ -1,4 +1,4 @@
-<template>
+<template functional>
     <div class="page notfound">
         <section class="section mt-6 section--notfound">
             <div class="section__heading">
@@ -7,7 +7,7 @@
             <div class="section__content">
                 <p class="section__lead">404 Error, The page you were looking for couldn't be found</p>
                 <div class="notfound__dp">
-                    <img src="@/assets/img/undraw_empty_xct9.svg" alt="404 Not Found">
+                    <img src="@/assets/img/undraw_empty_xct9.svg" alt="404 Not Found" />
                 </div>
             </div>
         </section>
@@ -16,10 +16,7 @@
 
 <script>
 export default {
-    name: 'NotFound',
-    props: [],
-    components: {},
-    mounted() {}
+    name: 'NotFound'
 };
 </script>
 

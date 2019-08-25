@@ -1,4 +1,4 @@
-<template>
+<template functional>
     <div class="page home">
         <section class="section section__landing">
             <div class="section__heading">
@@ -9,7 +9,7 @@
                     class="section__lead"
                 >Created to allow real time communication between users in groups via multiple rooms</p>
                 <div class="section__graphic">
-                    <img src="@/assets/img/undraw_programmer_imem.svg" alt>
+                    <img src="@/assets/img/undraw_programmer_imem.svg" alt />
                 </div>
                 <span class="heading-lg center">Features</span>
                 <div class="features">
