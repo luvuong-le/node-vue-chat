@@ -1,5 +1,6 @@
 /** Dotenv Environment Variables */
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.HEROKU_DEPLOYMENT !== true) {
+    // Skip loading the .env file if deploying with heroku
     require('dotenv').config();
 }
 
@@ -59,13 +60,13 @@ app.use(
 );
 app.use(morgan('dev'));
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.HEROKU_DEPLOYMENT === true) {
     /** Trust Proto Header for heroku */
     app.enable('trust proxy');
-    app.use(helmet());
     app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
+app.use(helmet());
 app.use(compression());
 
 app.use(bodyParser.urlencoded({ extended: true }));

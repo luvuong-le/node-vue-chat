@@ -79,15 +79,51 @@ $ cd astro-chat
 
 
 
-3. Add .env file to server folder and fill out details according to the .env.example. See [configuration details](#configuration-setup) for social auth and database setup
+3. Add .env file to server folder and fill out details according to the .env.example. See [configuration details](#configuration-setup) for social auth and database setup: **Note, this is mandatory for the application to run**
 
-4. Start the application
+4. Set **NODE_ENV=development** and **HEROKU_DEPLOYMENT=false**
+
+5. Start the application
 
 ```bash
 $ npm run dev
 ```
 
-5. Navigate to [localhost:8080](localhost:8080). The application should be up and running successfully
+Your app should now be running on [localhost:8080](localhost:8080).
+
+### Run [Production Ready] Mode
+
+_Ensure [Node.js](https://nodejs.org/en/) and [NPM](https://www.npmjs.com/) are installed_
+
+This runs the application with the built production ready Vue files as well as running the express server in production mode serving up the compiled files.
+
+1. Clone or Download the repository (Depending on whether you are using SSH or HTTPS)
+
+```bash
+$ git clone git@github.com:luvuong-le/astro-chat.git
+$ cd astro-chat
+```
+
+2. Install dependencies for root, client and server
+
+> You will need to npm install in each directory in order to install the node module needed for each part of the project
+
+> Directories Include: Root, Server & Client
+
+
+3. Add .env file to server folder and fill out details according to the .env.example. See [configuration details](#configuration-setup) for social auth and database setup. **Note, this is mandatory for the application to run**
+
+4. Ensure you set **NODE_ENV=production** and **HEROKU_DEPLOYMENT=false**
+
+5. Start the application in the root folder of the project. Since it's running in production mode, you should not see any message such as: **_"Server started at port 5000"_**
+
+```bash
+$ npm run start
+```
+
+Your app should now be running on the port you specified in the .env file. If none was specified it will default to **port 5000**.
+
+Eg. [localhost:5000](localhost:5000).
 
 ### Deploying to Heroku
 
@@ -99,13 +135,13 @@ _Ensure you have [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) 
 $ heroku login
 ```
 
-2. Create a new heroku app
+2. Create a new Heroku Application
 
 ```bash
 $ heroku create
 ```
 
-3. Before pushing to heroku, you need to set up the config variables in other words the env variables you would use locally
+3. Before pushing to heroku, you need to set up the config variables in other words the env variables you would use if you were doing this locally
 
     i. Go to Settings -> Reveal Config Vars
 
@@ -114,6 +150,7 @@ $ heroku create
     iii. These Include
 
     ```bash
+    HEROKU_DEPLOYMENT=true
     DATABASE_URL
     FACEBOOK_CLIENT_ID
     FACEBOOK_CLIENT_SECRET
@@ -128,8 +165,8 @@ $ heroku create
 
 4. Commit any changes and push your code from local repo to your git
 ```bash
-$ git add -A 
-$ git commit -m "message here"
+$ git add -A
+$ git commit -m "insert message here"
 $ git push heroku master
 ```
 
@@ -174,9 +211,14 @@ $ npm run server:test:watch
 These configuration setups are necessary for the app to function correctly as intended. These configuration setups will be required to be added as environment variables for the server to make use of.
 
 ### Local Environment Variables (.env file)
-For development you will need a .env file for environmental variables. This includes:
+For development you will need a .env file for environmental variables.
+
+**_Note: These are required for the application to be setup correctly_**
 
 ```bash
+NODE_ENV=development
+HEROKU_DEPLOYMENT=false
+
 DATABASE_URL=DATABASE_URL
 
 EXPRESS_SESSION_KEY=EXPRESS_SESSION_KEY

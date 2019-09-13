@@ -1,5 +1,5 @@
 const { populateData } = require('./seed/seedFunctions');
 
-module.exports = async function () {
+module.exports = async () => {
     await populateData();
-}
+};

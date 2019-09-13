@@ -3,6 +3,10 @@ const supertest = require('supertest');
 const { userSeedData } = require('./seed/seedData');
 const slugify = require('slugify');
 
+beforeAll(() => {
+    jest.setTimeout(30000);
+});
+
 describe('POST /auth', () => {
     let request = supertest(app);
 
