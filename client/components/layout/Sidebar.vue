@@ -1,6 +1,6 @@
-<template functional>
+<template>
     <transition name="slideLeft" mode="out-in">
-        <div v-show="visible" class="sidebar">
+        <div v-if="visible" class="sidebar">
             <div class="sidebar__header">
                 <slot name="header">
                     <h4>Default Header</h4>

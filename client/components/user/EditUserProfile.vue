@@ -8,12 +8,12 @@
                 <form @submit.prevent="handleSubmit" class="form">
                     <p class="lead">Edit Profile Details</p>
                     <div class="profile__item" v-if="user.social.id === null">
-                        <img :src="user.image" alt class="profile__image">
+                        <img :src="user.image" alt class="profile__image" />
                     </div>
                     <div class="profile__item" v-else>
-                        <img :src="user.social.image" alt class="profile__image">
+                        <img :src="user.social.image" alt class="profile__image" />
                     </div>
-                    <br>
+                    <br />
                     <div class="form__input-group">
                         <ion-icon name="pricetags" class="form__icon"></ion-icon>
                         <input
@@ -22,7 +22,7 @@
                             class="form__control"
                             placeholder="Enter New Handle"
                             v-model.trim="handle"
-                        >
+                        />
                         <label for="username" class="form__label">Display Handle</label>
                     </div>
                     <div class="form__input-group" v-if="this.getUserData.social.id === null">
@@ -33,7 +33,7 @@
                             class="form__control"
                             placeholder="Enter New Email"
                             v-model.trim="email"
-                        >
+                        />
                         <label for="email" class="form__label">Email</label>
                     </div>
                     <div class="form__input-group">
@@ -44,10 +44,10 @@
                             class="form__control"
                             placeholder="Enter New Location"
                             v-model.trim="location"
-                        >
+                        />
                         <label for="location" class="form__label">Location</label>
                     </div>
-                    <Error :errors="errors"/>
+                    <Error :errors="errors" />
                     <div class="form__actions mt-3">
                         <a @click="handleBackBtn" class="btn btn--info">Back</a>
                         <button type="submit" class="btn btn--clear btn--danger">Update Account</button>
@@ -165,4 +165,5 @@ export default {
 
 <style lang="scss">
 @import '@/assets/scss/views/profile.scss';
+@import '@/assets/scss/components/form.scss';
 </style>

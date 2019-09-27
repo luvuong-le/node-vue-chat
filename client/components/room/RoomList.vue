@@ -5,7 +5,7 @@
                 <span class="section__title">Room List</span>
             </div>
             <div class="section__content">
-                <Error :errorMessage="errorMessage"/>
+                <Error :errorMessage="errorMessage" />
                 <p class="section__lead">Enter a room and start chatting!</p>
                 <div class="rooms" v-if="rooms">
                     <div class="rooms__header">
@@ -32,7 +32,7 @@
                             class="rooms__search-input"
                             placeholder="Search | Enter 'my_rooms' for a list of your created rooms"
                             v-model.trim="searchInput"
-                        >
+                        />
                     </div>
                     <transition name="slideDown">
                         <ul class="rooms__list">
@@ -102,10 +102,10 @@
                                         class="form__control"
                                         placeholder="Enter Password"
                                         v-model.trim="privateRoomPassword"
-                                    >
+                                    />
                                     <label for="password" class="form__label">Password</label>
                                 </div>
-                                <Error :errors="errors"/>
+                                <Error :errors="errors" />
                                 <button type="submit" class="btn btn--clear btn--info">Enter Room</button>
                             </form>
                         </template>
@@ -129,7 +129,7 @@
                                         class="form__control"
                                         placeholder="Enter Room Name"
                                         v-model.trim="room_name"
-                                    >
+                                    />
                                     <label for="room_name" class="form__label">Room Name</label>
                                 </div>
                                 <div class="form__input-group">
@@ -142,10 +142,10 @@
                                         pattern=".{5,10}"
                                         title="Password must be between 5 and 15 characters"
                                         v-model.trim="password"
-                                    >
+                                    />
                                     <label for="password" class="form__label">Password (Optional)</label>
                                 </div>
-                                <Error :errors="errors"/>
+                                <Error :errors="errors" />
                                 <button type="submit" class="btn btn--clear btn--danger">Create Room</button>
                             </form>
                         </template>
@@ -380,4 +380,5 @@ export default {
 
 <style lang="scss">
 @import '@/assets/scss/views/rooms.scss';
+@import '@/assets/scss/components/form.scss';
 </style>

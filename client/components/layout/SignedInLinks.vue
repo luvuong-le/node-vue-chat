@@ -1,6 +1,9 @@
 <template>
     <ul class="navbar__nav navbar__nav--right">
         <li class="nav__item">
+            <router-link to="/rooms" class="nav__link nav__link--rounded">Rooms</router-link>
+        </li>
+        <li class="nav__item">
             <router-link
                 v-if="Object.keys(this.user).length > 0"
                 :to="{name: 'UserProfile', params: { handle: this.user.handle  }}"

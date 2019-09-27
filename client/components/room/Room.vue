@@ -21,7 +21,7 @@
                                 class="rooms__search-input"
                                 placeholder="Search user by name"
                                 v-model.trim="searchInput"
-                            >
+                            />
                             <ul class="chat__userlist" v-if="this.getCurrentRoom && filteredUsers">
                                 <transition-group name="slideDown">
                                     <li
@@ -36,13 +36,13 @@
                                                     :src="user.lookup.image"
                                                     class="chat__user-avatar"
                                                     alt
-                                                >
+                                                />
                                                 <img
                                                     v-else
                                                     :src="user.lookup.social.image"
                                                     class="chat__user-avatar"
                                                     alt
-                                                >
+                                                />
                                             </div>
 
                                             <div class="chat__user-details">
@@ -70,13 +70,13 @@
                                 <ion-icon name="people" @click="toggleUserList" class="icon"></ion-icon>
                             </div>
                         </div>
-                        <MessageList :messages="messages"/>
+                        <MessageList :messages="messages" />
                         <transition name="slideDown">
                             <div class="chat__utyping" v-show="usersTyping.length > 0">
                                 <span>{{ getUsersTyping }}</span>
                             </div>
                         </transition>
-                        <ChatInput/>
+                        <ChatInput />
                     </div>
                 </div>
             </div>
@@ -96,10 +96,10 @@
                                 pattern=".{3,20}"
                                 required
                                 v-model.trim="newRoomName"
-                            >
+                            />
                             <label for="roomName" class="form__label">New Room name</label>
                         </div>
-                        <Error :errors="errors"/>
+                        <Error :errors="errors" />
                         <button type="submit" class="btn btn--clear btn--info">Update Room Name</button>
                     </form>
                 </template>
@@ -289,6 +289,7 @@ export default {
         axios
             .get(`/api/room/${this.$route.params.id}`)
             .then(res => {
+                console.log(res);
                 this.room = res.data;
                 this.users = res.data.users;
                 this.$store.dispatch('saveCurrentRoom', res.data);
@@ -297,7 +298,7 @@ export default {
                 if (!res.data.access) {
                     if (
                         !res.data.accessIds.includes(this.getUserData._id) &&
-                        this.getUserData._id !== res.data.user.lookup._id
+                        this.getUserData._id !== res.data.user._id
                     ) {
                         return this.$router.push({
                             name: 'RoomList',
@@ -402,5 +403,6 @@ export default {
 
 <style lang="scss">
 @import '@/assets/scss/views/chat.scss';
+@import '@/assets/scss/views/rooms.scss';
 @import '@/assets/scss/components/infobox.scss';
 </style>
