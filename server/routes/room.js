@@ -11,8 +11,8 @@ const { createErrorObject, checkCreateRoomFields } = require('../middleware/auth
  */
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const rooms = await Room.find({})
-        .populate('user', ['username'])
-        .populate('users.lookup', ['username'])
+        .populate('user', ['handle'])
+        .populate('users.lookup', ['handle'])
         .select('-password')
         .exec();
 
@@ -136,9 +136,7 @@ router.delete('/:room_name', passport.authenticate('jwt', { session: false }), a
             return res.status(200).json(room);
         } else {
             return res.status(404).json({
-                errors: `No room with name ${
-                    req.params.room_name
-                } found, You will now be redirected`
+                errors: `No room with name ${req.params.room_name} found, You will now be redirected`
             });
         }
     } catch (err) {

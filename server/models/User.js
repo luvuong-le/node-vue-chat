@@ -13,7 +13,6 @@ const UserSchema = new Schema(
         },
         username: {
             type: String,
-            required: true,
             trim: true,
             unique: true,
             maxlength: ['15', 'Username should be less than 15 characters']
@@ -36,7 +35,7 @@ const UserSchema = new Schema(
             type: String,
             trim: true,
             unique: true,
-            default: null
+            sparse: true
         },
         password: {
             type: String,

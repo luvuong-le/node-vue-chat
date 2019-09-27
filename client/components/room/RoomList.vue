@@ -59,7 +59,7 @@
                                                 </p>
                                                 <p>
                                                     <strong>Room Admin:</strong>
-                                                    {{ room.user ? room.user.username : 'Unknown User' }}
+                                                    {{ room.user ? room.user.handle : 'Unknown User' }}
                                                 </p>
                                             </div>
                                             <div class="rooms__item-actions">
@@ -194,6 +194,7 @@ export default {
             return this.rooms.filter(room => room.access === true);
         },
         filteredRooms() {
+            console.log(this.rooms);
             if (this.searchInput.toLowerCase() === 'my_rooms') {
                 return this.rooms.filter(room => room.user._id === this.getUserData._id);
             } else {

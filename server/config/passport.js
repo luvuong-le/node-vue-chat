@@ -66,8 +66,9 @@ module.exports = function(passport) {
                                     email: profile.emails[0].value,
                                     image: profile.photos[0].value.replace('?sz=50', '')
                                 },
-                                handle: slugify(profile.displayName.toLowerCase()),
-                                username: profile.displayName
+                                handle: profile.displayName
+                                    ? slugify(profile.displayName.toLowerCase())
+                                    : profile.emails[0].value
                             })
                                 .save()
                                 .then(user => {
@@ -110,8 +111,9 @@ module.exports = function(passport) {
                                     image: profile.photos[0].value,
                                     email: profile.emails[0].value
                                 },
-                                handle: slugify(profile.displayName.toLowerCase()),
-                                username: profile.displayName
+                                handle: profile.displayName
+                                    ? slugify(profile.displayName.toLowerCase())
+                                    : profile.emails[0].value
                             })
                                 .save()
                                 .then(user => {
