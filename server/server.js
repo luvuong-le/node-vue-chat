@@ -1,5 +1,5 @@
 /** Dotenv Environment Variables */
-if (process.env.HEROKU_DEPLOYMENT !== true) {
+if (process.env.HEROKU_DEPLOYMENT !== 'true') {
     // Skip loading the .env file if deploying with heroku
     require('dotenv').config();
 }
@@ -60,7 +60,7 @@ app.use(
 );
 app.use(morgan('dev'));
 
-if (process.env.HEROKU_DEPLOYMENT === true) {
+if (process.env.HEROKU_DEPLOYMENT === 'true') {
     /** Trust Proto Header for heroku */
     app.enable('trust proxy');
     app.use(enforce.HTTPS({ trustProtoHeader: true }));
