@@ -46,7 +46,7 @@ module.exports = function(passport) {
                 profile,
                 done
             ) {
-                User.findOne({ username: profile.displayName })
+                User.findOne({ handle: slugify(profile.displayName.toLowerCase()) })
                     .then(user => {
                         if (user) {
                             user.social.id = profile.id;
@@ -91,7 +91,7 @@ module.exports = function(passport) {
                 profile,
                 done
             ) {
-                User.findOne({ username: profile.displayName })
+                User.findOne({ handle: slugify(profile.displayName.toLowerCase()) })
                     .then(user => {
                         if (user) {
                             user.social.id = profile.id;

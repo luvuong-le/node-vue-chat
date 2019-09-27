@@ -194,7 +194,6 @@ export default {
             return this.rooms.filter(room => room.access === true);
         },
         filteredRooms() {
-            console.log(this.rooms);
             if (this.searchInput.toLowerCase() === 'my_rooms') {
                 return this.rooms.filter(room => room.user._id === this.getUserData._id);
             } else {
